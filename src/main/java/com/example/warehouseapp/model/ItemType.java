@@ -4,5 +4,4 @@ import java.util.List;
 public class ItemType {
     private Long id;
     private String name;
-    private List<Item> items;
 }

@@ -1,6 +1,5 @@
 package com.example.warehouseapp.model;
 
-import java.util.List;
 public class PackageType {
     private Long id;
     private String name;
@@ -10,5 +9,4 @@ public class PackageType {
     private Double height;
     private Double depth;
     private Double weight;
-    private List<Package> packages;
 }

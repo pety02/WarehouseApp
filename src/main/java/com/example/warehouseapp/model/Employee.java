@@ -11,4 +11,5 @@ public class Employee extends AccountRecordOwner {
     private LocalDate hireDate;
     private LocalDate fireDate;
     private Facility facility;
+
 }
