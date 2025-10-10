@@ -1,8 +1,8 @@
 package com.example.warehouseapp.model;
 
 import java.util.List;
-public class ItemType {
+public class AddressType {
     private Long id;
     private String name;
-    private List<Item> items;
+    private List<Address> addresses;
 }

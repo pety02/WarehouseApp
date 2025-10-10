@@ -9,6 +9,7 @@ import net.sourceforge.barbecue.Barcode;
 import java.util.List;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Data
 @NoArgsConstructor
@@ -23,11 +24,15 @@ public class Item {
     private ItemType type;
     private Barcode barcode;
     @ElementCollection
-    private List<String> allergens;
+    private List<Allergen> allergens;
     @ManyToOne
     private Supplier supplier;
-    private Double price;
+    private Double sellingPrice;
+    private Currency currency;
     private Boolean isExpired;
     private LocalDateTime deliveryDate;
     private LocalDateTime expirationDate;
+    private List<Package> packages;
+    private Map<Facility, Integer> itemsStockByFacility;
+    private Map<Order, Integer> itemsStockInOrder;
 }

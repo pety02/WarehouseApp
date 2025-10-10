@@ -1,4 +1,5 @@
 package com.example.warehouseapp.model;
 
-public class NGO {
+public enum Currency {
+    BGN, EUR
 }

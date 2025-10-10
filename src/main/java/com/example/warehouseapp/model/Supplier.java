@@ -1,8 +1,11 @@
 package com.example.warehouseapp.model;
 
-public class Supplier {
-    private Long id;
-    private String name;
-    private String supplierNo;
+import java.util.List;
+public class Supplier extends AccountRecordOwner {
+    private String companyName;
+    private String companyNo;
     private SupplierLicense license;
+    private List<Item> items;
+    private List<Package> packages;
+    private List<DeliveryOffer> deliveryOffers;
 }
