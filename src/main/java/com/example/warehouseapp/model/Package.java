@@ -14,4 +14,8 @@ public class Package {
     private LocalDateTime expirationDate;
     private Barcode barcode;
     private Supplier supplier;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private String createdBy;
+    private String updatedBy;
 }

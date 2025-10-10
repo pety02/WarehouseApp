@@ -8,4 +8,8 @@ public class Delivery {
     private Payment payment;
     private Order order;
     private DeliveryOffer deliveryOffer;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private String createdBy;
+    private String updatedBy;
 }

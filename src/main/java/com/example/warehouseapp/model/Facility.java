@@ -9,4 +9,8 @@ public class Facility extends AccountRecordOwner {
     private LocalDateTime closingDateTime;
     private Employee manager;
     private Map<Item, Integer> itemsStocks;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private String createdBy;
+    private String updatedBy;
 }

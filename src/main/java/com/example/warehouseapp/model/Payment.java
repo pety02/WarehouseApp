@@ -9,4 +9,8 @@ public class Payment {
     private Double amount;
     private Currency currency;
     private Delivery delivery;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private String createdBy;
+    private String updatedBy;
 }

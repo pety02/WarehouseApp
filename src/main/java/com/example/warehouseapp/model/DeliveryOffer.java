@@ -1,5 +1,6 @@
 package com.example.warehouseapp.model;
 
+import java.time.LocalDateTime;
 import java.util.List;
 public class DeliveryOffer {
     private Long id;
@@ -9,4 +10,8 @@ public class DeliveryOffer {
     private Double maxWeight;
     private Double price;
     private Currency currency;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private String createdBy;
+    private String updatedBy;
 }

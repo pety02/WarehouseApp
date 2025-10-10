@@ -11,4 +11,8 @@ public class StockMovement {
     private LocalDateTime movementDate;
     private Employee performedBy;
     private String reason;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private String createdBy;
+    private String updatedBy;
 }

@@ -33,4 +33,8 @@ public class Item {
     private LocalDateTime deliveryDate;
     private LocalDateTime expirationDate;
     private List<Package> packages;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private String createdBy;
+    private String updatedBy;
 }

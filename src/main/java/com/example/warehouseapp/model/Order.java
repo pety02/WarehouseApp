@@ -11,4 +11,8 @@ public class Order {
     private AccountRecordOwner benefactor;
     private AccountRecordOwner recipient;
     private Delivery delivery;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private String createdBy;
+    private String updatedBy;
 }
