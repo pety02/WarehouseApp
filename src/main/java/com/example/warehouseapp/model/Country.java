@@ -5,7 +5,5 @@ public class Country {
     private Long id;
     private String fullName;
     private String abbreviation;
-    private List<Region> regions;
     private List<Postal> postal;
-    private List<Address> addresses;
 }

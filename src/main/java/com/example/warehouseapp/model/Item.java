@@ -33,6 +33,4 @@ public class Item {
     private LocalDateTime deliveryDate;
     private LocalDateTime expirationDate;
     private List<Package> packages;
-    private Map<Facility, Integer> itemsStockByFacility;
-    private Map<Order, Integer> itemsStockInOrder;
 }

@@ -1,6 +1,5 @@
 package com.example.warehouseapp.model;
 
-import java.util.List;
 public class Address {
     private Long id;
     private AddressType addressType;
@@ -9,5 +8,5 @@ public class Address {
     private Street street;
     private Locality locality;
     private Postal postal;
-    private List<Facility> facilities;
+    private Integer number;
 }
