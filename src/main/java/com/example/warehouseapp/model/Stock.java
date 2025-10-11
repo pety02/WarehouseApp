@@ -6,19 +6,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table
-public class EmployeeRole {
+public class Stock {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    @OneToMany(mappedBy = "role")
-    private List<Location> locations;
+    @ManyToOne
+    private Location location;
+    @ManyToOne
+    private Item item;
+    private Integer count;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String createdBy;

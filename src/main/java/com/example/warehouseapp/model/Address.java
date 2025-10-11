@@ -1,12 +1,18 @@
 package com.example.warehouseapp.model;
 
-public class Address {
-    private Long id;
-    private AddressType addressType;
-    private Country country;
-    private Region region;
-    private Street street;
-    private Locality locality;
-    private Postal postal;
-    private Integer number;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Address implements Serializable {
+    private String street;
+    private String city;
+    private String state;
+    private String zipCode;
+    private String country;
 }

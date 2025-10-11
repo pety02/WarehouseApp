@@ -1,9 +1,11 @@
 package com.example.warehouseapp.model;
 
+import com.vladmihalcea.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,13 +14,21 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table
-public class EmployeeRole {
+public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @OneToMany(mappedBy = "role")
-    private List<Location> locations;
+    @Type(JsonType.class)
+    @Column(columnDefinition = "jsonb")
+    private Address address;
+    @OneToOne
+    @JoinColumn(name = "manager_id")
+    private Employee manager;
+    @OneToMany(mappedBy = "location")
+    private List<Employee> employees;
+    @OneToMany
+    private List<EmployeeRole> roles;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String createdBy;
