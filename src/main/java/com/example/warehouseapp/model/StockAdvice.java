@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import java.util.List;
 import java.time.LocalDateTime;
 
 @Data
@@ -20,6 +20,8 @@ public class StockAdvice {
     private Item item;
     @ManyToOne(optional = false)
     private Location location;
+    @OneToMany(mappedBy = "advice")
+    private List<StockAdviceAction> actions;
     private Integer recommendedQuantity;
     private LocalDateTime validUntil;
     private String modelVersion;
