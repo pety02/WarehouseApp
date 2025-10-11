@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 
 @Data
@@ -11,20 +12,20 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @Table
-public class Item {
+public class StockAdvice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    @Column(nullable = false, unique = true)
-    private String barcodeValue;
-    private Double sellingPrice;
-    @Enumerated(EnumType.STRING)
-    private Currency currency;
-    private LocalDateTime deliveryDate;
-    private LocalDateTime expirationDate;
+    @ManyToOne(optional = false)
+    private Item item;
+    @ManyToOne(optional = false)
+    private Location location;
+    private Integer recommendedQuantity;
+    private LocalDateTime validUntil;
+    private String modelVersion;
+    private String reasoning;
     private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
     private String createdBy;
-    private String updatedBy;
+    private boolean isActioned;
+    private Double confidence;
 }
