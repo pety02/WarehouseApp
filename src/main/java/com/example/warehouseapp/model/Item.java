@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,6 +20,8 @@ public class Item {
     private Double sellingPrice;
     @Enumerated(EnumType.STRING)
     private Currency currency;
+    @ManyToOne
+    private StockAdviceAction action;
     private LocalDateTime deliveryDate;
     private LocalDateTime expirationDate;
     private LocalDateTime createdAt;

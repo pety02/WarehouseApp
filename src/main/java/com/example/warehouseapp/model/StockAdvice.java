@@ -22,7 +22,6 @@ public class StockAdvice {
     private Location location;
     @OneToMany(mappedBy = "advice")
     private List<StockAdviceAction> actions;
-    private Integer recommendedQuantity;
     private LocalDateTime validUntil;
     private String modelVersion;
     private String reasoning;

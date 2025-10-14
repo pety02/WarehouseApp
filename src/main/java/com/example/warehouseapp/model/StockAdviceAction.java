@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-
+import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,7 +20,9 @@ public class StockAdviceAction {
     private StockAdvice advice;
     @Enumerated(EnumType.STRING)
     private AdviceActionType actionType;
-    private Integer actionQuantity;
+    @OneToMany(mappedBy = "action")
+    private List<Item> items;
+    private Integer recommendedQuantity;
     private String actionReason;
     private LocalDateTime createdAt;
     private String createdBy;
