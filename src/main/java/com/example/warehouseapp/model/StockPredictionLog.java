@@ -25,4 +25,8 @@ public class StockPredictionLog {
     private LocalDateTime predictionTimestamp;
     private String modelName;
     private String modelVersion;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private String createdBy;
+    private String updatedBy;
 }

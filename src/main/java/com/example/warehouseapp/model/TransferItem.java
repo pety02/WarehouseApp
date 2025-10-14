@@ -2,6 +2,8 @@ package com.example.warehouseapp.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table
 public class TransferItem {
@@ -13,4 +15,8 @@ public class TransferItem {
     @ManyToOne
     private Item item;
     private Integer quantity;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private String createdBy;
+    private String updatedBy;
 }

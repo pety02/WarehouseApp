@@ -28,6 +28,8 @@ public class StockAdvice {
     private String reasoning;
     private LocalDateTime createdAt;
     private String createdBy;
+    private LocalDateTime updatedAt;
+    private String updatedBy;
     private boolean isActioned;
     private Double confidence;
 }
