@@ -20,8 +20,6 @@ public class Item {
     private Double sellingPrice;
     @Enumerated(EnumType.STRING)
     private Currency currency;
-    @ManyToOne
-    private StockAdviceAction action;
     private LocalDateTime deliveryDate;
     private LocalDateTime expirationDate;
     private LocalDateTime createdAt;
