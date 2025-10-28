@@ -1,0 +1,27 @@
+package com.example.warehouseapp.model.entites;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.time.Instant;
+import java.util.List;
+
+@Data
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class Transfer {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private Long id;
+    private Instant deliveryDateTime;
+    private String remarks;
+    private String createdBy;
+    private String updatedBy;
+    private Instant createdAt;
+    private Instant updatedAt;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<TransferItem> transferItems;
+}
