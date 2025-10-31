@@ -6,6 +6,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
+import java.util.UUID;
+
 @Data
 @Entity
 @Getter
@@ -15,7 +17,7 @@ import lombok.*;
 public class Currency {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private Long id;
+    private UUID id;
     private String name;
     private String abbreviation;
 }

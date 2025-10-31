@@ -1,9 +1,12 @@
 package com.example.warehouseapp.model.entites;
 
+import com.vladmihalcea.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Type;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -14,8 +17,10 @@ import java.time.Instant;
 public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private Long id;
+    private UUID id;
     private String name;
+    @Type(JsonType.class)
+    @Column(columnDefinition = "jsonb")
     private String address;
     private String createdBy;
     private String updatedBy;

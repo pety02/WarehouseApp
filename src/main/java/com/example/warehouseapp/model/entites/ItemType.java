@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import lombok.*;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -17,7 +18,7 @@ import java.time.Instant;
 public class ItemType {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private Long id;
+    private UUID id;
     private String name;
     private String createdBy;
     private String updatedBy;

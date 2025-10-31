@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -15,7 +16,7 @@ import java.util.List;
 public class Transfer {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private Long id;
+    private UUID id;
     private Instant deliveryDateTime;
     private String remarks;
     private String createdBy;

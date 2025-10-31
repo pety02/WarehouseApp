@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -14,7 +15,7 @@ import java.time.Instant;
 public class StockAvailability {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private Long id;
+    private UUID id;
     private Integer piecesCount;
     private String createdBy;
     private String updatedBy;

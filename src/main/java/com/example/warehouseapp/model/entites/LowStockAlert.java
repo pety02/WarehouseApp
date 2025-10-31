@@ -6,6 +6,7 @@ import lombok.*;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -16,7 +17,7 @@ import java.util.List;
 public class LowStockAlert {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private Long id;
+    private UUID id;
     private LocalDate alertDate;
     private String message;
     private Integer actualCount;
