@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/currencies")
 public class CurrencyController {
@@ -21,7 +23,7 @@ public class CurrencyController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CurrencyResponseDTO> getCurrencyById(@PathVariable(name = "id") Long id) {
+    public ResponseEntity<CurrencyResponseDTO> getCurrencyById(@PathVariable(name = "id") UUID id) {
         CurrencyResponseDTO responseDTO;
 
         try {

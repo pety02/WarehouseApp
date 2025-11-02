@@ -6,9 +6,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CurrencyMapper {
-    public CurrencyResponseDTO mapToCurrencyResponseDTO(Currency currency) {
+    public CurrencyResponseDTO mapToResponseDTO(Currency currency) {
         CurrencyResponseDTO responseDTO = new CurrencyResponseDTO();
-        responseDTO.setId(currency.getId());
+        responseDTO.setId(currency.getId().toString());
         responseDTO.setAbbreviation(currency.getAbbreviation());
         currency.setName(currency.getName());
 

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class CurrencyService {
@@ -21,11 +22,11 @@ public class CurrencyService {
         this.currencyMapper = currencyMapper;
     }
 
-    public CurrencyResponseDTO getCurrencyById(Long id) {
+    public CurrencyResponseDTO getCurrencyById(UUID id) {
         Optional<Currency> currency = this.currencyRepository.findById(id);
         if(currency.isEmpty()) {
             throw new NotFoundEntityException("Currency not found.");
         }
-        return this.currencyMapper.mapToCurrencyResponseDTO(currency.get());
+        return this.currencyMapper.mapToResponseDTO(currency.get());
     }
 }
