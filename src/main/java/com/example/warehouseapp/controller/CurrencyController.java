@@ -6,7 +6,7 @@ import com.example.warehouseapp.service.CurrencyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,13 +17,9 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/currencies")
+@RequiredArgsConstructor
 public class CurrencyController {
     private final CurrencyService currencyService;
-
-    @Autowired
-    public CurrencyController(CurrencyService currencyService) {
-        this.currencyService = currencyService;
-    }
 
     @Operation(summary = "Get a currency by id", description = "Returns a currency as per the id")
     @ApiResponses(value = {
@@ -37,7 +33,7 @@ public class CurrencyController {
 
         try {
              responseDTO = this.currencyService.getCurrencyById(id);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest().build();
         } catch (NotFoundEntityException ex) {
             return ResponseEntity.notFound().build();

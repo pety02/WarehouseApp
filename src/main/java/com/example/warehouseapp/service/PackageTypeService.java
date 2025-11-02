@@ -17,14 +17,14 @@ public class PackageTypeService {
     private final PackageTypeRepository packageTypeRepository;
     private final PackageTypeMapper packageTypeMapper;
 
-    public PackageTypeResponseDTO getItemTypeById(UUID id) {
+    public PackageTypeResponseDTO getPackageTypeById(UUID id) {
         PackageType packageType = this.packageTypeRepository.findById(id)
                 .orElseThrow(() -> new NotFoundEntityException("PackageType not found"));
 
         return this.packageTypeMapper.mapToPackageType(packageType);
     }
 
-    public List<PackageTypeResponseDTO> getAllItemTypes() {
+    public List<PackageTypeResponseDTO> getAllIPackageTypes() {
         List<PackageType> packageTypesList = this.packageTypeRepository.findAll();
         return packageTypesList.stream().map(this.packageTypeMapper::mapToPackageType).toList();
     }
