@@ -7,6 +7,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ItemTypeResponseDTO {
     private String id;
     private String name;

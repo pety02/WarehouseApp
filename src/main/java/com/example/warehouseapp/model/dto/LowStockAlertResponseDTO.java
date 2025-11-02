@@ -2,7 +2,6 @@ package com.example.warehouseapp.model.dto;
 
 import lombok.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -10,9 +9,10 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class LowStockAlertResponseDTO {
     private String id;
-    private LocalDate alertDate;
+    private String alertDate;
     private String message;
     private Integer actualCount;
     private Integer neededCount;

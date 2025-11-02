@@ -14,8 +14,8 @@ public class EmployeeResponseDTO {
     private String name;
     private String surname;
     private String uidNo;
-    private LocalDate hireDate;
-    private LocalDate fireDate;
+    private String hireDate;
+    private String fireDate;
     private String email;
     private String phoneNumber;
     private String role;

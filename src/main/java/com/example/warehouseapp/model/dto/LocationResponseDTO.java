@@ -6,10 +6,12 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class LocationResponseDTO {
     private String id;
     private String name;
     private String address;
+    private String managerId;
     private String managerName;
     private String managerSurname;
     private String managerEmail;

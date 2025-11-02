@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CurrencyMapper {
+
     public CurrencyResponseDTO mapToResponseDTO(Currency currency) {
         return CurrencyResponseDTO
                 .builder()

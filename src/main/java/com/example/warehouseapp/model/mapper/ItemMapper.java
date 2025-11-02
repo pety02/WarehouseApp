@@ -4,8 +4,11 @@ import com.example.warehouseapp.model.dto.ItemResponseDTO;
 import com.example.warehouseapp.model.entites.Currency;
 import com.example.warehouseapp.model.entites.Item;
 import org.springframework.data.util.Pair;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ItemMapper {
+
     public ItemResponseDTO mapToResponseDTO(Item item) {
         return ItemResponseDTO
                 .builder()

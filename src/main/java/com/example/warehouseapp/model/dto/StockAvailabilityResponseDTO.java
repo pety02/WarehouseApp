@@ -7,6 +7,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class StockAvailabilityResponseDTO {
     private String id;
     private Integer piecesCount;

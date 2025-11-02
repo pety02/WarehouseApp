@@ -3,8 +3,11 @@ package com.example.warehouseapp.model.mapper;
 import com.example.warehouseapp.model.dto.EmployeeCredentialsResponseDTO;
 import com.example.warehouseapp.model.entites.Employee;
 import com.example.warehouseapp.model.entites.EmployeeCredentials;
+import org.springframework.stereotype.Component;
 
+@Component
 public class EmployeeCredentialsMapper {
+
     public EmployeeCredentialsResponseDTO mapToResponseDTO(EmployeeCredentials employeeCredentials, Employee employee) {
         return EmployeeCredentialsResponseDTO
                 .builder()
