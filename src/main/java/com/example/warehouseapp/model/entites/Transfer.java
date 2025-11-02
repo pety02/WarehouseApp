@@ -25,4 +25,8 @@ public class Transfer {
     private Instant updatedAt;
     @ManyToMany(fetch = FetchType.EAGER)
     private List<TransferItem> transferItems;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Location sourceLocation;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Location destinationLocation;
 }

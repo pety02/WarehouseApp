@@ -16,12 +16,11 @@ public class StockAdviceAction {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private Integer recommendedQuantity;
+    private String actionDescription;
     private String actionReason;
     private Boolean isActioned;
-    private Double confidence;
-    private String createdByModelVersion;
-    private String updatedByModelVersion;
+    private String createdBy;
+    private String updatedBy;
     private Instant createdAt;
     private Instant updatedAt;
     @ManyToOne(fetch = FetchType.EAGER)
