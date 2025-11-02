@@ -7,11 +7,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class CurrencyMapper {
     public CurrencyResponseDTO mapToResponseDTO(Currency currency) {
-        CurrencyResponseDTO responseDTO = new CurrencyResponseDTO();
-        responseDTO.setId(currency.getId().toString());
-        responseDTO.setAbbreviation(currency.getAbbreviation());
-        currency.setName(currency.getName());
-
-        return responseDTO;
+        return CurrencyResponseDTO
+                .builder()
+                .id(currency.getId().toString())
+                .name(currency.getName())
+                .abbreviation(currency.getAbbreviation())
+                .build();
     }
 }
