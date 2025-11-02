@@ -8,6 +8,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class StockAdviceResponseDTO {
     private String id;
     private String validUntil;

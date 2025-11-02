@@ -5,23 +5,20 @@ import com.example.warehouseapp.model.dto.CurrencyResponseDTO;
 import com.example.warehouseapp.model.entites.Currency;
 import com.example.warehouseapp.model.mapper.CurrencyMapper;
 import com.example.warehouseapp.repository.CurrencyRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class CurrencyService {
     private final CurrencyRepository currencyRepository;
     private final CurrencyMapper currencyMapper;
 
-    @Autowired
-    public CurrencyService(CurrencyRepository currencyRepository, CurrencyMapper currencyMapper) {
-        this.currencyRepository = currencyRepository;
-        this.currencyMapper = currencyMapper;
-    }
-
+    @Transactional(readOnly=true)
     public CurrencyResponseDTO getCurrencyById(UUID id) {
         Optional<Currency> currency = this.currencyRepository.findById(id);
         if(currency.isEmpty()) {

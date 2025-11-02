@@ -1,24 +1,32 @@
 package com.example.warehouseapp.model.mapper;
 
-import com.example.warehouseapp.model.dto.StockAvailabilityResponseDTO;
-import com.example.warehouseapp.model.entites.StockAvailability;
+import com.example.warehouseapp.model.dto.StockAdviceResponseDTO;
+import com.example.warehouseapp.model.entites.StockAdvice;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class StockAdviceMapper {
+    private final StockAdviceActionMapper stockAdviceActionMapper;
 
-    public StockAvailabilityResponseDTO mapToResponseDTO(StockAvailability stockAvailability) {
-        return StockAvailabilityResponseDTO
+    public StockAdviceResponseDTO mapToResponseDTO(StockAdvice stockAdvice) {
+        return StockAdviceResponseDTO
                 .builder()
-                .id(stockAvailability.getId().toString())
-                .piecesCount(stockAvailability.getPiecesCount())
-                .itemId(stockAvailability.getItem().getId().toString())
-                .itemName(stockAvailability.getItem().getName())
-                .itemBarcodeValue(stockAvailability.getItem().getBarcodeValue())
-                .itemExpirationDateTime(stockAvailability.getItem().getExpirationDateTime().toString())
-                .zoneId(stockAvailability.getZone().getId().toString())
-                .zoneName(stockAvailability.getZone().getName())
-                .zoneStorageType(stockAvailability.getZone().getStorageType().getName())
+                .id(stockAdvice.getId().toString())
+                .validUntil(stockAdvice.getValidUntil().toString())
+                .reasoning(stockAdvice.getReasoning())
+                .isActioned(stockAdvice.getIsActioned())
+                .confidence(stockAdvice.getConfidence())
+                .createdByModelVersion(stockAdvice.getCreatedByModelVersion())
+                .updatedByModelVersion(stockAdvice.getUpdatedByModelVersion())
+                .createdAt(stockAdvice.getCreatedAt().toString())
+                .updatedAt(stockAdvice.getUpdatedAt().toString())
+                .actions(stockAdvice.getActions()
+                        .stream()
+                        .map(this.stockAdviceActionMapper::mapToResponseDTO)
+                        .toList()
+                )
                 .build();
     }
 }

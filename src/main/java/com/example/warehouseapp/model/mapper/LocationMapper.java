@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class LocationMapper {
 
-    public LocationResponseDTO toResponseDTO(Location location) {
+    public LocationResponseDTO mapToResponseDTO(Location location) {
         return LocationResponseDTO
                 .builder()
                 .id(location.getId().toString())
