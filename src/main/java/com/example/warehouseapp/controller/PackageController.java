@@ -3,6 +3,7 @@ package com.example.warehouseapp.controller;
 import com.example.warehouseapp.model.dto.PackageCreateRequestDTO;
 import com.example.warehouseapp.model.dto.PackageResponseDTO;
 import com.example.warehouseapp.model.dto.PackageUpdateRequestDTO;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -24,14 +25,14 @@ public class PackageController {
     }
 
     @PostMapping
-    public ResponseEntity<PackageResponseDTO> createPackage(@RequestBody PackageCreateRequestDTO obj) {
+    public ResponseEntity<PackageResponseDTO> createPackage(@RequestBody @Valid PackageCreateRequestDTO obj) {
         // TODO: to implement the logic here
         return null;
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<PackageResponseDTO> updatePackageById(@PathVariable(name = "id") Long id,
-                                                                @RequestBody PackageUpdateRequestDTO obj) {
+                                                                @RequestBody @Valid PackageUpdateRequestDTO obj) {
         // TODO: to implement the logic here
         return null;
     }

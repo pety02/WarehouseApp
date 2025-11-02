@@ -1,6 +1,7 @@
 package com.example.warehouseapp.controller;
 
 import com.example.warehouseapp.model.dto.*;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -87,49 +88,49 @@ public class LocationController {
 
     @PostMapping("/{id}")
     public ResponseEntity<LocationResponseDTO> createLocation(@PathVariable(name = "id") Long id,
-                                                              @RequestBody LocationCreateRequestDTO obj) {
+                                                              @RequestBody @Valid LocationCreateRequestDTO obj) {
         // TODO: to implement the logic here
         return null;
     }
 
     @PostMapping("/{id}/items")
     public ResponseEntity<ItemResponseDTO> createItem(@PathVariable(name = "id") Long id,
-                                                      @RequestBody ItemCreateRequestDTO obj) {
+                                                      @RequestBody @Valid ItemCreateRequestDTO obj) {
         // TODO: to implement the logic here
         return null;
     }
 
     @PostMapping("/{id}/stock_advices")
     public ResponseEntity<StockAdviceResponseDTO> createStockAdvice(@PathVariable(name = "id") Long id,
-                                                                    @RequestBody StockAdviceActionCreateRequestDTO obj) {
+                                                                    @RequestBody @Valid StockAdviceActionCreateRequestDTO obj) {
         // TODO: to implement the logic here
         return null;
     }
 
     @PostMapping("/{id}/stock_advice_actions")
     public ResponseEntity<StockAdviceActionResponseDTO> createStockAdviceAction(@PathVariable(name = "id") Long id,
-                                                                                @RequestBody StockAdviceActionCreateRequestDTO obj) {
+                                                                                @RequestBody @Valid StockAdviceActionCreateRequestDTO obj) {
         // TODO: to implement the logic here
         return null;
     }
 
     @PostMapping("/{id}/stock_availabilities")
     public ResponseEntity<StockAvailabilityResponseDTO> createStockAvailability(@PathVariable(name = "id") Long id,
-                                                                                @RequestBody StockAvailabilityCreateRequestDTO obj) {
+                                                                                @RequestBody @Valid StockAvailabilityCreateRequestDTO obj) {
         // TODO: to implement the logic here
         return null;
     }
 
     @PostMapping("/{id}/warehouse_zones")
     public ResponseEntity<WarehouseZoneResponseDTO> createWarehouseZone(@PathVariable(name = "id") Long id,
-                                                                        @RequestBody WarehouseZoneCreateRequestDTO obj) {
+                                                                        @RequestBody @Valid WarehouseZoneCreateRequestDTO obj) {
         // TODO: to implement the logic here
         return null;
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<LocationResponseDTO> updateLocation(@PathVariable(name = "id") Long id,
-                                                              @RequestBody LocationUpdateRequestDTO obj) {
+                                                              @RequestBody @Valid LocationUpdateRequestDTO obj) {
         // TODO: to implement the logic here
         return null;
     }
@@ -137,7 +138,7 @@ public class LocationController {
     @PutMapping("/{id}/items/{itid}")
     public ResponseEntity<ItemResponseDTO> updateItem(@PathVariable(name = "id") Long id,
                                                       @PathVariable(name = "itid") Long itid,
-                                                      @RequestBody ItemUpdateRequestDTO obj) {
+                                                      @RequestBody @Valid ItemUpdateRequestDTO obj) {
         // TODO: to implement the logic here
         return null;
     }
@@ -145,7 +146,7 @@ public class LocationController {
     @PutMapping("/{id}/stock_advices/{stid}")
     public ResponseEntity<StockAdviceResponseDTO> updateStockAdvice(@PathVariable(name = "id") Long id,
                                                                     @PathVariable(name = "stid") Long stid,
-                                                                    @RequestBody StockAdviceUpdateRequestDTO obj) {
+                                                                    @RequestBody @Valid StockAdviceUpdateRequestDTO obj) {
         // TODO: to implement the logic here
         return null;
     }
@@ -153,7 +154,7 @@ public class LocationController {
     @PutMapping("/{id}/stock_advice_actions/{staaid}")
     public ResponseEntity<StockAdviceActionResponseDTO> updateStockAdviceAction(@PathVariable(name = "id") Long id,
                                                                                 @PathVariable(name = "staaid") Long staaid,
-                                                                                @RequestBody StockAdviceActionUpdateRequestDTO obj) {
+                                                                                @RequestBody @Valid StockAdviceActionUpdateRequestDTO obj) {
         // TODO: to implement the logic here
         return null;
     }
@@ -161,7 +162,7 @@ public class LocationController {
     @PutMapping("/{id}/stock_availabilities/{staid}")
     public ResponseEntity<StockAvailabilityResponseDTO> updateStockAvailability(@PathVariable(name = "id") Long id,
                                                                                 @PathVariable(name = "staid") Long staid,
-                                                                                @RequestBody StockAvailabilityUpdateRequestDTO obj) {
+                                                                                @RequestBody @Valid StockAvailabilityUpdateRequestDTO obj) {
         // TODO: to implement the logic here
         return null;
     }

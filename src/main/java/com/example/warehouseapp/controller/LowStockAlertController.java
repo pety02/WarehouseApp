@@ -2,6 +2,7 @@ package com.example.warehouseapp.controller;
 
 import com.example.warehouseapp.model.dto.LowStockAlertCreateRequestDTO;
 import com.example.warehouseapp.model.dto.LowStockAlertResponseDTO;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -21,7 +22,7 @@ public class LowStockAlertController {
     }
 
     @PostMapping
-    public ResponseEntity<LowStockAlertResponseDTO> createLowStockAlert(@RequestBody LowStockAlertCreateRequestDTO obj) {
+    public ResponseEntity<LowStockAlertResponseDTO> createLowStockAlert(@RequestBody @Valid LowStockAlertCreateRequestDTO obj) {
         return null;
     }
 }

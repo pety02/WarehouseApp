@@ -3,6 +3,7 @@ package com.example.warehouseapp.controller;
 import com.example.warehouseapp.model.dto.EmployeeCreateRequestDTO;
 import com.example.warehouseapp.model.dto.EmployeeResponseDTO;
 import com.example.warehouseapp.model.dto.EmployeeUpdateRequestDTO;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -24,14 +25,14 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public ResponseEntity<EmployeeResponseDTO> createEmployee(@RequestBody EmployeeCreateRequestDTO obj) {
+    public ResponseEntity<EmployeeResponseDTO> createEmployee(@RequestBody @Valid EmployeeCreateRequestDTO obj) {
         // TODO: to implement the logic here
         return null;
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<EmployeeResponseDTO> updateEmployeeById(@PathVariable(name = "id") Long id,
-                                                                  @RequestBody EmployeeUpdateRequestDTO obj) {
+                                                                  @RequestBody @Valid EmployeeUpdateRequestDTO obj) {
         // TODO: to implement the logic here
         return null;
     }

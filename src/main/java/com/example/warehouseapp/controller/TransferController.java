@@ -1,6 +1,7 @@
 package com.example.warehouseapp.controller;
 
 import com.example.warehouseapp.model.dto.*;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -22,14 +23,14 @@ public class TransferController {
     }
 
     @PostMapping
-    public ResponseEntity<TransferResponseDTO> createTransfer(@RequestBody TransferCreateRequestDTO obj) {
+    public ResponseEntity<TransferResponseDTO> createTransfer(@RequestBody @Valid TransferCreateRequestDTO obj) {
         // TODO: to implement the logic here
         return null;
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<TransferResponseDTO> updateTransferById(@PathVariable(name = "id") Long id,
-                                                                  @RequestBody TransferUpdateRequestDTO obj) {
+                                                                  @RequestBody @Valid TransferUpdateRequestDTO obj) {
         // TODO: to implement the logic here
         return null;
     }
@@ -47,7 +48,7 @@ public class TransferController {
 
     @PostMapping("/{id}/transfer_items")
     public ResponseEntity<TransferItemResponseDTO> createTransferItem(@PathVariable(name = "id") Long id,
-                                                                      @RequestBody TransferItemCreateRequestDTO obj) {
+                                                                      @RequestBody @Valid TransferItemCreateRequestDTO obj) {
         // TODO: to implement the logic here
         return null;
     }
@@ -55,7 +56,7 @@ public class TransferController {
     @PutMapping("/{id}/transfer_items/{tiid}")
     public ResponseEntity<TransferItemResponseDTO> updateTransferItemById(@PathVariable(name = "id") Long id,
                                                                           @PathVariable(name = "tiid") Long tiid,
-                                                                          @RequestBody TransferItemUpdateRequestDTO obj) {
+                                                                          @RequestBody @Valid TransferItemUpdateRequestDTO obj) {
         // TODO: to implement the logic here
         return null;
     }

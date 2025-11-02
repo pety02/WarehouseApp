@@ -3,6 +3,7 @@ package com.example.warehouseapp.controller;
 import com.example.warehouseapp.model.dto.StorageTypeCreateRequestDTO;
 import com.example.warehouseapp.model.dto.StorageTypeResponseDTO;
 import com.example.warehouseapp.model.dto.StorageTypeUpdateRequestDTO;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -18,14 +19,14 @@ public class StorageTypeController {
     }
 
     @PostMapping
-    public ResponseEntity<StorageTypeResponseDTO> createStorageType(@RequestBody StorageTypeCreateRequestDTO obj) {
+    public ResponseEntity<StorageTypeResponseDTO> createStorageType(@RequestBody @Valid StorageTypeCreateRequestDTO obj) {
         // TODO: to implement the logic here
         return null;
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<StorageTypeResponseDTO> updateStorageTypeById(@PathVariable(name = "id") Long id,
-                                                                        @RequestBody StorageTypeUpdateRequestDTO obj) {
+                                                                        @RequestBody @Valid StorageTypeUpdateRequestDTO obj) {
         // TODO: to implement the logic here
         return null;
     }

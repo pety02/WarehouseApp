@@ -4,6 +4,7 @@ import com.example.warehouseapp.model.dto.EmployeeCreateRequestDTO;
 import com.example.warehouseapp.model.dto.EmployeeLoginRequestDTO;
 import com.example.warehouseapp.model.dto.EmployeeResponseDTO;
 import com.example.warehouseapp.model.dto.EmployeeUpdateRequestDTO;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/employee_credentials")
 public class EmployeeCredentialsController {
     @GetMapping("/login")
-    public ResponseEntity<EmployeeResponseDTO> loginEmployee(@RequestBody EmployeeLoginRequestDTO obj) {
+    public ResponseEntity<EmployeeResponseDTO> loginEmployee(@RequestBody @Valid EmployeeLoginRequestDTO obj) {
         // TODO: to implement the logic here
         return null;
     }
@@ -22,14 +23,14 @@ public class EmployeeCredentialsController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<EmployeeResponseDTO> registerEmployee(@RequestBody EmployeeCreateRequestDTO obj) {
+    public ResponseEntity<EmployeeResponseDTO> registerEmployee(@RequestBody @Valid EmployeeCreateRequestDTO obj) {
         // TODO: to implement the logic here
         return null;
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<EmployeeResponseDTO> updateEmployeeCredentialsById(@PathVariable(name = "id") Long id,
-                                                                             @RequestBody EmployeeUpdateRequestDTO obj) {
+                                                                             @RequestBody @Valid EmployeeUpdateRequestDTO obj) {
         // TODO: to implement the logic here
         return null;
     }
