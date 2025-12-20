@@ -28,4 +28,8 @@ public class EmployeeRoleService {
 
         return this.employeeRoleMapper.mapToResponseDTO(employeeRole);
     }
+
+    public EmployeeRole getEmployeeRoleByName(String roleName) {
+        return this.employeeRoleRepository.findByName(roleName);
+    }
 }

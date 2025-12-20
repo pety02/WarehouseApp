@@ -18,9 +18,10 @@ public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+    @Column(nullable = false, length = 100)
     private String name;
     @Type(JsonType.class)
-    @Column(columnDefinition = "jsonb")
+    @Column(columnDefinition = "jsonb", nullable = false)
     private String address;
     private String createdBy;
     private String updatedBy;

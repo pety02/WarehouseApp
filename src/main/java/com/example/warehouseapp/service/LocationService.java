@@ -53,6 +53,10 @@ public class LocationService {
         return this.locationMapper.mapToResponseDTO(location);
     }
 
+    public Location getLocationByAddressAndName(String address, String name) {
+        return this.locationRepository.findByAddressAndName(address, name);
+    }
+
     public List<ItemResponseDTO> getAllItems() {
         List<Item> itemsList = this.itemRepository.findAll();
         return itemsList.stream().map(this.itemMapper::mapToResponseDTO).toList();
