@@ -61,8 +61,8 @@ public class EmployeeController {
     @PostMapping
     public ResponseEntity<EmployeeResponseDTO> createEmployee(
             @RequestBody @Valid EmployeeCreateRequestDTO employeeRequestDTO,
-            @AuthenticationPrincipal Principal principal) {
-
+            @AuthenticationPrincipal Principal principal
+    ) {
         EmployeeResponseDTO createdEmployee = employeeService
                 .createEmployee(employeeRequestDTO, principal.getName());
 
@@ -78,10 +78,14 @@ public class EmployeeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EmployeeResponseDTO> updateEmployeeById(@PathVariable(name = "id") UUID id,
-                                                                  @RequestBody @Valid EmployeeUpdateRequestDTO employeeRequest) {
-        // TODO: to implement the logic here
-        return null;
+    public ResponseEntity<EmployeeResponseDTO> updateEmployeeById(
+            @PathVariable(name = "id") UUID id,
+            @RequestBody @Valid EmployeeUpdateRequestDTO employeeRequestDTO,
+            @AuthenticationPrincipal Principal principal
+    ) {
+        EmployeeResponseDTO createdEmployee = employeeService
+                .updateEmployee(id, employeeRequestDTO, principal.getName());
+        return ResponseEntity.ok(createdEmployee);
     }
 
     @DeleteMapping("/{id}")

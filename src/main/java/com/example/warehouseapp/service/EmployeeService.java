@@ -4,12 +4,12 @@ import com.example.warehouseapp.exception.NotFoundEntityException;
 import com.example.warehouseapp.model.dto.EmployeeCreateRequestDTO;
 import com.example.warehouseapp.model.dto.EmployeeCredentialsCreateRequestDTO;
 import com.example.warehouseapp.model.dto.EmployeeResponseDTO;
+import com.example.warehouseapp.model.dto.EmployeeUpdateRequestDTO;
 import com.example.warehouseapp.model.entites.Employee;
 import com.example.warehouseapp.model.entites.EmployeeCredentials;
 import com.example.warehouseapp.model.entites.EmployeeRole;
 import com.example.warehouseapp.model.entites.Location;
 import com.example.warehouseapp.model.mapper.EmployeeMapper;
-import com.example.warehouseapp.repository.EmployeeCredentialsRepository;
 import com.example.warehouseapp.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,7 +23,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EmployeeService {
     private final EmployeeRepository employeeRepository;
-    private final EmployeeCredentialsRepository employeeCredentialsRepository;
     private final EmployeeMapper employeeMapper;
     private final EmployeeCredentialsService employeeCredentialsService;
     private final EmployeeRoleService employeeRoleService;
@@ -57,16 +56,13 @@ public class EmployeeService {
                 employeeRequestDTO.getLocationAddress(),
                 employeeRequestDTO.getLocationName()
         );
-        EmployeeCredentialsCreateRequestDTO credentialsRequestDTO = EmployeeCredentialsCreateRequestDTO
+        EmployeeCredentials credentials = EmployeeCredentials
                 .builder()
                 .email(employeeRequestDTO.getEmail())
                 .phoneNumber(employeeRequestDTO.getPhoneNumber())
                 .password(this.passwordEncoder.encode(employeeRequestDTO.getPassword()))
                 .build();
-        final EmployeeCredentials employeeCredentials = employeeCredentialsService.createCredentials(
-                credentialsRequestDTO,
-                user, today
-        );
+        final EmployeeCredentials employeeCredentials = employeeCredentialsService.saveCredentials(credentials);
         final Employee toBeSaved = this.employeeMapper.mapToEmployee(
                 employeeRequestDTO,
                 role, location, user, today
@@ -74,6 +70,32 @@ public class EmployeeService {
         toBeSaved.setCredentials(employeeCredentials);
 
         return this.employeeMapper.mapToResponseDTO(this.employeeRepository.save(toBeSaved));
+    }
+
+    public EmployeeResponseDTO updateEmployee(UUID id, EmployeeUpdateRequestDTO employeeRequestDTO, String user) {
+        Employee toBeUpdated = this.employeeRepository.findById(id).orElseThrow(() ->
+                new NotFoundEntityException("Employee not found"));
+        LocalDate today = LocalDate.now();
+
+        EmployeeCredentials credentials = toBeUpdated.getCredentials();
+        credentials.setEmail(employeeRequestDTO.getEmail());
+        credentials.setPassword(this.passwordEncoder.encode(employeeRequestDTO.getPassword()));
+        credentials.setPhoneNumber(employeeRequestDTO.getPhoneNumber());
+        this.employeeCredentialsService.saveCredentials(credentials);
+
+        EmployeeRole role = employeeRoleService.getEmployeeRoleByName(employeeRequestDTO.getRole());
+        Location location = locationService.getLocationByAddressAndName(
+                employeeRequestDTO.getLocationAddress(),
+                employeeRequestDTO.getLocationName()
+        );
+
+        this.employeeMapper.updateEmployee(
+                toBeUpdated, employeeRequestDTO,
+                role != null ? role : toBeUpdated.getRole(),
+                location != null ? location : toBeUpdated.getLocation(),
+                user, today
+        );
+        return  this.employeeMapper.mapToResponseDTO(this.employeeRepository.save(toBeUpdated));
     }
 
     public void deleteEmployeeById(UUID id){

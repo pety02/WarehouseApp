@@ -35,10 +35,7 @@ public class EmployeeCredentialsService {
                 }).toList();
     }
 
-    EmployeeCredentials createCredentials(EmployeeCredentialsCreateRequestDTO employeeCredentialsRequest,
-                                          String user, LocalDate today) {
-        return this.employeeCredentialsRepository.save(
-                this.employeeCredentialsMapper.mapToEntity(employeeCredentialsRequest, user, today)
-        );
+    EmployeeCredentials saveCredentials(EmployeeCredentials employeeCredentials) {
+        return this.employeeCredentialsRepository.save(employeeCredentials);
     }
 }
