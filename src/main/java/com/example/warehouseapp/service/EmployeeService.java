@@ -1,5 +1,6 @@
 package com.example.warehouseapp.service;
 
+import com.example.warehouseapp.exception.InactiveEmployeeException;
 import com.example.warehouseapp.exception.NotFoundEntityException;
 import com.example.warehouseapp.model.dto.EmployeeCreateRequestDTO;
 import com.example.warehouseapp.model.dto.EmployeeLoginRequestDTO;
@@ -69,6 +70,7 @@ public class EmployeeService {
                 role, location, user, today
         );
         toBeSaved.setCredentials(employeeCredentials);
+        toBeSaved.setActive(true);
 
         return this.employeeMapper.mapToResponseDTO(this.employeeRepository.save(toBeSaved));
     }
@@ -111,10 +113,18 @@ public class EmployeeService {
                 .findEmployeeByCredentialsId(credentials.getId())
                 .orElseThrow(() -> new NotFoundEntityException("Employee not found"));
 
+        if(!employee.isActive()) {
+            throw new InactiveEmployeeException(
+                    String.format("Employee with email %s is inactive",
+                        employee.getCredentials().getEmail()
+                    )
+            );
+        }
+
         return this.employeeMapper.mapToResponseDTO(employee);
     }
 
     public void deleteEmployeeById(UUID id){
-        employeeRepository.deleteById(id);
+        this.employeeRepository.findById(id).ifPresent(employee -> employee.setActive(false));
     }
 }

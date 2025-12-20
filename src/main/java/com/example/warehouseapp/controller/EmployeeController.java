@@ -58,7 +58,7 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public ResponseEntity<EmployeeResponseDTO> createEmployee(
+    public ResponseEntity<EmployeeResponseDTO> registerEmployee(
             @RequestBody @Valid EmployeeCreateRequestDTO employeeRequestDTO,
             @AuthenticationPrincipal Principal principal
     ) {
@@ -90,6 +90,11 @@ public class EmployeeController {
     @GetMapping
     public ResponseEntity<EmployeeResponseDTO> login(@RequestBody @Valid EmployeeLoginRequestDTO employeeRequestDTO) {
         return ResponseEntity.ok(this.employeeService.login(employeeRequestDTO));
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<Void> logout() {
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")

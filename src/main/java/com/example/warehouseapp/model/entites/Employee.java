@@ -33,4 +33,5 @@ public class Employee {
     private EmployeeRole role;
     @ManyToOne(fetch = FetchType.EAGER)
     private Location location;
+    private boolean isActive;
 }
