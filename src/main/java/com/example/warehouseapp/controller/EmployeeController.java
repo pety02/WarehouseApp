@@ -1,9 +1,9 @@
 package com.example.warehouseapp.controller;
 
 import com.example.warehouseapp.model.dto.EmployeeCreateRequestDTO;
+import com.example.warehouseapp.model.dto.EmployeeLoginRequestDTO;
 import com.example.warehouseapp.model.dto.EmployeeResponseDTO;
 import com.example.warehouseapp.model.dto.EmployeeUpdateRequestDTO;
-import com.example.warehouseapp.repository.EmployeeRepository;
 import com.example.warehouseapp.service.EmployeeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -18,7 +18,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -86,6 +85,11 @@ public class EmployeeController {
         EmployeeResponseDTO createdEmployee = employeeService
                 .updateEmployee(id, employeeRequestDTO, principal.getName());
         return ResponseEntity.ok(createdEmployee);
+    }
+
+    @GetMapping
+    public ResponseEntity<EmployeeResponseDTO> login(@RequestBody @Valid EmployeeLoginRequestDTO employeeRequestDTO) {
+        return ResponseEntity.ok(this.employeeService.login(employeeRequestDTO));
     }
 
     @DeleteMapping("/{id}")

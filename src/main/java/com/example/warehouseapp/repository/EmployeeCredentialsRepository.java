@@ -11,6 +11,8 @@ import java.util.UUID;
 
 @Repository
 public interface EmployeeCredentialsRepository extends JpaRepository<EmployeeCredentials, UUID> {
+    Optional<EmployeeCredentials> findByEmail(String email);
+
     @Query("SELECT ec FROM Employee e JOIN e.credentials ec WHERE e.id = :id")
     Optional<EmployeeCredentials> findEmployeeCredentialsByEmployeeId(@Param("id") UUID id);
 }

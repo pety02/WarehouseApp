@@ -1,13 +1,9 @@
 package com.example.warehouseapp.model.mapper;
 
-import com.example.warehouseapp.model.dto.EmployeeCredentialsCreateRequestDTO;
 import com.example.warehouseapp.model.dto.EmployeeCredentialsResponseDTO;
 import com.example.warehouseapp.model.entites.Employee;
 import com.example.warehouseapp.model.entites.EmployeeCredentials;
 import org.springframework.stereotype.Component;
-
-import java.time.Instant;
-import java.time.LocalDate;
 
 @Component
 public class EmployeeCredentialsMapper {
@@ -25,20 +21,6 @@ public class EmployeeCredentialsMapper {
                 .updatedBy(employeeCredentials.getUpdatedBy())
                 .name(employee.getName())
                 .surname(employee.getSurname())
-                .build();
-    }
-
-    public EmployeeCredentials mapToEntity(EmployeeCredentialsCreateRequestDTO employeeCredentialsRequest,
-                                           String user, LocalDate today) {
-        return EmployeeCredentials
-                .builder()
-                .email(employeeCredentialsRequest.getEmail())
-                .phoneNumber(employeeCredentialsRequest.getPhoneNumber())
-                .password(employeeCredentialsRequest.getPassword())
-                .createdBy(user)
-                .updatedBy(user)
-                .createdAt(Instant.from(today))
-                .updatedAt(Instant.from(today))
                 .build();
     }
 }

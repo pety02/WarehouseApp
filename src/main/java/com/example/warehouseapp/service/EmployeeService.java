@@ -2,7 +2,7 @@ package com.example.warehouseapp.service;
 
 import com.example.warehouseapp.exception.NotFoundEntityException;
 import com.example.warehouseapp.model.dto.EmployeeCreateRequestDTO;
-import com.example.warehouseapp.model.dto.EmployeeCredentialsCreateRequestDTO;
+import com.example.warehouseapp.model.dto.EmployeeLoginRequestDTO;
 import com.example.warehouseapp.model.dto.EmployeeResponseDTO;
 import com.example.warehouseapp.model.dto.EmployeeUpdateRequestDTO;
 import com.example.warehouseapp.model.entites.Employee;
@@ -12,6 +12,7 @@ import com.example.warehouseapp.model.entites.Location;
 import com.example.warehouseapp.model.mapper.EmployeeMapper;
 import com.example.warehouseapp.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -96,6 +97,21 @@ public class EmployeeService {
                 user, today
         );
         return  this.employeeMapper.mapToResponseDTO(this.employeeRepository.save(toBeUpdated));
+    }
+
+    public EmployeeResponseDTO login(EmployeeLoginRequestDTO employeeLoginRequestDTO) {
+        EmployeeCredentials credentials =
+                employeeCredentialsService.findByEmail(employeeLoginRequestDTO.getEmail());
+
+        if (!passwordEncoder.matches(employeeLoginRequestDTO.getPassword(), credentials.getPassword())) {
+            throw new BadCredentialsException("Invalid email or password");
+        }
+
+        Employee employee = employeeRepository
+                .findEmployeeByCredentialsId(credentials.getId())
+                .orElseThrow(() -> new NotFoundEntityException("Employee not found"));
+
+        return this.employeeMapper.mapToResponseDTO(employee);
     }
 
     public void deleteEmployeeById(UUID id){
