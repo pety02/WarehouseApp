@@ -52,6 +52,7 @@ public class LowStockAlertController {
 
     @PostMapping
     public ResponseEntity<LowStockAlertResponseDTO> createLowStockAlert(@RequestBody @Valid LowStockAlertCreateRequestDTO obj) {
+        // TODO: to be implemented: use open-source AI API here for recommendation on which stock are low
         return null;
     }
 }

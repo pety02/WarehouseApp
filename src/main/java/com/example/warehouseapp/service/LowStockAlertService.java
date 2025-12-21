@@ -9,6 +9,8 @@ import com.example.warehouseapp.model.mapper.LowStockAlertMapper;
 import com.example.warehouseapp.model.mapper.StockAvailabilityMapper;
 import com.example.warehouseapp.repository.LowStockAlertRepository;
 import com.example.warehouseapp.repository.StockAvailabilityRepository;
+import com.google.genai.Client;
+import com.google.genai.ResponseSchema;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class LowStockAlertService {
+    private final Client client;
     private final LowStockAlertRepository lowStockAlertRepository;
     private final StockAvailabilityRepository  stockAvailabilityRepository;
     private final StockAvailabilityMapper  stockAvailabilityMapper;
@@ -47,5 +50,23 @@ public class LowStockAlertService {
                         return this.lowStockAlertMapper.mapToResponseDTO(lowStockAlert, stockAvailabilityResponseDTO);
                     })
                 .toList();
+    }
+
+    public void generatePrediction() {
+        String prompt = "Predict warehouse stock levels for product ABC tomorrow.";
+
+        // Define the JSON schema for structured output
+        ResponseSchema schema = ResponseSchema.builder()
+                .addProperty("date", ResponseSchema.Type.STRING)
+                .addProperty("predicted_stock", ResponseSchema.Type.INT)
+                .addProperty("notes", ResponseSchema.Type.STRING)
+                .build();
+
+        // Generate structured response
+        String jsonResponse = client.models()
+                .generateStructured("gemma-3", prompt, schema);
+
+        // Optional: parse JSON into Java object
+        System.out.println("Generated prediction JSON: " + jsonResponse);
     }
 }
