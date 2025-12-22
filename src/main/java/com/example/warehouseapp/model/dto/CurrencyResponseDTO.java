@@ -9,6 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 
+
 public class CurrencyResponseDTO {
     private String id;
     private String name;
