@@ -1,16 +1,19 @@
 package com.example.warehouseapp.controller;
 
-import com.example.warehouseapp.model.dto.LowStockAlertCreateRequestDTO;
 import com.example.warehouseapp.model.dto.LowStockAlertResponseDTO;
 import com.example.warehouseapp.service.LowStockAlertService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
@@ -51,8 +54,17 @@ public class LowStockAlertController {
     }
 
     @PostMapping
-    public ResponseEntity<LowStockAlertResponseDTO> createLowStockAlert(@RequestBody @Valid LowStockAlertCreateRequestDTO obj) {
-        // TODO: to be implemented: use open-source AI API here for recommendation on which stock are low
-        return null;
+    public ResponseEntity<LowStockAlertResponseDTO> createLowStockAlert(@AuthenticationPrincipal Principal principal) {
+        LowStockAlertResponseDTO createdLowStockAlert = this.lowStockAlertService.predictLowStocks(principal.getName());
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(createdLowStockAlert.getId())
+                .toUri();
+
+        return ResponseEntity
+                .created(location)
+                .body(createdLowStockAlert);
     }
 }
