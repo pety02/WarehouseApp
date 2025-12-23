@@ -12,6 +12,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -52,20 +55,28 @@ public class PackageController {
     }
 
     @PostMapping
-    public ResponseEntity<PackageResponseDTO> createPackage(@RequestBody @Valid PackageCreateRequestDTO obj) {
-        // TODO: to implement the logic here
-        return null;
+    public ResponseEntity<PackageResponseDTO> createPackage(@RequestBody @Valid PackageCreateRequestDTO packageRequestDTO) {
+        PackageResponseDTO createdPackage = this.packageService.createPackage(packageRequestDTO);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(createdPackage.getId())
+                .toUri();
+
+        return ResponseEntity
+                .created(location)
+                .body(createdPackage);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PackageResponseDTO> updatePackageById(@PathVariable(name = "id") Long id,
-                                                                @RequestBody @Valid PackageUpdateRequestDTO obj) {
-        // TODO: to implement the logic here
-        return null;
+    public ResponseEntity<PackageResponseDTO> updatePackageById(@PathVariable(name = "id") UUID id,
+                                                                @RequestBody @Valid PackageUpdateRequestDTO packageUpdateRequestDTO) {
+        return ResponseEntity.ok(this.packageService.updatePackage(id, packageUpdateRequestDTO));
     }
 
     @DeleteMapping("/{id}")
-    public void deletePackageById(@PathVariable(name = "id") Long id) {
-        // TODO: to implement the logic here
+    public void deletePackageById(@PathVariable(name = "id") UUID id) {
+        this.packageService.deletePackageById(id);
     }
 }

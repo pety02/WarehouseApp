@@ -5,12 +5,13 @@ import com.example.warehouseapp.exception.JsonParseException;
 import com.example.warehouseapp.exception.NotFoundEntityException;
 import com.example.warehouseapp.model.dto.LowStockAlertResponseDTO;
 import com.example.warehouseapp.model.dto.StockAvailabilityResponseDTO;
-import com.example.warehouseapp.model.entites.LowStockAlert;
-import com.example.warehouseapp.model.entites.StockAvailability;
+import com.example.warehouseapp.model.entites.*;
 import com.example.warehouseapp.model.mapper.LowStockAlertMapper;
 import com.example.warehouseapp.model.mapper.StockAvailabilityMapper;
+import com.example.warehouseapp.repository.EmployeeRepository;
 import com.example.warehouseapp.repository.LowStockAlertRepository;
 import com.example.warehouseapp.repository.StockAvailabilityRepository;
+import com.example.warehouseapp.repository.WarehouseZoneRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.genai.Client;
 import com.google.genai.types.GenerateContentConfig;
@@ -33,6 +34,8 @@ public class LowStockAlertService {
     private final StockAvailabilityRepository  stockAvailabilityRepository;
     private final StockAvailabilityMapper  stockAvailabilityMapper;
     private final LowStockAlertMapper  lowStockAlertMapper;
+    private EmployeeRepository employeeRepository;
+    private WarehouseZoneRepository warehouseZoneRepository;
 
     public LowStockAlertResponseDTO getLowStockAlertById(UUID id){
         LowStockAlert lowStockAlert = this.lowStockAlertRepository.findById(id)
@@ -78,7 +81,26 @@ public class LowStockAlertService {
 
         try {
             LowStockAlertResponseDTO dto = mapper.readValue(jsonResponse, LowStockAlertResponseDTO.class);
-            this.lowStockAlertRepository.save(this.lowStockAlertMapper.mapToEntity(dto, user, today));
+            List<Employee> employees = dto.getEmployees().stream()
+                    .map(email -> {
+                        return this.employeeRepository.findEmployeeByEmail(email)
+                                .orElseThrow(() -> new NotFoundEntityException("Employee not found with email: " + email));
+                    })
+                    .toList();
+            Item item = this.stockAvailabilityRepository.getItemById(
+                            UUID.fromString(dto.getStockAvailability().getItem()))
+                    .orElseThrow(() -> new NotFoundEntityException("Item not found")).getItem();
+            WarehouseZone zone = this.warehouseZoneRepository
+                    .findById(UUID.fromString(dto.getStockAvailability().getWarehouseZone()))
+                    .orElseThrow(() -> new NotFoundEntityException("WarehouseZone not found"));
+            this.lowStockAlertRepository.save(
+                    this.lowStockAlertMapper.mapToEntity(
+                        dto,
+                        this.stockAvailabilityMapper.mapToEntity(dto.getStockAvailability(), item, zone),
+                        employees,
+                        today
+                    )
+            );
             log.info("Parsed DTO: {}", dto);
 
             return dto;

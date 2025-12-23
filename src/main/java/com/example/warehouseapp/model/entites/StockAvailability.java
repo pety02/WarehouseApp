@@ -12,6 +12,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class StockAvailability {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
