@@ -1,6 +1,5 @@
 package com.example.warehouseapp.model.dto;
 
-import jakarta.persistence.Entity;
 import lombok.*;
 
 import java.time.Instant;
