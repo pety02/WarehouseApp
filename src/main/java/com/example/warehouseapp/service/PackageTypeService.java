@@ -1,7 +1,7 @@
 package com.example.warehouseapp.service;
 
 import com.example.warehouseapp.exception.NotFoundEntityException;
-import com.example.warehouseapp.model.dto.PackageTypeCreateRequestDTO;
+import com.example.warehouseapp.model.dto.PackageTypeRequestDTO;
 import com.example.warehouseapp.model.dto.PackageTypeResponseDTO;
 import com.example.warehouseapp.model.entites.PackageType;
 import com.example.warehouseapp.model.mapper.PackageTypeMapper;
@@ -30,12 +30,12 @@ public class PackageTypeService {
         return packageTypesList.stream().map(this.packageTypeMapper::mapToPackageType).toList();
     }
 
-    public PackageTypeResponseDTO createPackageType(PackageTypeCreateRequestDTO packageTypeRequestDTO) {
+    public PackageTypeResponseDTO createPackageType(PackageTypeRequestDTO packageTypeRequestDTO) {
         PackageType savedPackageType = this.packageTypeRepository.save(this.packageTypeMapper.mapToEntity(packageTypeRequestDTO));
         return this.packageTypeMapper.mapToPackageType(savedPackageType);
     }
 
-    public PackageTypeResponseDTO updatePackageType(UUID id, PackageTypeCreateRequestDTO packageTypeRequestDTO) {
+    public PackageTypeResponseDTO updatePackageType(UUID id, PackageTypeRequestDTO packageTypeRequestDTO) {
         PackageType existingPackageType = this.packageTypeRepository.findById(id)
                 .orElseThrow(() -> new NotFoundEntityException("PackageType not found"));
 

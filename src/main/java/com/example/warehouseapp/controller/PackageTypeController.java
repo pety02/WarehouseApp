@@ -1,8 +1,7 @@
 package com.example.warehouseapp.controller;
 
-import com.example.warehouseapp.model.dto.PackageTypeCreateRequestDTO;
+import com.example.warehouseapp.model.dto.PackageTypeRequestDTO;
 import com.example.warehouseapp.model.dto.PackageTypeResponseDTO;
-import com.example.warehouseapp.model.dto.PackageUpdateRequestDTO;
 import com.example.warehouseapp.service.PackageTypeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -56,7 +55,7 @@ public class PackageTypeController {
     }
 
     @PostMapping
-    public ResponseEntity<PackageTypeResponseDTO> createPackageType(@RequestBody @Valid PackageTypeCreateRequestDTO obj) {
+    public ResponseEntity<PackageTypeResponseDTO> createPackageType(@RequestBody @Valid PackageTypeRequestDTO obj) {
         PackageTypeResponseDTO createdLowStockAlert = this.packageTypeService.createPackageType(obj);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -71,9 +70,8 @@ public class PackageTypeController {
 
     @PutMapping("/{id}")
     public ResponseEntity<PackageTypeResponseDTO> updatePackageTypeById(@PathVariable(name = "id") UUID id,
-                                                                        @RequestBody @Valid PackageUpdateRequestDTO obj) {
-        // TODO: to implement the logic here
-        return null;
+                                                                        @RequestBody @Valid PackageTypeRequestDTO obj) {
+        return ResponseEntity.ok(this.packageTypeService.updatePackageType(id, obj));
     }
 
     @DeleteMapping("/{id}")

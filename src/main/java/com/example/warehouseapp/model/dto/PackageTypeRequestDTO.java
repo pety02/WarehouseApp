@@ -8,6 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PackageTypeCreateRequestDTO {
+public class PackageTypeRequestDTO {
     private String name;
 }
