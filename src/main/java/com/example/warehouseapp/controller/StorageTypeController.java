@@ -10,8 +10,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/storage_types")
@@ -31,20 +37,32 @@ public class StorageTypeController {
     }
 
     @PostMapping
-    public ResponseEntity<StorageTypeResponseDTO> createStorageType(@RequestBody @Valid StorageTypeCreateRequestDTO obj) {
-        // TODO: to implement the logic here
-        return null;
+    public ResponseEntity<StorageTypeResponseDTO> createStorageType(@RequestBody @Valid StorageTypeCreateRequestDTO locationRequestDTO,
+                                                                    @AuthenticationPrincipal Authentication authentication) {
+        StorageTypeResponseDTO createdLocation = this.storageTypeService.createStorageType(locationRequestDTO, authentication.getName());
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(createdLocation.getId())
+                .toUri();
+
+        return ResponseEntity
+                .created(location)
+                .body(createdLocation);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<StorageTypeResponseDTO> updateStorageTypeById(@PathVariable(name = "id") Long id,
-                                                                        @RequestBody @Valid StorageTypeUpdateRequestDTO obj) {
-        // TODO: to implement the logic here
-        return null;
+    public ResponseEntity<StorageTypeResponseDTO> updateStorageTypeById(@PathVariable(name = "id") UUID id,
+                                                                        @RequestBody @Valid StorageTypeUpdateRequestDTO storageTypeRequestDTO,
+                                                                        @AuthenticationPrincipal Authentication authentication) {
+        StorageTypeResponseDTO updatedStorageType = this.storageTypeService.updateStorageTypeById(id,
+                storageTypeRequestDTO,
+                authentication.getName());
+        return ResponseEntity.ok(updatedStorageType);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteStorageTypeById(@PathVariable(name = "id") Long id) {
-        // TODO: to implement the logic here
+    public void deleteStorageTypeById(@PathVariable(name = "id") UUID id) {
+        this.storageTypeService.deleteStorageTypeById(id);
     }
 }
