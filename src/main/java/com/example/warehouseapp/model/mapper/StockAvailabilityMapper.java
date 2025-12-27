@@ -15,13 +15,8 @@ public class StockAvailabilityMapper {
         return StockAvailabilityResponseDTO
                 .builder()
                 .piecesCount(stockAvailability.getPiecesCount())
-                .itemId(stockAvailability.getItem().getId().toString())
-                .itemName(stockAvailability.getItem().getName())
-                .itemBarcodeValue(stockAvailability.getItem().getBarcodeValue())
-                .itemExpirationDateTime(stockAvailability.getItem().getExpirationDateTime().toString())
-                .zoneId(stockAvailability.getZone().getId().toString())
-                .zoneName(stockAvailability.getZone().getName())
-                .zoneStorageType(stockAvailability.getZone().getStorageType().toString())
+                .item(stockAvailability.getItem().getId().toString())
+                .warehouseZone(stockAvailability.getZone().getId().toString())
                 .build();
     }
 
