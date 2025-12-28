@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: 005_insert_package_types.yaml
+      author: petya_licheva
+      changes:
+        - insert:
+            tableName: package_type
+            columns:
+              - column: {name: id, value: "eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee"}
+              - column: {name: name, value: "Bag"}
+              - column: {name: createdBy, value: "system"}
+              - column: {name: updatedBy, value: "system"}
+              - column: {name: createdAt, valueDate: "2025-12-28T00:00:00Z"}
+              - column: {name: updatedAt, valueDate: "2025-12-28T00:00:00Z"}
+        - insert:
+            tableName: package_type
+            columns:
+              - column: {name: id, value: "ffffffff-ffff-ffff-ffff-ffffffffffff"}
+              - column: {name: name, value: "Box"}
+              - column: {name: createdBy, value: "system"}
+              - column: {name: updatedBy, value: "system"}
+              - column: {name: createdAt, valueDate: "2025-12-28T00:00:00Z"}
+              - column: {name: updatedAt, valueDate: "2025-12-28T00:00:00Z"}
+        - insert:
+            tableName: package_type
+            columns:
+              - column: {name: id, value: "00000000-0000-0000-0000-000000000000"}
+              - column: {name: name, value: "Crate"}
+              - column: {name: createdBy, value: "system"}
+              - column: {name: updatedBy, value: "system"}
+              - column: {name: createdAt, valueDate: "2025-12-28T00:00:00Z"}
+              - column: {name: updatedAt, valueDate: "2025-12-28T00:00:00Z"}
+        - insert:
+            tableName: package_type
+            columns:
+              - column: {name: id, value: "11111111-aaaa-bbbb-cccc-222222222222"}
+              - column: {name: name, value: "Bottle"}
+              - column: {name: createdBy, value: "system"}
+              - column: {name: updatedBy, value: "system"}
+              - column: {name: createdAt, valueDate: "2025-12-28T00:00:00Z"}
+              - column: {name: updatedAt, valueDate: "2025-12-28T00:00:00Z"}

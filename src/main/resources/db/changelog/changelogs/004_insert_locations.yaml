@@ -1,0 +1,55 @@
+databaseChangeLog:
+  - changeSet:
+      id: 004_insert_locations.yaml
+      author: petya_licheva
+      changes:
+        - insert:
+            tableName: location
+            columns:
+              - column: {name: id, value: "99999999-9999-9999-9999-999999999999"}
+              - column: {name: name, value: "Sofia"}
+              - column: {name: address, value: '{"city":"Sofia","street":"Central","zip":"1000"}'}
+              - column: {name: createdBy, value: "system"}
+              - column: {name: updatedBy, value: "system"}
+              - column: {name: createdAt, valueDate: "2025-12-28T00:00:00Z"}
+              - column: {name: updatedAt, valueDate: "2025-12-28T00:00:00Z"}
+        - insert:
+            tableName: location
+            columns:
+              - column: {name: id, value: "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"}
+              - column: {name: name, value: "Pleven"}
+              - column: {name: address, value: '{"city":"Pleven","street":"Main","zip":"5800"}'}
+              - column: {name: createdBy, value: "system"}
+              - column: {name: updatedBy, value: "system"}
+              - column: {name: createdAt, valueDate: "2025-12-28T00:00:00Z"}
+              - column: {name: updatedAt, valueDate: "2025-12-28T00:00:00Z"}
+        - insert:
+            tableName: location
+            columns:
+              - column: {name: id, value: "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"}
+              - column: {name: name, value: "Plovdiv"}
+              - column: {name: address, value: '{"city":"Plovdiv","street":"Center","zip":"4000"}'}
+              - column: {name: createdBy, value: "system"}
+              - column: {name: updatedBy, value: "system"}
+              - column: {name: createdAt, valueDate: "2025-12-28T00:00:00Z"}
+              - column: {name: updatedAt, valueDate: "2025-12-28T00:00:00Z"}
+        - insert:
+            tableName: location
+            columns:
+              - column: {name: id, value: "cccccccc-cccc-cccc-cccc-cccccccccccc"}
+              - column: {name: name, value: "Varna"}
+              - column: {name: address, value: '{"city":"Varna","street":"Seaside","zip":"9000"}'}
+              - column: {name: createdBy, value: "system"}
+              - column: {name: updatedBy, value: "system"}
+              - column: {name: createdAt, valueDate: "2025-12-28T00:00:00Z"}
+              - column: {name: updatedAt, valueDate: "2025-12-28T00:00:00Z"}
+        - insert:
+            tableName: location
+            columns:
+              - column: {name: id, value: "dddddddd-dddd-dddd-dddd-dddddddddddd"}
+              - column: {name: name, value: "Burgas"}
+              - column: {name: address, value: '{"city":"Burgas","street":"Harbor","zip":"8000"}'}
+              - column: {name: createdBy, value: "system"}
+              - column: {name: updatedBy, value: "system"}
+              - column: {name: createdAt, valueDate: "2025-12-28T00:00:00Z"}
+              - column: {name: updatedAt, valueDate: "2025-12-28T00:00:00Z"}

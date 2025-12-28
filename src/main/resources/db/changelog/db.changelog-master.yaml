@@ -1,1 +1,8 @@
 databaseChangeLog:
+  - include: db/changelog/changelogs/001_insert_currencies.yaml
+  - include: db/changelog/changelogs/002_insert_employee_roles.yaml
+  - include: db/changelog/changelogs/003_insert_item_types.yaml
+  - include: db/changelog/changelogs/004_insert_locations.yaml
+  - include: db/changelog/changelogs/005_insert_package_types.yaml
+  - include: db/changelog/changelogs/006_insert_storage_types.yaml
+  - include: db/changelog/changelogs/007_insert_warehouse_zones.yaml
