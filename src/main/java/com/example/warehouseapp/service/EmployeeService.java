@@ -50,6 +50,12 @@ public class EmployeeService {
         return this.employeeMapper.mapToResponseDTO(employee);
     }
 
+    public List<EmployeeResponseDTO> getAllEmployeesByLocationId(UUID id) {
+        return this.employeeRepository.findAllByLocationId(id).stream()
+                .map(employeeMapper::mapToResponseDTO)
+                .toList();
+    }
+
     public EmployeeResponseDTO createEmployee(EmployeeCreateRequestDTO employeeRequestDTO,
                                               String user) {
         LocalDate today = LocalDate.now();

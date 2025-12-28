@@ -31,4 +31,6 @@ public class Item {
     private List<Package> packages;
     @ManyToOne(fetch = FetchType.EAGER)
     private ItemType type;
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<Location> locations;
 }

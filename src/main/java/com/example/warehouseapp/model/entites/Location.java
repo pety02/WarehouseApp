@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.Type;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -29,4 +30,6 @@ public class Location {
     private Instant updatedAt;
     @OneToOne(fetch = FetchType.LAZY)
     private Employee manager;
+    @OneToMany
+    private List<WarehouseZone> warehouseZones;
 }

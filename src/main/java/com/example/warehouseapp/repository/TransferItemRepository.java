@@ -12,5 +12,7 @@ import java.util.List;
 @Repository
 public interface TransferItemRepository extends JpaRepository<TransferItem, UUID> {
     @Query("SELECT TI FROM TransferItem TI WHERE TI.item.id =: id")
-    List<TransferItem> findAllByTransferId(@Param("id") UUID Id);
+    List<TransferItem> findAllByTransferId(@Param("id") UUID id);
+    @Query("SELECT TI FROM TransferItem TI WHERE TI.id IN :ids")
+    List<TransferItem> findAllByIds(@Param("ids") List<UUID> ids);
 }

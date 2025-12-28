@@ -12,6 +12,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class TransferItem {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -23,4 +24,7 @@ public class TransferItem {
     private Instant updatedAt;
     @ManyToOne(fetch = FetchType.EAGER)
     private Item item;
+    @ManyToOne
+    @JoinColumn(name = "transfer_id")
+    private Transfer transfer;
 }
