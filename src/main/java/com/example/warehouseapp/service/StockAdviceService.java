@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class StockAdviceService {
+    // TODO: should be implemented and tested
     private final StockAdviceRepository stockAdviceRepository;
     private final StockAdviceMapper stockAdviceMapper;
 }
