@@ -1,4 +1,4 @@
-package com.example.warehouseapp.config;
+package com.example.warehouseapp.config.schema_exporters;
 
 import com.google.genai.types.Schema;
 import com.google.genai.types.Type;
@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public class LowStockAlertSchemaExporter {
-    public final static String PROMPT = """
+    public static final String PROMPT = """
             Generate a low stock alert in JSON format with the following fields:
             - alertDate (string): The date when the alert is generated.
             - message (string): A descriptive message about the low stock situation.

@@ -1,6 +1,6 @@
 package com.example.warehouseapp.service;
 
-import com.example.warehouseapp.config.LowStockAlertSchemaExporter;
+import com.example.warehouseapp.config.schema_exporters.LowStockAlertSchemaExporter;
 import com.example.warehouseapp.exception.JsonParseException;
 import com.example.warehouseapp.exception.NotFoundEntityException;
 import com.example.warehouseapp.model.dto.LowStockAlertResponseDTO;
@@ -20,7 +20,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.UUID;
 import java.util.List;
