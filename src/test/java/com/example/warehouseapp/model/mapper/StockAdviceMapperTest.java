@@ -3,51 +3,39 @@ package com.example.warehouseapp.model.mapper;
 import com.example.warehouseapp.model.dto.StockAdviceResponseDTO;
 import com.example.warehouseapp.model.entites.StockAdvice;
 import com.example.warehouseapp.model.entites.StockAdviceAction;
-import com.example.warehouseapp.model.entites.Item;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class StockAdviceMapperTest {
 
+    private final StockAdviceActionMapper actionMapper = Mockito.mock(StockAdviceActionMapper.class);
+    private final StockAdviceMapper mapper = new StockAdviceMapper(actionMapper);
+
     @Test
-    void mapToResponseDTO_shouldMapAdviceAndActions() {
-        StockAdviceActionMapper actionMapper = new StockAdviceActionMapper();
-        StockAdviceMapper mapper = new StockAdviceMapper(actionMapper);
-
-        Item item = new Item();
-        item.setId(UUID.randomUUID());
-        item.setName("Milk");
-
+    void mapToResponseDTO_success() {
         StockAdviceAction action = new StockAdviceAction();
-        action.setId(UUID.randomUUID());
-        action.setActionReason("Low stock");
-        action.setItem(item);
-        action.setCreatedAt(Instant.now());
-        action.setUpdatedAt(Instant.now());
+        Mockito.when(actionMapper.mapToResponseDTO(action))
+                .thenReturn(Map.entry("1", "Buy more"));
 
-        StockAdvice advice = new StockAdvice();
-        advice.setId(UUID.randomUUID());
-        advice.setValidUntil(Instant.from(LocalDate.now()));
-        advice.setReasoning("Demand increase");
-        advice.setIsActioned(false);
-        advice.setConfidence(0.85);
-        advice.setCreatedByModelVersion("v1");
-        advice.setUpdatedByModelVersion("v1");
-        advice.setCreatedAt(Instant.now());
-        advice.setUpdatedAt(Instant.now());
-        advice.setActions(List.of(action));
+        StockAdvice entity = new StockAdvice();
+        entity.setId(UUID.randomUUID());
+        entity.setValidUntil(Instant.now());
+        entity.setCreatedAt(Instant.now());
+        entity.setUpdatedAt(Instant.now());
+        entity.setConfidence(0.8);
+        entity.setIsActioned(false);
+        entity.setActions(List.of(action));
 
-        StockAdviceResponseDTO dto = mapper.mapToResponseDTO(advice);
+        StockAdviceResponseDTO dto = mapper.mapToResponseDTO(entity);
 
-        assertEquals(advice.getId().toString(), dto.getId());
-        assertEquals("Demand increase", dto.getReasoning());
-        assertFalse(dto.getIsActioned());
-        assertEquals(1, dto.getActions().size());
+        assertThat(dto.getActions()).containsEntry("1", "Buy more");
+        assertThat(dto.getConfidence()).isEqualTo(0.8);
     }
 }

@@ -8,4 +8,5 @@ import java.util.UUID;
 
 @Repository
 public interface LowStockAlertRepository extends JpaRepository<LowStockAlert, UUID> {
+    // Additional query methods can be added if needed, e.g. by date or item
 }

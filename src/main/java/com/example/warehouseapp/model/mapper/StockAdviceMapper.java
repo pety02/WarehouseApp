@@ -5,6 +5,8 @@ import com.example.warehouseapp.model.entites.StockAdvice;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
 @Component
 @RequiredArgsConstructor
 public class StockAdviceMapper {
@@ -22,10 +24,16 @@ public class StockAdviceMapper {
                 .updatedByModelVersion(stockAdvice.getUpdatedByModelVersion())
                 .createdAt(stockAdvice.getCreatedAt().toString())
                 .updatedAt(stockAdvice.getUpdatedAt().toString())
-                .actions(stockAdvice.getActions()
-                        .stream()
-                        .map(this.stockAdviceActionMapper::mapToResponseDTO)
-                        .toList()
+                .actions(
+                        stockAdvice.getActions()
+                                .stream()
+                                .map(stockAdviceActionMapper::mapToResponseDTO)
+                                .collect(
+                                        java.util.stream.Collectors.toMap(
+                                                Map.Entry::getKey,
+                                                Map.Entry::getValue
+                                        )
+                                )
                 )
                 .build();
     }

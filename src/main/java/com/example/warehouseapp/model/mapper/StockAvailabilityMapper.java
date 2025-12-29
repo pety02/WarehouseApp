@@ -11,26 +11,31 @@ import java.time.Instant;
 @Component
 public class StockAvailabilityMapper {
 
-    public StockAvailabilityResponseDTO mapToResponseDTO(StockAvailability stockAvailability){
-        return StockAvailabilityResponseDTO
-                .builder()
-                .piecesCount(stockAvailability.getPiecesCount())
-                .item(stockAvailability.getItem().getId().toString())
-                .warehouseZone(stockAvailability.getZone().getId().toString())
-                .build();
+    public StockAvailability mapToEntity(
+            StockAvailabilityResponseDTO dto,
+            Item item,
+            WarehouseZone zone
+    ) {
+        StockAvailability entity = new StockAvailability();
+        entity.setPiecesCount(dto.getPiecesCount());
+        entity.setCreatedBy(dto.getCreatedBy());
+        entity.setUpdatedBy(dto.getUpdatedBy());
+        entity.setCreatedAt(Instant.parse(dto.getCreatedAt()));
+        entity.setUpdatedAt(Instant.parse(dto.getUpdatedAt()));
+        entity.setItem(item);
+        entity.setZone(zone);
+        return entity;
     }
 
-    public StockAvailability mapToEntity(StockAvailabilityResponseDTO stockAvailabilityResponseDTO, Item item, WarehouseZone zone) {
-        return StockAvailability
-                .builder()
-                .piecesCount(stockAvailabilityResponseDTO.getPiecesCount())
-                .createdBy(stockAvailabilityResponseDTO.getCreatedBy())
-                .updatedBy(stockAvailabilityResponseDTO.getUpdatedBy())
-                .createdAt(Instant.parse(stockAvailabilityResponseDTO.getCreatedAt()))
-                .updatedAt(Instant.parse(stockAvailabilityResponseDTO.getUpdatedAt()))
-                .item(item)
-                .zone(zone)
+    public StockAvailabilityResponseDTO mapToResponseDTO(StockAvailability entity) {
+        return StockAvailabilityResponseDTO.builder()
+                .piecesCount(entity.getPiecesCount())
+                .createdBy(entity.getCreatedBy())
+                .updatedBy(entity.getUpdatedBy())
+                .createdAt(entity.getCreatedAt().toString())
+                .updatedAt(entity.getUpdatedAt().toString())
+                .item(entity.getItem().getId().toString())
+                .warehouseZone(entity.getZone().getId().toString())
                 .build();
-
     }
 }

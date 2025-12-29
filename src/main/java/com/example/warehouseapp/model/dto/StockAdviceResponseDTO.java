@@ -1,7 +1,7 @@
 package com.example.warehouseapp.model.dto;
 
 import lombok.*;
-import java.util.List;
+import java.util.Map;
 
 @Data
 @Getter
@@ -19,5 +19,5 @@ public class StockAdviceResponseDTO {
     private String updatedByModelVersion;
     private String createdAt;
     private String updatedAt;
-    private List<StockAdviceActionResponseDTO>  actions;
+    private Map<String, String> actions; // Map of action ID to action description
 }
