@@ -5,6 +5,7 @@ import com.example.warehouseapp.service.ItemTypeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,10 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/item_types")
 @RequiredArgsConstructor
+@Tag(
+        name = "Item Types",
+        description = "Item Type management endpoints (CRUD, authentication)"
+)
 public class ItemTypeController {
     private  final ItemTypeService itemTypeService;
 

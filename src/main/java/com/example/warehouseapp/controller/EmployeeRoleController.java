@@ -5,6 +5,7 @@ import com.example.warehouseapp.service.EmployeeRoleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,10 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/employee_roles")
 @RequiredArgsConstructor
+@Tag(
+        name = "Employee Roles",
+        description = "Employee Role management endpoints (CRUD, authentication)"
+)
 public class EmployeeRoleController {
     private final EmployeeRoleService employeeRoleService;
 

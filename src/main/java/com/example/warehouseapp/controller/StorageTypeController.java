@@ -7,6 +7,7 @@ import com.example.warehouseapp.service.StorageTypeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,47 +23,85 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/storage_types")
 @RequiredArgsConstructor
+@Tag(
+        name = "Storage Types",
+        description = "Storage Types management endpoints (CRUD, authentication)"
+)
 public class StorageTypeController {
+
     private final StorageTypeService storageTypeService;
 
-    @Operation(summary = "Get a list of all storage types", description = "Returns a list of all storage types")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
-            @ApiResponse(responseCode = "400", description = "Bad request - the request was mistaken"),
-            @ApiResponse(responseCode = "404", description = "Not found - The product was not found")
+    @Operation(
+            summary = "Get all storage types",
+            description = "Returns a list of all storage types"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Storage types retrieved successfully")
     })
     @GetMapping
     public ResponseEntity<List<StorageTypeResponseDTO>> getAllStorageTypes() {
         return ResponseEntity.ok(storageTypeService.getAllStorageTypes());
     }
 
+    @Operation(
+            summary = "Create a storage type",
+            description = "Creates a new storage type"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Storage type created successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid request body")
+    })
     @PostMapping
-    public ResponseEntity<StorageTypeResponseDTO> createStorageType(@RequestBody @Valid StorageTypeCreateRequestDTO locationRequestDTO,
-                                                                    @AuthenticationPrincipal Authentication authentication) {
-        StorageTypeResponseDTO createdLocation = this.storageTypeService.createStorageType(locationRequestDTO, authentication.getName());
+    public ResponseEntity<StorageTypeResponseDTO> createStorageType(
+            @RequestBody @Valid StorageTypeCreateRequestDTO requestDTO,
+            @AuthenticationPrincipal Authentication authentication
+    ) {
+        StorageTypeResponseDTO created =
+                storageTypeService.createStorageType(requestDTO, authentication.getName());
+
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(createdLocation.getId())
+                .buildAndExpand(created.getId())
                 .toUri();
 
-        return ResponseEntity
-                .created(location)
-                .body(createdLocation);
+        return ResponseEntity.created(location).body(created);
     }
 
+    @Operation(
+            summary = "Update a storage type",
+            description = "Updates an existing storage type by ID"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Storage type updated successfully"),
+            @ApiResponse(responseCode = "404", description = "Storage type not found")
+    })
     @PutMapping("/{id}")
-    public ResponseEntity<StorageTypeResponseDTO> updateStorageTypeById(@PathVariable(name = "id") UUID id,
-                                                                        @RequestBody @Valid StorageTypeUpdateRequestDTO storageTypeRequestDTO,
-                                                                        @AuthenticationPrincipal Authentication authentication) {
-        StorageTypeResponseDTO updatedStorageType = this.storageTypeService.updateStorageTypeById(id,
-                storageTypeRequestDTO,
-                authentication.getName());
-        return ResponseEntity.ok(updatedStorageType);
+    public ResponseEntity<StorageTypeResponseDTO> updateStorageTypeById(
+            @PathVariable UUID id,
+            @RequestBody @Valid StorageTypeUpdateRequestDTO requestDTO,
+            @AuthenticationPrincipal Authentication authentication
+    ) {
+        return ResponseEntity.ok(
+                storageTypeService.updateStorageTypeById(
+                        id,
+                        requestDTO,
+                        authentication.getName()
+                )
+        );
     }
 
+    @Operation(
+            summary = "Delete a storage type",
+            description = "Deletes a storage type by ID"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Storage type deleted successfully"),
+            @ApiResponse(responseCode = "404", description = "Storage type not found")
+    })
     @DeleteMapping("/{id}")
-    public void deleteStorageTypeById(@PathVariable(name = "id") UUID id) {
-        this.storageTypeService.deleteStorageTypeById(id);
+    public ResponseEntity<Void> deleteStorageTypeById(@PathVariable UUID id) {
+        storageTypeService.deleteStorageTypeById(id);
+        return ResponseEntity.noContent().build();
     }
 }

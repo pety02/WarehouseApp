@@ -6,6 +6,7 @@ import com.example.warehouseapp.service.PackageTypeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,61 +22,98 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/package_types")
 @RequiredArgsConstructor
+@Tag(
+        name = "Package Types",
+        description = "Package Types management endpoints (CRUD, authentication)"
+)
 public class PackageTypeController {
+
     private final PackageTypeService packageTypeService;
 
-    @Operation(summary = "Get a list of all package types", description = "Returns a list of all package types")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+    @Operation(
+            summary = "Get all package types",
+            description = "Returns a list of all available package types"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Package types retrieved successfully")
     })
     @GetMapping
     public ResponseEntity<List<PackageTypeResponseDTO>> getAllPackageTypes() {
-        return ResponseEntity.ok(this.packageTypeService.getAllIPackageTypes());
+        return ResponseEntity.ok(packageTypeService.getAllIPackageTypes());
     }
 
-    @Operation(summary = "Get a package type by id", description = "Returns a package type as per the id")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
-            @ApiResponse(responseCode = "400", description = "Bad request - the request was mistaken"),
-            @ApiResponse(responseCode = "404", description = "Not found - The product was not found")
+    @Operation(
+            summary = "Get package type by ID",
+            description = "Returns a package type by its ID"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Package type retrieved successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid package type ID"),
+            @ApiResponse(responseCode = "404", description = "Package type not found")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<PackageTypeResponseDTO> getPackageTypeById(@PathVariable(name = "id") UUID id) {
-        PackageTypeResponseDTO responseDTO;
-
+    public ResponseEntity<PackageTypeResponseDTO> getPackageTypeById(@PathVariable UUID id) {
         try {
-            responseDTO = this.packageTypeService.getPackageTypeById(id);
+            return ResponseEntity.ok(packageTypeService.getPackageTypeById(id));
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest().build();
         } catch (EntityNotFoundException ex) {
             return ResponseEntity.notFound().build();
         }
-
-        return ResponseEntity.ok(responseDTO);
     }
 
+    @Operation(
+            summary = "Create a package type",
+            description = "Creates a new package type"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Package type created successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid request body")
+    })
     @PostMapping
-    public ResponseEntity<PackageTypeResponseDTO> createPackageType(@RequestBody @Valid PackageTypeRequestDTO obj) {
-        PackageTypeResponseDTO createdLowStockAlert = this.packageTypeService.createPackageType(obj);
+    public ResponseEntity<PackageTypeResponseDTO> createPackageType(
+            @RequestBody @Valid PackageTypeRequestDTO requestDTO
+    ) {
+        PackageTypeResponseDTO created = packageTypeService.createPackageType(requestDTO);
+
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(createdLowStockAlert.getId())
+                .buildAndExpand(created.getId())
                 .toUri();
 
-        return ResponseEntity
-                .created(location)
-                .body(createdLowStockAlert);
+        return ResponseEntity.created(location).body(created);
     }
 
+    @Operation(
+            summary = "Update a package type",
+            description = "Updates an existing package type by ID"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Package type updated successfully"),
+            @ApiResponse(responseCode = "404", description = "Package type not found")
+    })
     @PutMapping("/{id}")
-    public ResponseEntity<PackageTypeResponseDTO> updatePackageTypeById(@PathVariable(name = "id") UUID id,
-                                                                        @RequestBody @Valid PackageTypeRequestDTO obj) {
-        return ResponseEntity.ok(this.packageTypeService.updatePackageType(id, obj));
+    public ResponseEntity<PackageTypeResponseDTO> updatePackageTypeById(
+            @PathVariable UUID id,
+            @RequestBody @Valid PackageTypeRequestDTO requestDTO
+    ) {
+        return ResponseEntity.ok(
+                packageTypeService.updatePackageType(id, requestDTO)
+        );
     }
 
+    @Operation(
+            summary = "Delete a package type",
+            description = "Deletes a package type by ID"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Package type deleted successfully"),
+            @ApiResponse(responseCode = "404", description = "Package type not found")
+    })
     @DeleteMapping("/{id}")
-    public void deletePackageTypeById(@PathVariable(name = "id") UUID id) {
-        this.packageTypeService.deletePackageTypeById(id);
+    public ResponseEntity<Void> deletePackageTypeById(@PathVariable UUID id) {
+        packageTypeService.deletePackageTypeById(id);
+        return ResponseEntity.noContent().build();
     }
 }
