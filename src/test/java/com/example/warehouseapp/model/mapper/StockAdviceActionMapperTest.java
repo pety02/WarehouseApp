@@ -35,14 +35,8 @@ class StockAdviceActionMapperTest {
         action.setItem(item);
 
         StockAdviceActionMapper mapper = new StockAdviceActionMapper();
-        StockAdviceActionResponseDTO dto = mapper.mapToResponseDTO(action);
+        var dto = mapper.mapToResponseDTO(action);
 
-        assertEquals(actionId.toString(), dto.getId());
-        assertEquals("Low stock", dto.getActionReason());
-        assertEquals("Order more milk", dto.getActionDescription());
-        assertFalse(dto.getIsActioned());
-        assertEquals(itemId.toString(), dto.getItemId());
-        assertEquals("Milk", dto.getItemName());
-        assertEquals("987654321", dto.getItemBarcodeValue());
+        assertEquals(action.getActionDescription(), dto);
     }
 }

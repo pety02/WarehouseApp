@@ -24,7 +24,7 @@ public class Location {
     private String name;
     @Type(JsonType.class)
     @Column(columnDefinition = "jsonb", nullable = false)
-    private String address;
+    private Address address;
     private String createdBy;
     private String updatedBy;
     private Instant createdAt;

@@ -6,6 +6,7 @@ import com.example.warehouseapp.service.CurrencyService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -25,6 +26,7 @@ class CurrencyControllerTest {
     private CurrencyService currencyService;
 
     @Test
+    @WithMockUser(username = "testuser")
     void getCurrencyById_ok() throws Exception {
         UUID id = UUID.randomUUID();
 
@@ -42,6 +44,7 @@ class CurrencyControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "testuser")
     void getCurrencyById_notFound() throws Exception {
         UUID id = UUID.randomUUID();
 

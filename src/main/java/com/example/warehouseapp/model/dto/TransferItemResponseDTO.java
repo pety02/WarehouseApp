@@ -1,5 +1,6 @@
 package com.example.warehouseapp.model.dto;
 
+import com.example.warehouseapp.model.entites.Address;
 import lombok.*;
 
 @Data
@@ -21,7 +22,7 @@ public class TransferItemResponseDTO {
     private String transferDate;
     private String transferRemarks;
     private String sourceLocationName;
-    private String sourceLocationAddress;
+    private Address sourceLocationAddress;
     private String destinationLocationName;
-    private String destinationLocationAddress;
+    private Address destinationLocationAddress;
 }

@@ -1,6 +1,7 @@
 package com.example.warehouseapp.service;
 
 import com.example.warehouseapp.model.dto.LocationResponseDTO;
+import com.example.warehouseapp.model.entites.Address;
 import com.example.warehouseapp.model.entites.Location;
 import com.example.warehouseapp.repository.LocationRepository;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,7 @@ class LocationServiceIntegrationTest {
 
     @Test
     void getAllLocations_realDb() {
-        repository.save(Location.builder().name("Sofia").address("{}").build());
+        repository.save(Location.builder().name("Sofia").address(new Address()).build());
 
         List<LocationResponseDTO> locations = service.getAllLocations();
 

@@ -5,6 +5,7 @@ import com.example.warehouseapp.service.PackageTypeService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -26,6 +27,7 @@ class PackageTypeControllerTest {
     private PackageTypeService packageTypeService;
 
     @Test
+    @WithMockUser(username = "testuser")
     void getAllPackageTypes_ok() throws Exception {
         when(packageTypeService.getAllIPackageTypes()).thenReturn(List.of());
 
@@ -34,6 +36,7 @@ class PackageTypeControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "testuser")
     void getPackageTypeById_ok() throws Exception {
         UUID id = UUID.randomUUID();
 

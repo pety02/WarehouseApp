@@ -2,6 +2,11 @@ databaseChangeLog:
   - changeSet:
       id: 007_insert_warehouse_zones.yaml
       author: petya_licheva
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+        - tableExists:
+            tableName: warehouse_zone
       changes:
         - insert:
             tableName: warehouse_zone
@@ -9,10 +14,10 @@ databaseChangeLog:
               - column: {name: id, value: "66666666-aaaa-bbbb-cccc-777777777777"}
               - column: {name: name, value: "Frozen Zone"}
               - column: {name: storage_type_id, value: "33333333-aaaa-bbbb-cccc-444444444444"} # Frozen
-              - column: {name: createdBy, value: "system"}
-              - column: {name: updatedBy, value: "system"}
-              - column: {name: createdAt, valueDate: "2025-12-28T00:00:00Z"}
-              - column: {name: updatedAt, valueDate: "2025-12-28T00:00:00Z"}
+              - column: {name: created_by, value: "system"}
+              - column: {name: updated_by, value: "system"}
+              - column: {name: created_at, value: "2025-12-28T00:00:00Z"}
+              - column: {name: updated_at, value: "2025-12-28T00:00:00Z"}
 
         - insert:
             tableName: warehouse_zone
@@ -20,10 +25,10 @@ databaseChangeLog:
               - column: {name: id, value: "77777777-aaaa-bbbb-cccc-888888888888"}
               - column: {name: name, value: "Dry Goods Zone"}
               - column: {name: storage_type_id, value: "44444444-aaaa-bbbb-cccc-555555555555"} # Dry
-              - column: {name: createdBy, value: "system"}
-              - column: {name: updatedBy, value: "system"}
-              - column: {name: createdAt, valueDate: "2025-12-28T00:00:00Z"}
-              - column: {name: updatedAt, valueDate: "2025-12-28T00:00:00Z"}
+              - column: {name: created_by, value: "system"}
+              - column: {name: updated_by, value: "system"}
+              - column: {name: created_at, value: "2025-12-28T00:00:00Z"}
+              - column: {name: updated_at, value: "2025-12-28T00:00:00Z"}
 
         - insert:
             tableName: warehouse_zone
@@ -31,10 +36,10 @@ databaseChangeLog:
               - column: {name: id, value: "88888888-aaaa-bbbb-cccc-999999999999"}
               - column: {name: name, value: "Beverage Zone"}
               - column: {name: storage_type_id, value: "55555555-aaaa-bbbb-cccc-666666666666"} # Beverage Shelf
-              - column: {name: createdBy, value: "system"}
-              - column: {name: updatedBy, value: "system"}
-              - column: {name: createdAt, valueDate: "2025-12-28T00:00:00Z"}
-              - column: {name: updatedAt, valueDate: "2025-12-28T00:00:00Z"}
+              - column: {name: created_by, value: "system"}
+              - column: {name: updated_by, value: "system"}
+              - column: {name: created_at, value: "2025-12-28T00:00:00Z"}
+              - column: {name: updated_at, value: "2025-12-28T00:00:00Z"}
 
         - insert:
             tableName: warehouse_zone
@@ -42,7 +47,7 @@ databaseChangeLog:
               - column: {name: id, value: "99999999-aaaa-bbbb-cccc-aaaaaaaaaaaa"}
               - column: {name: name, value: "Snacks Zone"}
               - column: {name: storage_type_id, value: "44444444-aaaa-bbbb-cccc-555555555555"} # Dry
-              - column: {name: createdBy, value: "system"}
-              - column: {name: updatedBy, value: "system"}
-              - column: {name: createdAt, valueDate: "2025-12-28T00:00:00Z"}
-              - column: {name: updatedAt, valueDate: "2025-12-28T00:00:00Z"}
+              - column: {name: created_by, value: "system"}
+              - column: {name: updated_by, value: "system"}
+              - column: {name: created_at, value: "2025-12-28T00:00:00Z"}
+              - column: {name: updated_at, value: "2025-12-28T00:00:00Z"}

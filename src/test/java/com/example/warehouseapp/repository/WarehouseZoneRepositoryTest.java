@@ -1,5 +1,6 @@
 package com.example.warehouseapp.repository;
 
+import com.example.warehouseapp.model.entites.Address;
 import com.example.warehouseapp.model.entites.Location;
 import com.example.warehouseapp.model.entites.WarehouseZone;
 import org.junit.jupiter.api.Test;
@@ -34,7 +35,7 @@ class WarehouseZoneRepositoryTest {
 
     @Test
     void findAllByLocationId_success() {
-        Location location = Location.builder().name("Loc").address("Addr").build();
+        Location location = Location.builder().name("Loc").address(new Address()).build();
         locationRepository.save(location);
 
         WarehouseZone zone =

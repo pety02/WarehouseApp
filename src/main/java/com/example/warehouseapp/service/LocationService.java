@@ -29,7 +29,7 @@ public class LocationService {
         return this.locationMapper.mapToResponseDTO(location);
     }
 
-    public Location getLocationByAddressAndName(String address, String name) {
+    public Location getLocationByAddressAndName(Address address, String name) {
         return this.locationRepository.findByAddressAndName(address, name);
     }
 }

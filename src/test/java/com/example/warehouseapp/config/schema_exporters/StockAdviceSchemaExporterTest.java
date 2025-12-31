@@ -14,7 +14,7 @@ class StockAdviceSchemaExporterTest {
     void exportSchema_containsRequiredFields() {
         Schema schema = StockAdviceSchemaExporter.exportSchema();
 
-        assertThat(schema.type()).isEqualTo(Type.Known.OBJECT);
+        assertThat(schema.type().orElseThrow().knownEnum()).isEqualTo(Type.Known.OBJECT);
         assertThat(schema.required())
                 .contains(List.of(
                         "createdAt",

@@ -1,5 +1,6 @@
 package com.example.warehouseapp.model.dto;
 
+import com.example.warehouseapp.model.entites.Address;
 import lombok.*;
 import java.util.List;
 
@@ -20,8 +21,8 @@ public class TransferResponseDTO {
     private List<TransferItemResponseDTO> transferResponseDTOList;
     private String sourceLocationId;
     private String sourceLocationName;
-    private String sourceLocationAddress;
+    private Address sourceLocationAddress;
     private String destinationLocationId;
     private String destinationLocationName;
-    private String destinationLocationAddress;
+    private Address destinationLocationAddress;
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 
 @Component
 public class EmployeeMapper {
@@ -43,8 +44,8 @@ public class EmployeeMapper {
                 .fireDate(null)
                 .createdBy(user)
                 .updatedBy(user)
-                .createdAt(Instant.from(today))
-                .updatedAt(Instant.from(today))
+                .createdAt(today.atStartOfDay(ZoneId.systemDefault()).toInstant())
+                .updatedAt(today.atStartOfDay(ZoneId.systemDefault()).toInstant())
                 .credentials(null)
                 .role(role)
                 .location(location)
@@ -58,7 +59,7 @@ public class EmployeeMapper {
         employee.setRole(role);
         employee.setLocation(location);
         employee.setUpdatedBy(user);
-        employee.setUpdatedAt(Instant.from(today));
+        employee.setUpdatedAt(today.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
         return employee;
     }

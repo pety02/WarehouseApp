@@ -1,4 +1,5 @@
 package com.example.warehouseapp.model.dto;
+import com.example.warehouseapp.model.entites.Address;
 import lombok.*;
 
 @Data
@@ -10,7 +11,7 @@ import lombok.*;
 public class LocationResponseDTO {
     private String id;
     private String name;
-    private String address;
+    private Address address;
     private String managerId;
     private String managerName;
     private String managerSurname;

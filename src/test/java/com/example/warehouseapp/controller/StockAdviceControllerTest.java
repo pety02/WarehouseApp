@@ -9,12 +9,14 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 import java.util.UUID;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -31,6 +33,7 @@ class StockAdviceControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
+    @WithMockUser(username = "testuser")
     void getAllStockAdvices_returns200() throws Exception {
         Mockito.when(stockAdviceService.getAllStockAdvices())
                 .thenReturn(List.of(StockAdviceResponseDTO.builder().id("1").build()));
@@ -41,6 +44,7 @@ class StockAdviceControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "testuser")
     void getStockAdviceById_found() throws Exception {
         UUID id = UUID.randomUUID();
 
@@ -53,6 +57,7 @@ class StockAdviceControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "testuser")
     void getStockAdviceById_notFound() throws Exception {
         UUID id = UUID.randomUUID();
 
@@ -64,6 +69,7 @@ class StockAdviceControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", roles = "{ADMIN}")
     void createStockAdvice_returns201() throws Exception {
         StockAdviceCreateRequestDTO request = StockAdviceCreateRequestDTO.builder()
                 .validUntil("2025-01-01T00:00:00Z")
@@ -78,6 +84,7 @@ class StockAdviceControllerTest {
                 .thenReturn(response);
 
         mockMvc.perform(post("/api/stock_advices")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -85,6 +92,7 @@ class StockAdviceControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", roles = "{ADMIN}")
     void updateStockAdvice_notFound() throws Exception {
         UUID id = UUID.randomUUID();
 
@@ -92,16 +100,20 @@ class StockAdviceControllerTest {
                 .thenThrow(EntityNotFoundException.class);
 
         mockMvc.perform(put("/api/stock_advices/{id}", id)
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{}"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
+    @WithMockUser(username = "admin", roles = "{ADMIN}")
     void deleteStockAdvice_noContent() throws Exception {
         UUID id = UUID.randomUUID();
 
-        mockMvc.perform(delete("/api/stock_advices/{id}", id))
+        mockMvc.perform(delete("/api/stock_advices/{id}", id)
+                        .with(csrf())
+                )
                 .andExpect(status().isNoContent());
     }
 }

@@ -1,5 +1,6 @@
 package com.example.warehouseapp.model.dto;
 
+import com.example.warehouseapp.model.entites.Address;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -17,5 +18,5 @@ public class EmployeeUpdateRequestDTO {
     private String phoneNumber;
     private String role;
     private String locationName;
-    private String locationAddress;
+    private Address locationAddress;
 }

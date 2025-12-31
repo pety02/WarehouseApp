@@ -2,31 +2,36 @@ databaseChangeLog:
   - changeSet:
       id: 002_insert_employee_roles.yaml
       author: petya_licheva
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+        - tableExists:
+            tableName: employee_role
       changes:
         - insert:
             tableName: employee_role
             columns:
-              - column: {name: id, value: "33333333-3333-3333-3333-333333333333"}
-              - column: {name: name, value: "Warehouse Manager"}
-              - column: {name: createdBy, value: "system"}
-              - column: {name: updatedBy, value: "system"}
-              - column: {name: createdAt, valueDate: "2025-12-28T00:00:00Z"}
-              - column: {name: updatedAt, valueDate: "2025-12-28T00:00:00Z"}
+              - column: { name: id, value: "33333333-3333-3333-3333-333333333333" }
+              - column: { name: name, value: "Warehouse Manager" }
+              - column: { name: created_by, value: "system" }
+              - column: { name: updated_by, value: "system" }
+              - column: { name: created_at, value: "2025-12-28T00:00:00Z" }
+              - column: { name: updated_at, value: "2025-12-28T00:00:00Z" }
         - insert:
             tableName: employee_role
             columns:
-              - column: {name: id, value: "44444444-4444-4444-4444-444444444444"}
-              - column: {name: name, value: "Forklift Operator"}
-              - column: {name: createdBy, value: "system"}
-              - column: {name: updatedBy, value: "system"}
-              - column: {name: createdAt, valueDate: "2025-12-28T00:00:00Z"}
-              - column: {name: updatedAt, valueDate: "2025-12-28T00:00:00Z"}
+              - column: { name: id, value: "44444444-4444-4444-4444-444444444444" }
+              - column: { name: name, value: "Forklift Operator" }
+              - column: { name: created_by, value: "system" }
+              - column: { name: updated_by, value: "system" }
+              - column: { name: created_at, value: "2025-12-28T00:00:00Z" }
+              - column: { name: updated_at, value: "2025-12-28T00:00:00Z" }
         - insert:
             tableName: employee_role
             columns:
-              - column: {name: id, value: "55555555-5555-5555-5555-555555555555"}
-              - column: {name: name, value: "Inventory Specialist"}
-              - column: {name: createdBy, value: "system"}
-              - column: {name: updatedBy, value: "system"}
-              - column: {name: createdAt, valueDate: "2025-12-28T00:00:00Z"}
-              - column: {name: updatedAt, valueDate: "2025-12-28T00:00:00Z"}
+              - column: { name: id, value: "55555555-5555-5555-5555-555555555555" }
+              - column: { name: name, value: "Inventory Specialist" }
+              - column: { name: created_by, value: "system" }
+              - column: { name: updated_by, value: "system" }
+              - column: { name: created_at, value: "2025-12-28T00:00:00Z" }
+              - column: { name: updated_at, value: "2025-12-28T00:00:00Z" }

@@ -1,5 +1,6 @@
 package com.example.warehouseapp.repository;
 
+import com.example.warehouseapp.model.entites.Address;
 import com.example.warehouseapp.model.entites.Employee;
 import com.example.warehouseapp.model.entites.EmployeeCredentials;
 import com.example.warehouseapp.model.entites.Location;
@@ -69,7 +70,7 @@ class EmployeeRepositoryTest {
 
     @Test
     void findAllByLocationId_success() {
-        Location location = Location.builder().name("L1").address("A1").build();
+        Location location = Location.builder().name("L1").address(new Address()).build();
 
         Employee e1 = Employee.builder().location(location).isActive(true).build();
         Employee e2 = Employee.builder().location(location).isActive(true).build();

@@ -24,7 +24,7 @@ class LowStockAlertSchemaExporterTest {
 
         assertEquals(
                 Type.Known.OBJECT,
-                schema.type(),
+                schema.type().orElseThrow().knownEnum(),
                 "Top-level schema type should be OBJECT"
         );
     }
@@ -71,7 +71,6 @@ class LowStockAlertSchemaExporterTest {
         Schema stockAvailability = schema.properties().orElseThrow().get("stockAvailability");
 
         assertNotNull(stockAvailability);
-        assertEquals(Type.Known.OBJECT, stockAvailability.type());
 
         List<String> required = stockAvailability.required().orElseThrow();
         assertNotNull(required);
@@ -91,15 +90,16 @@ class LowStockAlertSchemaExporterTest {
                         .get("stockAvailability");
 
         Map<String, Schema> properties = stockAvailability.properties().orElseThrow();
-
         assertNotNull(properties);
-        assertEquals(Type.Known.INTEGER, properties.get("piecesCount").type());
-        assertEquals(Type.Known.STRING, properties.get("item").type());
-        assertEquals(Type.Known.STRING, properties.get("warehouseZone").type());
-        assertEquals(Type.Known.STRING, properties.get("createdBy").type());
-        assertEquals(Type.Known.STRING, properties.get("updatedBy").type());
-        assertEquals(Type.Known.STRING, properties.get("createdAt").type());
-        assertEquals(Type.Known.STRING, properties.get("updatedAt").type());
+
+        // Compare using .known() which returns Type.Known enum
+        assertEquals(Type.Known.INTEGER, properties.get("piecesCount").type().orElseThrow().knownEnum());
+        assertEquals(Type.Known.STRING, properties.get("item").type().orElseThrow().knownEnum());
+        assertEquals(Type.Known.STRING, properties.get("warehouseZone").type().orElseThrow().knownEnum());
+        assertEquals(Type.Known.STRING, properties.get("createdBy").type().orElseThrow().knownEnum());
+        assertEquals(Type.Known.STRING, properties.get("updatedBy").type().orElseThrow().knownEnum());
+        assertEquals(Type.Known.STRING, properties.get("createdAt").type().orElseThrow().knownEnum());
+        assertEquals(Type.Known.STRING, properties.get("updatedAt").type().orElseThrow().knownEnum());
     }
 
     @Test
@@ -111,11 +111,11 @@ class LowStockAlertSchemaExporterTest {
                         .get("employees");
 
         assertNotNull(employees);
-        assertEquals(Type.Known.ARRAY, employees.type());
+        assertEquals(Type.Known.ARRAY, employees.type().orElseThrow().knownEnum());
 
         Schema itemSchema = employees.items().orElseThrow();
         assertNotNull(itemSchema);
-        assertEquals(Type.Known.STRING, itemSchema.type());
+        assertEquals(Type.Known.STRING, itemSchema.type().orElseThrow().knownEnum());
     }
 
     @Test

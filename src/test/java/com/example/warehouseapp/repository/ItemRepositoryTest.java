@@ -1,5 +1,6 @@
 package com.example.warehouseapp.repository;
 
+import com.example.warehouseapp.model.entites.Address;
 import com.example.warehouseapp.model.entites.Item;
 import com.example.warehouseapp.model.entites.Location;
 import org.junit.jupiter.api.Test;
@@ -30,7 +31,7 @@ class ItemRepositoryTest {
 
     @Test
     void findAllByLocationId_success() {
-        Location location = Location.builder().name("Loc").address("Addr").build();
+        Location location = Location.builder().name("Loc").address(new Address()).build();
 
         Item item = Item.builder()
                 .name("Item")

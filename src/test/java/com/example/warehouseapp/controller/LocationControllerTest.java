@@ -4,6 +4,7 @@ import com.example.warehouseapp.service.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -32,6 +33,7 @@ class LocationControllerTest {
     private StockAvailabilityService stockAvailabilityService;
 
     @Test
+    @WithMockUser(username = "testuser")
     void getAllLocations_ok() throws Exception {
         when(locationService.getAllLocations()).thenReturn(List.of());
 
@@ -40,6 +42,7 @@ class LocationControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "testuser")
     void getAllItemsByLocation_ok() throws Exception {
         UUID id = UUID.randomUUID();
 
@@ -50,6 +53,7 @@ class LocationControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "testuser")
     void getAllWarehouseZones_ok() throws Exception {
         UUID id = UUID.randomUUID();
 

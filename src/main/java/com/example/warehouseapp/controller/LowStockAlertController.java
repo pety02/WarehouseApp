@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/low-stock-alerts")
+@RequestMapping("/api/low_stock_alerts")
 @RequiredArgsConstructor
 @Tag(name = "Low Stock Alerts", description = "AI-generated low stock predictions")
 public class LowStockAlertController {
