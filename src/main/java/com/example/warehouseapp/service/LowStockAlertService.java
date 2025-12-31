@@ -52,6 +52,7 @@ public class LowStockAlertService {
         String jsonResponse = response.text();
         log.info("JSON Output: " + jsonResponse);
 
+
         try {
             LowStockAlertResponseDTO dto = new com.fasterxml.jackson.databind.ObjectMapper()
                     .readValue(jsonResponse, LowStockAlertResponseDTO.class);
