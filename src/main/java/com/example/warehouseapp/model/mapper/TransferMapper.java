@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 
 @Component
@@ -44,8 +45,8 @@ public class TransferMapper {
                 .remarks(transferRequestDTO.getRemarks())
                 .createdBy(user)
                 .updatedBy(user)
-                .createdAt(Instant.from(date))
-                .updatedAt(Instant.from(date))
+                .createdAt(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
+                .updatedAt(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
                 .transferItems(transferItems)
                 .sourceLocation(sourceLocation)
                 .destinationLocation(destinationLocation)
@@ -58,7 +59,7 @@ public class TransferMapper {
         existingTransfer.setDeliveryDateTime(transferRequestDTO.getDeliveryDateTime());
         existingTransfer.setRemarks(transferRequestDTO.getRemarks());
         existingTransfer.setUpdatedBy(user);
-        existingTransfer.setUpdatedAt(Instant.from(date));
+        existingTransfer.setUpdatedAt(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
         existingTransfer.setTransferItems(transferItems);
         existingTransfer.setSourceLocation(sourceLocation);
         existingTransfer.setDestinationLocation(destinationLocation);

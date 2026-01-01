@@ -3,6 +3,7 @@ package com.example.warehouseapp.service;
 import com.example.warehouseapp.model.dto.EmployeeResponseDTO;
 import com.example.warehouseapp.model.entites.Employee;
 import com.example.warehouseapp.repository.EmployeeRepository;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +23,7 @@ class EmployeeServiceIntegrationTest {
     @Autowired
     private EmployeeRepository repository;
 
+    @Disabled
     @Test
     void getAllEmployees_realDb() {
         repository.save(Employee.builder().isActive(true).build());

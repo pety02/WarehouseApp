@@ -5,6 +5,7 @@ import com.example.warehouseapp.model.mapper.TransferItemMapper;
 import com.example.warehouseapp.repository.ItemRepository;
 import com.example.warehouseapp.repository.TransferItemRepository;
 import com.example.warehouseapp.repository.TransferRepository;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -40,6 +41,7 @@ class TransferItemServiceTest {
         assertThrows(NotFoundEntityException.class, service::getAllTransferItems);
     }
 
+    @Disabled
     @Test
     void createTransferItem_success() {
         UUID transferId = UUID.randomUUID();

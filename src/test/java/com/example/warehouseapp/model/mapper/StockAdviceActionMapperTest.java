@@ -37,6 +37,6 @@ class StockAdviceActionMapperTest {
         StockAdviceActionMapper mapper = new StockAdviceActionMapper();
         var dto = mapper.mapToResponseDTO(action);
 
-        assertEquals(action.getActionDescription(), dto);
+        assertEquals(action.getActionDescription(), dto.getValue());
     }
 }

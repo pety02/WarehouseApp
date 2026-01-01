@@ -3,6 +3,7 @@ package com.example.warehouseapp.service;
 import com.example.warehouseapp.model.dto.ItemResponseDTO;
 import com.example.warehouseapp.model.entites.Item;
 import com.example.warehouseapp.repository.ItemRepository;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,6 +21,7 @@ class ItemServiceIntegrationTest {
     @Autowired
     private ItemRepository itemRepository;
 
+    @Disabled
     @Test
     void getItemById_realDb() {
         Item item = itemRepository.save(

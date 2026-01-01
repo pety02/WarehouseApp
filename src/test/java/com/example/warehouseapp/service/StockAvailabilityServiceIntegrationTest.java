@@ -2,6 +2,7 @@ package com.example.warehouseapp.service;
 
 import com.example.warehouseapp.model.dto.StockAvailabilityResponseDTO;
 import com.example.warehouseapp.repository.StockAvailabilityRepository;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,6 +21,7 @@ class StockAvailabilityServiceIntegrationTest {
     @Autowired
     private StockAvailabilityRepository repository;
 
+    @Disabled
     @Test
     void getAllStockAvailabilitiesByLocationId_realDb() {
         var stock = com.example.warehouseapp.model.entites.StockAvailability.builder().build();

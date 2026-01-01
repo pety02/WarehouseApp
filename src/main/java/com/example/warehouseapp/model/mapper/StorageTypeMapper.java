@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 
 @Component
 public class StorageTypeMapper {
@@ -26,8 +27,8 @@ public class StorageTypeMapper {
                 .name(storageTypeCreateRequestDTO.getName())
                 .createdBy(user)
                 .updatedBy(user)
-                .createdAt(Instant.from(date))
-                .updatedAt(Instant.from(date))
+                .createdAt(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
+                .updatedAt(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
                 .build();
     }
 
@@ -35,6 +36,6 @@ public class StorageTypeMapper {
                                     String user, LocalDate date) {
         storageType.setName(storageTypeUpdateRequestDTO.getName());
         storageType.setUpdatedBy(user);
-        storageType.setUpdatedAt(Instant.from(date));
+        storageType.setUpdatedAt(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 }
