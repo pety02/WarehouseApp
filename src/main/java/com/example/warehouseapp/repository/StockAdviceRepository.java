@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 @Repository
 public interface StockAdviceRepository extends JpaRepository<StockAdvice, UUID> {
-    // TODO: should be implemented and tested
+
 }

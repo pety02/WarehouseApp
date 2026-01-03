@@ -12,6 +12,6 @@ import java.util.UUID;
 @Repository
 public interface StockAvailabilityRepository extends JpaRepository<StockAvailability, UUID> {
     Optional<StockAvailability> getItemById(UUID itemId);
-    @Query("SELECT sa FROM StockAvailability sa JOIN sa.item.locations l WHERE l = ?1")
+    @Query("SELECT sa FROM StockAvailability sa JOIN sa.item.locations l WHERE l.id = ?1")
     List<StockAvailability> findAllByLocationId(UUID locationId);
 }

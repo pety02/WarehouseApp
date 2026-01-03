@@ -14,23 +14,37 @@ import java.time.Instant;
 public class TransferItemMapper {
 
     public TransferItemResponseDTO mapToResponseDTO(TransferItem transferItem) {
-        return TransferItemResponseDTO
-                .builder()
-                .id(transferItem.getId().toString())
+        var transfer = transferItem.getTransfer();
+        var item = transferItem.getItem();
+
+        var sourceLocation = transfer != null ? transfer.getSourceLocation() : null;
+        var destinationLocation = transfer != null ? transfer.getDestinationLocation() : null;
+
+        return TransferItemResponseDTO.builder()
+                .id(transferItem.getId() != null ? transferItem.getId().toString() : null)
                 .quantity(transferItem.getQuantity())
                 .createdBy(transferItem.getCreatedBy())
                 .updatedBy(transferItem.getUpdatedBy())
-                .createdAt(transferItem.getCreatedAt().toString())
-                .updatedAt(transferItem.getUpdatedAt().toString())
-                .itemId(transferItem.getItem().getId().toString())
-                .itemName(transferItem.getItem().getName())
-                .itemBarcodeValue(transferItem.getItem().getBarcodeValue())
-                .transferDate(transferItem.getTransfer().getDeliveryDateTime().toString())
-                .transferRemarks(transferItem.getTransfer().getRemarks())
-                .sourceLocationName(transferItem.getTransfer().getSourceLocation().getName())
-                .sourceLocationAddress(transferItem.getTransfer().getSourceLocation().getAddress())
-                .destinationLocationName(transferItem.getTransfer().getDestinationLocation().getName())
-                .destinationLocationAddress(transferItem.getTransfer().getDestinationLocation().getAddress())
+                .createdAt(transferItem.getCreatedAt() != null ? transferItem.getCreatedAt().toString() : null)
+                .updatedAt(transferItem.getUpdatedAt() != null ? transferItem.getUpdatedAt().toString() : null)
+
+                .itemId(item != null && item.getId() != null ? item.getId().toString() : null)
+                .itemName(item != null ? item.getName() : null)
+                .itemBarcodeValue(item != null ? item.getBarcodeValue() : null)
+
+                .transferDate(
+                        transfer != null && transfer.getDeliveryDateTime() != null
+                                ? transfer.getDeliveryDateTime().toString()
+                                : null
+                )
+                .transferRemarks(transfer != null ? transfer.getRemarks() : null)
+
+                .sourceLocationName(sourceLocation != null ? sourceLocation.getName() : null)
+                .sourceLocationAddress(sourceLocation != null ? sourceLocation.getAddress() : null)
+
+                .destinationLocationName(destinationLocation != null ? destinationLocation.getName() : null)
+                .destinationLocationAddress(destinationLocation != null ? destinationLocation.getAddress() : null)
+
                 .build();
     }
 

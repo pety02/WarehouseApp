@@ -3,7 +3,6 @@ package com.example.warehouseapp.service;
 import com.example.warehouseapp.repository.ItemRepository;
 import com.example.warehouseapp.repository.TransferItemRepository;
 import com.example.warehouseapp.repository.TransferRepository;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,7 +23,6 @@ class TransferItemServiceIntegrationTest {
     @Autowired
     private ItemRepository itemRepository;
 
-    @Disabled
     @Test
     void createAndFetchTransferItem_realDb() {
         var transfer = transferRepository.save(new com.example.warehouseapp.model.entites.Transfer());

@@ -6,24 +6,26 @@ import com.example.warehouseapp.model.entites.Item;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class ItemMapper {
 
     public ItemResponseDTO mapToResponseDTO(Item item) {
         return ItemResponseDTO
                 .builder()
-                .id(item.getId().toString())
+                .id(item.getId() != null ? item.getId().toString() : null)
                 .name(item.getName())
                 .barcodeValue(item.getBarcodeValue())
-                .expirationDateTime(item.getExpirationDateTime().toString())
+                .expirationDateTime(item.getExpirationDateTime() != null ? item.getExpirationDateTime().toString() : null)
                 .sellingPrice(item.getSellingPrice())
-                .currencies(item.getCurrencies().stream().map(Currency::getName).toList())
+                .currencies(item.getCurrencies() != null ? item.getCurrencies().stream().map(Currency::getName).toList() : null)
                 .packages(
-                        item.getPackages().stream()
+                        item.getPackages() != null ? item.getPackages().stream()
                                 .map(p -> Pair.of(p.getName(), p.getPiecesCount().toString()))
-                                .toList()
+                                .toList() :  List.of()
                 )
-                .itemType(item.getType().getName())
+                .itemType(item.getType() != null ? item.getType().getName() : null)
                 .build();
     }
 }

@@ -15,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
-@Disabled
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 @TestPropertySource(properties = {
         "spring.liquibase.enabled=false"
@@ -28,7 +27,6 @@ class EmployeeCredentialsRepositoryTest {
     @Autowired
     private EmployeeRepository employeeRepository;
 
-    @Disabled
     @Test
     void findByEmail_success() {
         EmployeeCredentials creds = repository.save(
@@ -45,7 +43,6 @@ class EmployeeCredentialsRepositoryTest {
         assertEquals(creds.getId(), result.get().getId());
     }
 
-    @Disabled
     @Test
     void findEmployeeCredentialsByEmployeeId_success() {
         EmployeeCredentials creds = repository.save(

@@ -4,7 +4,6 @@ import com.example.warehouseapp.model.entites.Address;
 import com.example.warehouseapp.model.entites.Employee;
 import com.example.warehouseapp.model.entites.EmployeeCredentials;
 import com.example.warehouseapp.model.entites.Location;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -18,10 +17,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
-@Disabled
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 @TestPropertySource(properties = {
-        "spring.liquibase.enabled=false"
+        "spring.liquibase.enabled=false",
+        "spring.jpa.hibernate.ddl-auto=create-drop"
 })
 class EmployeeRepositoryTest {
 
@@ -31,7 +30,9 @@ class EmployeeRepositoryTest {
     @Autowired
     private EmployeeCredentialsRepository credentialsRepository;
 
-    @Disabled
+    @Autowired
+    private LocationRepository locationRepository;
+
     @Test
     void findEmployeeByCredentialsId_success() {
         EmployeeCredentials creds = credentialsRepository.save(
@@ -55,7 +56,6 @@ class EmployeeRepositoryTest {
         assertEquals(employee.getId(), result.get().getId());
     }
 
-    @Disabled
     @Test
     void findEmployeeByEmail_success() {
         EmployeeCredentials creds = credentialsRepository.save(
@@ -78,18 +78,35 @@ class EmployeeRepositoryTest {
         assertTrue(result.isPresent());
     }
 
-    @Disabled
     @Test
     void findAllByLocationId_success() {
-        Location location = Location.builder().name("L1").address(new Address()).build();
+        // Persist the location first so the FK works
+        Location location = Location.builder()
+                .name("L1")
+                .address(Address.builder()
+                        .street("123 Main St")
+                        .city("Springfield")
+                        .zip("12345")
+                        .country("USA")
+                        .build())
+                .build();
 
-        Employee e1 = Employee.builder().location(location).isActive(true).build();
-        Employee e2 = Employee.builder().location(location).isActive(true).build();
+        locationRepository.save(location);
+
+        // Persist employees with cascade (optional)
+        Employee e1 = Employee.builder()
+                .location(location)
+                .isActive(true)
+                .build();
+
+        Employee e2 = Employee.builder()
+                .location(location)
+                .isActive(true)
+                .build();
 
         employeeRepository.saveAll(List.of(e1, e2));
 
-        List<Employee> employees =
-                employeeRepository.findAllByLocationId(location.getId());
+        List<Employee> employees = employeeRepository.findAllByLocationId(location.getId());
 
         assertEquals(2, employees.size());
     }

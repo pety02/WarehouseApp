@@ -23,7 +23,6 @@ class EmployeeServiceIntegrationTest {
     @Autowired
     private EmployeeRepository repository;
 
-    @Disabled
     @Test
     void getAllEmployees_realDb() {
         repository.save(Employee.builder().isActive(true).build());

@@ -32,10 +32,12 @@ public class StockAvailabilityMapper {
                 .piecesCount(entity.getPiecesCount())
                 .createdBy(entity.getCreatedBy())
                 .updatedBy(entity.getUpdatedBy())
-                .createdAt(entity.getCreatedAt().toString())
-                .updatedAt(entity.getUpdatedAt().toString())
-                .item(entity.getItem().getId().toString())
-                .warehouseZone(entity.getZone().getId().toString())
+                .createdAt(entity.getCreatedAt() != null ? entity.getCreatedAt().toString() : null)
+                .updatedAt(entity.getUpdatedAt() != null ? entity.getUpdatedAt().toString() : null)
+                .item(entity.getItem() != null && entity.getItem().getId() != null
+                        ? entity.getItem().getId().toString() : null)
+                .warehouseZone(entity.getZone() != null && entity.getZone().getId() != null
+                        ? entity.getZone().getId().toString() : null)
                 .build();
     }
 }

@@ -1,7 +1,6 @@
 package com.example.warehouseapp.service;
 
 import com.example.warehouseapp.exception.NotFoundEntityException;
-import com.example.warehouseapp.model.dto.ItemResponseDTO;
 import com.example.warehouseapp.model.dto.TransferItemCreateRequestDTO;
 import com.example.warehouseapp.model.dto.TransferItemResponseDTO;
 import com.example.warehouseapp.model.dto.TransferItemUpdateRequestDTO;
@@ -25,7 +24,7 @@ public class TransferItemService {
     private final TransferItemRepository transferItemRepository;
     private final TransferRepository transferRepository;
     private final TransferItemMapper transferItemMapper;
-    private ItemRepository itemRepository;
+    private final ItemRepository itemRepository;
 
     public List<TransferItemResponseDTO> getAllTransferItems() {
         List<TransferItem> items = transferItemRepository.findAll();
@@ -40,7 +39,6 @@ public class TransferItemService {
     }
 
     public List<TransferItemResponseDTO> getTransferItemsByTransferId(UUID transferId) {
-        // Ensure transfer exists
         transferRepository.findById(transferId)
                 .orElseThrow(() -> new NotFoundEntityException("Transfer not found"));
 

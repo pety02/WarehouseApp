@@ -41,7 +41,6 @@ class TransferItemServiceTest {
         assertThrows(NotFoundEntityException.class, service::getAllTransferItems);
     }
 
-    @Disabled
     @Test
     void createTransferItem_success() {
         UUID transferId = UUID.randomUUID();

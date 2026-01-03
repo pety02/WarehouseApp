@@ -4,12 +4,10 @@ import com.example.warehouseapp.model.dto.EmployeeCreateRequestDTO;
 import com.example.warehouseapp.model.dto.EmployeeResponseDTO;
 import com.example.warehouseapp.model.dto.EmployeeUpdateRequestDTO;
 import com.example.warehouseapp.model.entites.Employee;
-import com.example.warehouseapp.model.entites.EmployeeCredentials;
 import com.example.warehouseapp.model.entites.EmployeeRole;
 import com.example.warehouseapp.model.entites.Location;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 
@@ -19,17 +17,17 @@ public class EmployeeMapper {
     public EmployeeResponseDTO mapToResponseDTO(Employee employee) {
         return EmployeeResponseDTO
                 .builder()
-                .id(employee.getId().toString())
+                .id(employee.getId() != null ? employee.getId().toString() : null)
                 .name(employee.getName())
                 .surname(employee.getSurname())
                 .uidNo(employee.getUidNo())
-                .hireDate(employee.getHireDate().toString())
-                .fireDate(employee.getFireDate().toString())
-                .email(employee.getCredentials().getEmail())
-                .phoneNumber(employee.getCredentials().getPhoneNumber())
-                .role(employee.getRole().getName())
-                .locationId(employee.getLocation().getId().toString())
-                .locationName(employee.getLocation().getName())
+                .hireDate(employee.getHireDate() != null ? employee.getHireDate().toString() : null)
+                .fireDate(employee.getFireDate() != null ? employee.getFireDate().toString() : null)
+                .email(employee.getCredentials() != null ? employee.getCredentials().getEmail() : null)
+                .phoneNumber(employee.getCredentials() != null ? employee.getCredentials().getPhoneNumber() : null)
+                .role(employee.getRole() != null ? employee.getRole().getName() : null)
+                .locationId(employee.getLocation() != null ? employee.getLocation().getId().toString() : null)
+                .locationName(employee.getLocation() != null ? employee.getLocation().getName() : null)
                 .build();
     }
 

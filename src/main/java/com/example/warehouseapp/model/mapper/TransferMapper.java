@@ -9,7 +9,6 @@ import com.example.warehouseapp.model.entites.Transfer;
 import com.example.warehouseapp.model.entites.TransferItem;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
@@ -17,23 +16,63 @@ import java.util.List;
 @Component
 public class TransferMapper {
 
-    public TransferResponseDTO mapToResponseDTO(Transfer transfer, List<TransferItemResponseDTO> transferItemResponseDTOList){
-        return TransferResponseDTO
-                .builder()
-                .id(transfer.getId().toString())
-                .deliveryDateTime(transfer.getDeliveryDateTime().toString())
+    public TransferResponseDTO mapToResponseDTO(
+            Transfer transfer,
+            List<TransferItemResponseDTO> transferItemResponseDTOList
+    ) {
+        return TransferResponseDTO.builder()
+                .id(transfer.getId() != null ? transfer.getId().toString() : null)
+                .deliveryDateTime(
+                        transfer.getDeliveryDateTime() != null
+                                ? transfer.getDeliveryDateTime().toString()
+                                : null
+                )
                 .remarks(transfer.getRemarks())
                 .createdBy(transfer.getCreatedBy())
                 .updatedBy(transfer.getUpdatedBy())
-                .createdAt(transfer.getCreatedAt().toString())
-                .updatedAt(transfer.getUpdatedAt().toString())
+                .createdAt(
+                        transfer.getCreatedAt() != null
+                                ? transfer.getCreatedAt().toString()
+                                : null
+                )
+                .updatedAt(
+                        transfer.getUpdatedAt() != null
+                                ? transfer.getUpdatedAt().toString()
+                                : null
+                )
                 .transferResponseDTOList(transferItemResponseDTOList)
-                .sourceLocationId(transfer.getSourceLocation().getId().toString())
-                .sourceLocationName(transfer.getSourceLocation().getName())
-                .sourceLocationAddress(transfer.getSourceLocation().getAddress())
-                .destinationLocationId(transfer.getDestinationLocation().getId().toString())
-                .destinationLocationName(transfer.getDestinationLocation().getName())
-                .destinationLocationAddress(transfer.getDestinationLocation().getAddress())
+
+                .sourceLocationId(
+                        transfer.getSourceLocation() != null
+                                ? transfer.getSourceLocation().getId().toString()
+                                : null
+                )
+                .sourceLocationName(
+                        transfer.getSourceLocation() != null
+                                ? transfer.getSourceLocation().getName()
+                                : null
+                )
+                .sourceLocationAddress(
+                        transfer.getSourceLocation() != null
+                                ? transfer.getSourceLocation().getAddress()
+                                : null
+                )
+
+                .destinationLocationId(
+                        transfer.getDestinationLocation() != null
+                                ? transfer.getDestinationLocation().getId().toString()
+                                : null
+                )
+                .destinationLocationName(
+                        transfer.getDestinationLocation() != null
+                                ? transfer.getDestinationLocation().getName()
+                                : null
+                )
+                .destinationLocationAddress(
+                        transfer.getDestinationLocation() != null
+                                ? transfer.getDestinationLocation().getAddress()
+                                : null
+                )
                 .build();
     }
 

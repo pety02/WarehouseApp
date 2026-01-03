@@ -21,7 +21,6 @@ class ItemServiceIntegrationTest {
     @Autowired
     private ItemRepository itemRepository;
 
-    @Disabled
     @Test
     void getItemById_realDb() {
         Item item = itemRepository.save(
