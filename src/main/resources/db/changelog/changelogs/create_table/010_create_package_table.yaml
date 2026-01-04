@@ -1,0 +1,38 @@
+databaseChangeLog:
+  - changeSet:
+      id: 010_create_package_table.yaml
+      author: petya_licheva
+      preConditions:
+        - not:
+            tableExists:
+              tableName: package
+            onFail: MARK_RAN
+      changes:
+        - createTable:
+            tableName: package
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: pieces_count
+                  type: INT
+              - column:
+                  name: created_by
+                  type: VARCHAR(100)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(100)
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP

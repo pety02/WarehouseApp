@@ -1,0 +1,37 @@
+databaseChangeLog:
+  - changeSet:
+      id: 013_create_item_package_table.yaml
+      author: petya_licheva
+      preConditions:
+        - not:
+            tableExists:
+              tableName: item_packages
+            onFail: MARK_RAN
+      changes:
+        - createTable:
+            tableName: item_packages
+            columns:
+              - column:
+                  name: item_id
+                  type: UUID
+              - column:
+                  name: packages_id
+                  type: UUID
+
+        - addPrimaryKey:
+            tableName: item_packages
+            columnNames: item_id, packages_id
+
+        - addForeignKeyConstraint:
+            baseTableName: item_packages
+            baseColumnNames: item_id
+            referencedTableName: item
+            referencedColumnNames: id
+            constraintName: fk_item_package_item
+
+        - addForeignKeyConstraint:
+            baseTableName: item_packages
+            baseColumnNames: packages_id
+            referencedTableName: package
+            referencedColumnNames: id
+            constraintName: fk_item_package_package

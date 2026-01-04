@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: 006_create_location_table.yaml
+      author: petya_licheva
+      preConditions:
+        - not:
+            tableExists:
+              tableName: location
+            onFail: MARK_RAN
+      changes:
+        - createTable:
+            tableName: location
+            columns:
+              - column: { name: id, type: UUID, constraints: { primaryKey: true } }
+              - column: { name: name, type: VARCHAR(100), constraints: { nullable: false } }
+              - column: { name: country, type: VARCHAR(100) }
+              - column: { name: city, type: VARCHAR(100) }
+              - column: { name: zip, type: VARCHAR(20) }
+              - column: { name: street, type: VARCHAR(150) }
+              - column: { name: "no", type: VARCHAR(20) }
+              - column: { name: manager_id, type: UUID }
+              - column: { name: created_by, type: VARCHAR(100) }
+              - column: { name: updated_by, type: VARCHAR(100) }
+              - column: { name: created_at, type: TIMESTAMP }
+              - column: { name: updated_at, type: TIMESTAMP }

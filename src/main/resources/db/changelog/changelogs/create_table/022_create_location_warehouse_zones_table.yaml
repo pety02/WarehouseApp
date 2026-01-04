@@ -1,0 +1,57 @@
+databaseChangeLog:
+  - changeSet:
+      id: 005_create_location_warehouse_zones_table
+      author: petya_licheva
+      preConditions:
+        - not:
+            tableExists:
+              tableName: location_warehouse_zones
+            onFail: MARK_RAN
+      changes:
+        - createTable:
+            tableName: location_warehouse_zones
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: location_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: warehouse_zones_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+
+        - addForeignKeyConstraint:
+            baseTableName: location_warehouse_zones
+            baseColumnNames: location_id
+            referencedTableName: location
+            referencedColumnNames: id
+            constraintName: fk_lwz_location
+
+        - addForeignKeyConstraint:
+            baseTableName: location_warehouse_zones
+            baseColumnNames: warehouse_zones_id
+            referencedTableName: warehouse_zone
+            referencedColumnNames: id
+            constraintName: fk_lwz_warehouse_zone
+
+        - addUniqueConstraint:
+            tableName: location_warehouse_zones
+            columnNames: location_id, warehouse_zones_id
+            constraintName: uq_location_warehouse_zone

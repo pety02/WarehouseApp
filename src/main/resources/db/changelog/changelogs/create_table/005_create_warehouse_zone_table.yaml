@@ -1,0 +1,47 @@
+databaseChangeLog:
+  - changeSet:
+      id: 005_create_warehouse_zone_table.yaml
+      author: petya_licheva
+      preConditions:
+        - not:
+            tableExists:
+              tableName: warehouse_zone
+            onFail: MARK_RAN
+      changes:
+        - createTable:
+            tableName: warehouse_zone
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: storage_type_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: VARCHAR(100)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(100)
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+
+        - addForeignKeyConstraint:
+            baseTableName: warehouse_zone
+            baseColumnNames: storage_type_id
+            referencedTableName: storage_type
+            referencedColumnNames: id
+            constraintName: fk_zone_storage_type

@@ -1,0 +1,56 @@
+databaseChangeLog:
+  - changeSet:
+      id: 020_create_transfer_table.yaml
+      author: petya_licheva
+      preConditions:
+        - not:
+            tableExists:
+              tableName: transfer
+            onFail: MARK_RAN
+      changes:
+        - createTable:
+            tableName: transfer
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: delivery_date_time
+                  type: TIMESTAMP
+              - column:
+                  name: remarks
+                  type: VARCHAR(500)
+              - column:
+                  name: source_location_id
+                  type: UUID
+              - column:
+                  name: destination_location_id
+                  type: UUID
+              - column:
+                  name: created_by
+                  type: VARCHAR(100)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(100)
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+
+        - addForeignKeyConstraint:
+            baseTableName: transfer
+            baseColumnNames: source_location_id
+            referencedTableName: location
+            referencedColumnNames: id
+            constraintName: fk_transfer_source_location
+
+        - addForeignKeyConstraint:
+            baseTableName: transfer
+            baseColumnNames: destination_location_id
+            referencedTableName: location
+            referencedColumnNames: id
+            constraintName: fk_transfer_destination_location

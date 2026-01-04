@@ -1,0 +1,37 @@
+databaseChangeLog:
+  - changeSet:
+      id: 009_create_item_currency_table.yaml
+      author: petya_licheva
+      preConditions:
+        - not:
+            tableExists:
+              tableName: item_currencies
+            onFail: MARK_RAN
+      changes:
+        - createTable:
+            tableName: item_currencies
+            columns:
+              - column:
+                  name: item_id
+                  type: UUID
+              - column:
+                  name: currencies_id
+                  type: UUID
+
+        - addPrimaryKey:
+            tableName: item_currencies
+            columnNames: item_id, currencies_id
+
+        - addForeignKeyConstraint:
+            baseTableName: item_currencies
+            baseColumnNames: item_id
+            referencedTableName: item
+            referencedColumnNames: id
+            constraintName: fk_item_currency_item
+
+        - addForeignKeyConstraint:
+            baseTableName: item_currencies
+            baseColumnNames: currencies_id
+            referencedTableName: currency
+            referencedColumnNames: id
+            constraintName: fk_item_currency_currency

@@ -1,0 +1,37 @@
+databaseChangeLog:
+  - changeSet:
+      id: 014_create_item_location_table.yaml
+      author: petya_licheva
+      preConditions:
+        - not:
+            tableExists:
+              tableName: item_locations
+            onFail: MARK_RAN
+      changes:
+        - createTable:
+            tableName: item_locations
+            columns:
+              - column:
+                  name: item_id
+                  type: UUID
+              - column:
+                  name: locations_id
+                  type: UUID
+
+        - addPrimaryKey:
+            tableName: item_locations
+            columnNames: item_id, locations_id
+
+        - addForeignKeyConstraint:
+            baseTableName: item_locations
+            baseColumnNames: item_id
+            referencedTableName: item
+            referencedColumnNames: id
+            constraintName: fk_item_location_item
+
+        - addForeignKeyConstraint:
+            baseTableName: item_locations
+            baseColumnNames: locations_id
+            referencedTableName: location
+            referencedColumnNames: id
+            constraintName: fk_item_location_location

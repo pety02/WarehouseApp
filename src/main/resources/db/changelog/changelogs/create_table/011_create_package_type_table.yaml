@@ -1,13 +1,52 @@
 databaseChangeLog:
   - changeSet:
-      id: 005_insert_package_types.yaml
+      id: 011_create_package_type_table.yaml
       author: petya_licheva
+      runAlways: true
+      preConditions:
+        - not:
+            tableExists:
+              tableName: package_type
+            onFail: MARK_RAN
+      changes:
+        # Create table
+        - createTable:
+            tableName: package_type
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: VARCHAR(100)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(100)
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+
+  - changeSet:
+      id: 011_insert_package_types.yaml
+      author: petya_licheva
+      runAlways: true
       preConditions:
         - onFail: MARK_RAN
-        - not:
         - tableExists:
             tableName: package_type
       changes:
+        # Insert package types
         - insert:
             tableName: package_type
             columns:
@@ -17,6 +56,7 @@ databaseChangeLog:
               - column: {name: updated_by, value: "system"}
               - column: {name: created_at, value: "2025-12-28T00:00:00Z"}
               - column: {name: updated_at, value: "2025-12-28T00:00:00Z"}
+
         - insert:
             tableName: package_type
             columns:
@@ -26,6 +66,7 @@ databaseChangeLog:
               - column: {name: updated_by, value: "system"}
               - column: {name: created_at, value: "2025-12-28T00:00:00Z"}
               - column: {name: updated_at, value: "2025-12-28T00:00:00Z"}
+
         - insert:
             tableName: package_type
             columns:
@@ -35,6 +76,7 @@ databaseChangeLog:
               - column: {name: updated_by, value: "system"}
               - column: {name: created_at, value: "2025-12-28T00:00:00Z"}
               - column: {name: updated_at, value: "2025-12-28T00:00:00Z"}
+
         - insert:
             tableName: package_type
             columns:

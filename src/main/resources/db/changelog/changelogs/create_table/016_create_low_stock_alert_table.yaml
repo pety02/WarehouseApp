@@ -1,0 +1,55 @@
+databaseChangeLog:
+  - changeSet:
+      id: 016_create_low_stock_alert_table.yaml
+      author: petya_licheva
+      preConditions:
+        - not:
+            tableExists:
+              tableName: low_stock_alert
+            onFail: MARK_RAN
+      changes:
+        - createTable:
+            tableName: low_stock_alert
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: alert_date
+                  type: DATE
+              - column:
+                  name: message
+                  type: VARCHAR(500)
+              - column:
+                  name: actual_count
+                  type: INT
+              - column:
+                  name: needed_count
+                  type: INT
+              - column:
+                  name: recommendations
+                  type: VARCHAR(500)
+              - column:
+                  name: stock_availability_id
+                  type: UUID
+              - column:
+                  name: created_by
+                  type: VARCHAR(100)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(100)
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+
+        - addForeignKeyConstraint:
+            baseTableName: low_stock_alert
+            baseColumnNames: stock_availability_id
+            referencedTableName: stock_availability
+            referencedColumnNames: id
+            constraintName: fk_alert_stock

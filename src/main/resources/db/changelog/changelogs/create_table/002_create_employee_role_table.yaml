@@ -1,0 +1,79 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002_create_employee_role_table.yaml
+      author: petya_licheva
+      runAlways: true
+      preConditions:
+        - not:
+            tableExists:
+              tableName: employee_role
+            onFail: MARK_RAN
+      changes:
+        # Create the table
+        - createTable:
+            tableName: employee_role
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: created_by
+                  type: VARCHAR(100)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(100)
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+
+  - changeSet:
+      id: 002_insert_employee_roles.yaml
+      author: petya_licheva
+      runAlways: true
+      preConditions:
+        - onFail: MARK_RAN
+        - tableExists:
+            tableName: employee_role
+      changes:
+        # Insert rows
+        - insert:
+            tableName: employee_role
+            columns:
+              - column: { name: "id", value: "33333333-3333-3333-3333-333333333333" }
+              - column: { name: "name", value: "Warehouse Manager" }
+              - column: { name: "created_by", value: "system" }
+              - column: { name: "updated_by", value: "system" }
+              - column: { name: "created_at", value: "2025-12-28T00:00:00Z" }
+              - column: { name: "updated_at", value: "2025-12-28T00:00:00Z" }
+
+        - insert:
+            tableName: employee_role
+            columns:
+              - column: { name: "id", value: "44444444-4444-4444-4444-444444444444" }
+              - column: { name: "name", value: "Forklift Operator" }
+              - column: { name: "created_by", value: "system" }
+              - column: { name: "updated_by", value: "system" }
+              - column: { name: "created_at", value: "2025-12-28T00:00:00Z" }
+              - column: { name: "updated_at", value: "2025-12-28T00:00:00Z" }
+
+        - insert:
+            tableName: employee_role
+            columns:
+              - column: { name: "id", value: "55555555-5555-5555-5555-555555555555" }
+              - column: { name: "name", value: "Inventory Specialist" }
+              - column: { name: "created_by", value: "system" }
+              - column: { name: "updated_by", value: "system" }
+              - column: { name: "created_at", value: "2025-12-28T00:00:00Z" }
+              - column: { name: "updated_at", value: "2025-12-28T00:00:00Z" }

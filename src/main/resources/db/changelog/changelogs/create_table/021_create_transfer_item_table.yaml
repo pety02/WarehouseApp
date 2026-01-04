@@ -1,0 +1,53 @@
+databaseChangeLog:
+  - changeSet:
+      id: 021_create_transfer_item_table.yaml
+      author: petya_licheva
+      preConditions:
+        - not:
+            tableExists:
+              tableName: transfer_item
+            onFail: MARK_RAN
+      changes:
+        - createTable:
+            tableName: transfer_item
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: quantity
+                  type: INT
+              - column:
+                  name: item_id
+                  type: UUID
+              - column:
+                  name: transfer_id
+                  type: UUID
+              - column:
+                  name: created_by
+                  type: VARCHAR(100)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(100)
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+
+        - addForeignKeyConstraint:
+            baseTableName: transfer_item
+            baseColumnNames: item_id
+            referencedTableName: item
+            referencedColumnNames: id
+            constraintName: fk_transfer_item_item
+
+        - addForeignKeyConstraint:
+            baseTableName: transfer_item
+            baseColumnNames: transfer_id
+            referencedTableName: transfer
+            referencedColumnNames: id
+            constraintName: fk_transfer_item_transfer

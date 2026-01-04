@@ -1,0 +1,43 @@
+databaseChangeLog:
+  - changeSet:
+      id: 022_create_transfer_transfer_items_table
+      author: petya_licheva
+      preConditions:
+        - not:
+            tableExists:
+              tableName: transfer_transfer_items
+            onFail: MARK_RAN
+      changes:
+        - createTable:
+            tableName: transfer_transfer_items
+            columns:
+              - column:
+                  name: transfer_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: transfer_items_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+
+        - addPrimaryKey:
+            tableName: transfer_transfer_items
+            columnNames: transfer_id, transfer_items_id
+            constraintName: pk_transfer_transfer_items
+
+        - addForeignKeyConstraint:
+            baseTableName: transfer_transfer_items
+            baseColumnNames: transfer_id
+            referencedTableName: transfer
+            referencedColumnNames: id
+            constraintName: fk_tti_transfer
+
+        - addForeignKeyConstraint:
+            baseTableName: transfer_transfer_items
+            baseColumnNames: transfer_items_id
+            referencedTableName: transfer_item
+            referencedColumnNames: id
+            constraintName: fk_tti_transfer_item

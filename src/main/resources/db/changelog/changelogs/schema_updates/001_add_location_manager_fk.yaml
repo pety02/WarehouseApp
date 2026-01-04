@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001_add_location_manager_fk.yaml
+      author: petya_licheva
+      preConditions:
+        - and:
+            onFail: MARK_RAN
+            preConditions:
+              - tableExists:
+                  tableName: location
+              - tableExists:
+                  tableName: employee
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: location
+            baseColumnNames: manager_id
+            referencedTableName: employee
+            referencedColumnNames: id
+            constraintName: fk_location_manager

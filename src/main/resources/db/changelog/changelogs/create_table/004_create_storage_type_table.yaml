@@ -1,10 +1,47 @@
 databaseChangeLog:
   - changeSet:
-      id: 006_insert_storage_types.yaml
+      id: 004_create_storage_type_table.yaml
       author: petya_licheva
+      runAlways: true
+      preConditions:
+        - not:
+            tableExists:
+              tableName: storage_type
+            onFail: MARK_RAN
+      changes:
+        - createTable:
+            tableName: storage_type
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: VARCHAR(100)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(100)
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+
+  - changeSet:
+      id: 004_insert_storage_types.yaml
+      author: petya_licheva
+      runAlways: true
       preConditions:
         - onFail: MARK_RAN
-        - not:
         - tableExists:
             tableName: storage_type
       changes:
@@ -17,6 +54,7 @@ databaseChangeLog:
               - column: {name: updated_by, value: "system"}
               - column: {name: created_at, value: "2025-12-28T00:00:00Z"}
               - column: {name: updated_at, value: "2025-12-28T00:00:00Z"}
+
         - insert:
             tableName: storage_type
             columns:
@@ -26,6 +64,7 @@ databaseChangeLog:
               - column: {name: updated_by, value: "system"}
               - column: {name: created_at, value: "2025-12-28T00:00:00Z"}
               - column: {name: updated_at, value: "2025-12-28T00:00:00Z"}
+
         - insert:
             tableName: storage_type
             columns:
@@ -35,6 +74,7 @@ databaseChangeLog:
               - column: {name: updated_by, value: "system"}
               - column: {name: created_at, value: "2025-12-28T00:00:00Z"}
               - column: {name: updated_at, value: "2025-12-28T00:00:00Z"}
+
         - insert:
             tableName: storage_type
             columns:

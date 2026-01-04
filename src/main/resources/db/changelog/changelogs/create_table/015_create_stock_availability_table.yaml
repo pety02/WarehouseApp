@@ -1,0 +1,53 @@
+databaseChangeLog:
+  - changeSet:
+      id: 015_create_stock_availability_table.yaml
+      author: petya_licheva
+      preConditions:
+        - not:
+            tableExists:
+              tableName: stock_availability
+            onFail: MARK_RAN
+      changes:
+        - createTable:
+            tableName: stock_availability
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: pieces_count
+                  type: INT
+              - column:
+                  name: item_id
+                  type: UUID
+              - column:
+                  name: zone_id
+                  type: UUID
+              - column:
+                  name: created_by
+                  type: VARCHAR(100)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(100)
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+
+        - addForeignKeyConstraint:
+            baseTableName: stock_availability
+            baseColumnNames: item_id
+            referencedTableName: item
+            referencedColumnNames: id
+            constraintName: fk_stock_item
+
+        - addForeignKeyConstraint:
+            baseTableName: stock_availability
+            baseColumnNames: zone_id
+            referencedTableName: warehouse_zone
+            referencedColumnNames: id
+            constraintName: fk_stock_zone

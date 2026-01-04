@@ -1,16 +1,62 @@
 databaseChangeLog:
-  - include:
-      file: db/changelog/changelogs/001_insert_currencies.yaml
-  - include:
-      file: db/changelog/changelogs/002_insert_employee_roles.yaml
-  - include:
-      file: db/changelog/changelogs/003_insert_item_types.yaml
-  - include:
-      file: db/changelog/changelogs/004_insert_locations.yaml
-  - include:
-      file: db/changelog/changelogs/005_insert_package_types.yaml
-  - include:
-      file: db/changelog/changelogs/006_insert_storage_types.yaml
-  - include:
-      file: db/changelog/changelogs/007_insert_warehouse_zones.yaml
 
+  # Reference / independent tables first
+  - include:
+      file: db/changelog/changelogs/create_table/001_create_currency_table.yaml
+  - include:
+      file: db/changelog/changelogs/create_table/002_create_employee_role_table.yaml
+  - include:
+      file: db/changelog/changelogs/create_table/003_create_item_type_table.yaml
+  - include:
+      file: db/changelog/changelogs/create_table/004_create_storage_type_table.yaml
+  - include:
+      file: db/changelog/changelogs/create_table/011_create_package_type_table.yaml
+
+  # Tables depending on reference tables
+  - include:
+      file: db/changelog/changelogs/create_table/005_create_warehouse_zone_table.yaml   # depends on storage_type
+  - include:
+      file: db/changelog/changelogs/create_table/007_create_employee_credentials_table.yaml
+
+  # Employee-related
+  - include:
+      file: db/changelog/changelogs/create_table/006_create_location_table.yaml
+  - include:
+      file: db/changelog/changelogs/create_table/008_create_employee_table.yaml
+
+  # Item and Package related
+  - include:
+      file: db/changelog/changelogs/create_table/012_create_item_table.yaml             # depends on item_type
+  - include:
+      file: db/changelog/changelogs/create_table/009_create_item_currency_table.yaml   # depends on item, currency
+  - include:
+      file: db/changelog/changelogs/create_table/010_create_package_table.yaml          # depends on package_type, currency
+  - include:
+      file: db/changelog/changelogs/create_table/013_create_item_package_table.yaml     # depends on item, package
+  - include:
+      file: db/changelog/changelogs/create_table/014_create_item_location_table.yaml    # depends on item, location
+
+  # Stock management
+  - include:
+      file: db/changelog/changelogs/create_table/015_create_stock_availability_table.yaml # depends on item, location
+  - include:
+      file: db/changelog/changelogs/create_table/016_create_low_stock_alert_table.yaml   # depends on stock_availability
+  - include:
+      file: db/changelog/changelogs/create_table/017_create_low_stock_alert_employee_table.yaml # depends on low_stock_alert, employee
+  - include:
+      file: db/changelog/changelogs/create_table/018_create_stock_advice_table.yaml      # depends on employee, stock_availability
+  - include:
+      file: db/changelog/changelogs/create_table/019_create_stock_advice_actions_table.yaml # depends on stock_advice, employee
+  - include:
+      file: db/changelog/changelogs/create_table/023_create_stock_advice_action_table.yaml
+
+  # Transfer tables
+  - include:
+      file: db/changelog/changelogs/create_table/020_create_transfer_table.yaml          # depends on location
+  - include:
+      file: db/changelog/changelogs/create_table/021_create_transfer_item_table.yaml     # depends on transfer, item
+  - include:
+      file: db/changelog/changelogs/create_table/024_create_transfer_transfer_items_table.yaml
+
+  - include:
+      file: db/changelog/changelogs/create_table/022_create_location_warehouse_zones_table.yaml

@@ -1,0 +1,55 @@
+databaseChangeLog:
+  - changeSet:
+      id: 012_create_item_table.yaml
+      author: petya_licheva
+      preConditions:
+        - not:
+            tableExists:
+              tableName: item
+            onFail: MARK_RAN
+      changes:
+        - createTable:
+            tableName: item
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: barcode_value
+                  type: VARCHAR(100)
+              - column:
+                  name: expiration_date_time
+                  type: TIMESTAMP
+              - column:
+                  name: selling_price
+                  type: FLOAT(53)
+              - column:
+                  name: type_id
+                  type: UUID
+              - column:
+                  name: created_by
+                  type: VARCHAR(100)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(100)
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+
+        - addForeignKeyConstraint:
+            baseTableName: item
+            baseColumnNames: type_id
+            referencedTableName: item_type
+            referencedColumnNames: id
+            constraintName: fk_item_type

@@ -1,0 +1,62 @@
+databaseChangeLog:
+  - changeSet:
+      id: 019_create_stock_advice_actions_table.yaml
+      author: petya_licheva
+      preConditions:
+        - not:
+            tableExists:
+              tableName: stock_advice_actions
+            onFail: MARK_RAN
+      changes:
+        - createTable:
+            tableName: stock_advice_actions
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: action_description
+                  type: VARCHAR(500)
+              - column:
+                  name: action_reason
+                  type: VARCHAR(500)
+              - column:
+                  name: is_actioned
+                  type: BOOLEAN
+              - column:
+                  name: actions_id
+                  type: UUID
+              - column:
+                  name: item_id
+                  type: UUID
+              - column:
+                  name: stock_advice_id
+                  type: UUID
+              - column:
+                  name: created_by
+                  type: VARCHAR(100)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(100)
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+
+        - addForeignKeyConstraint:
+            baseTableName: stock_advice_actions
+            baseColumnNames: item_id
+            referencedTableName: item
+            referencedColumnNames: id
+            constraintName: fk_advice_action_item
+
+        - addForeignKeyConstraint:
+            baseTableName: stock_advice_actions
+            baseColumnNames: stock_advice_id
+            referencedTableName: stock_advice
+            referencedColumnNames: id
+            constraintName: fk_advice_action_advice
