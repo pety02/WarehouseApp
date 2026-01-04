@@ -3,10 +3,10 @@ databaseChangeLog:
       id: 019_create_stock_advice_actions_table.yaml
       author: petya_licheva
       preConditions:
+        - onFail: MARK_RAN
         - not:
             tableExists:
               tableName: stock_advice_actions
-            onFail: MARK_RAN
       changes:
         - createTable:
             tableName: stock_advice_actions

@@ -4,10 +4,10 @@ databaseChangeLog:
       author: petya_licheva
       runAlways: true
       preConditions:
+        - onFail: MARK_RAN
         - not:
             tableExists:
               tableName: currency
-            onFail: MARK_RAN
       changes:
         # Create the table
         - createTable:

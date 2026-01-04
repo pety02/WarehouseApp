@@ -3,10 +3,10 @@ databaseChangeLog:
       id: 016_create_low_stock_alert_table.yaml
       author: petya_licheva
       preConditions:
+        - onFail: MARK_RAN
         - not:
             tableExists:
               tableName: low_stock_alert
-            onFail: MARK_RAN
       changes:
         - createTable:
             tableName: low_stock_alert

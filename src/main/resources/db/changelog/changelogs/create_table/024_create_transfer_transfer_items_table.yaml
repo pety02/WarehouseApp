@@ -3,10 +3,10 @@ databaseChangeLog:
       id: 022_create_transfer_transfer_items_table
       author: petya_licheva
       preConditions:
+        - onFail: MARK_RAN
         - not:
             tableExists:
               tableName: transfer_transfer_items
-            onFail: MARK_RAN
       changes:
         - createTable:
             tableName: transfer_transfer_items

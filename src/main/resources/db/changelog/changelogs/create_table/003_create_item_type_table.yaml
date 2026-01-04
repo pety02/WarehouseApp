@@ -4,10 +4,10 @@ databaseChangeLog:
       author: petya_licheva
       runAlways: true
       preConditions:
+        - onFail: MARK_RAN
         - not:
             tableExists:
               tableName: item_type
-            onFail: MARK_RAN
       changes:
         # Create table
         - createTable:

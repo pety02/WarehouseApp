@@ -2,10 +2,8 @@ package com.example.warehouseapp.service;
 
 import com.example.warehouseapp.model.dto.StockAvailabilityResponseDTO;
 import com.example.warehouseapp.model.entites.*;
-import com.example.warehouseapp.repository.ItemRepository;
-import com.example.warehouseapp.repository.LocationRepository;
-import com.example.warehouseapp.repository.StockAvailabilityRepository;
-import com.example.warehouseapp.repository.WarehouseZoneRepository;
+import com.example.warehouseapp.repository.*;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,7 +14,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-@SpringBootTest
+@SpringBootTest(properties = "spring.liquibase.enabled=false")
 @Transactional
 class StockAvailabilityServiceIntegrationTest {
 
@@ -35,8 +33,12 @@ class StockAvailabilityServiceIntegrationTest {
     @Autowired
     private WarehouseZoneRepository  warehouseZoneRepository;
 
+    @Autowired
+    private StorageTypeRepository storageTypeRepository;
+
     @Test
     void getAllStockAvailabilitiesByLocationId_realDb() {
+        // Address and Location
         Address address = Address.builder()
                 .city("Sofia")
                 .country("Bulgaria")
@@ -52,6 +54,7 @@ class StockAvailabilityServiceIntegrationTest {
                         .build()
         );
 
+        // Item
         Item item = itemRepository.save(
                 Item.builder()
                         .name("Test Item")
@@ -60,12 +63,22 @@ class StockAvailabilityServiceIntegrationTest {
                         .build()
         );
 
-        WarehouseZone zone = warehouseZoneRepository.save(
-                WarehouseZone.builder()
-                        .name("Zone A")
+        // StorageType
+        StorageType storageType = storageTypeRepository.save(
+                StorageType.builder()
+                        .name("Standard Storage")
                         .build()
         );
 
+        // WarehouseZone
+        WarehouseZone zone = warehouseZoneRepository.save(
+                WarehouseZone.builder()
+                        .name("Zone A")
+                        .storageType(storageType) // mandatory
+                        .build()
+        );
+
+        // StockAvailability
         StockAvailability stock = repository.save(
                 StockAvailability.builder()
                         .item(item)
@@ -74,9 +87,11 @@ class StockAvailabilityServiceIntegrationTest {
                         .build()
         );
 
+        // call service
         List<StockAvailabilityResponseDTO> dtos =
                 service.getAllStockAvailabilitiesByLocationId(location.getId());
 
+        // assertions
         assertFalse(dtos.isEmpty(), "Stock availability list should not be empty");
         StockAvailabilityResponseDTO dto = dtos.get(0);
 

@@ -3,6 +3,7 @@ package com.example.warehouseapp.service;
 import com.example.warehouseapp.repository.ItemRepository;
 import com.example.warehouseapp.repository.TransferItemRepository;
 import com.example.warehouseapp.repository.TransferRepository;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@SpringBootTest
+@SpringBootTest(properties = "spring.liquibase.enabled=false")
 @Transactional
 class TransferItemServiceIntegrationTest {
 

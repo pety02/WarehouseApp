@@ -3,10 +3,10 @@ databaseChangeLog:
       id: 020_create_transfer_table.yaml
       author: petya_licheva
       preConditions:
+        - onFail: MARK_RAN
         - not:
             tableExists:
               tableName: transfer
-            onFail: MARK_RAN
       changes:
         - createTable:
             tableName: transfer

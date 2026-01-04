@@ -3,10 +3,10 @@ databaseChangeLog:
       id: 012_create_item_table.yaml
       author: petya_licheva
       preConditions:
+        - onFail: MARK_RAN
         - not:
             tableExists:
               tableName: item
-            onFail: MARK_RAN
       changes:
         - createTable:
             tableName: item

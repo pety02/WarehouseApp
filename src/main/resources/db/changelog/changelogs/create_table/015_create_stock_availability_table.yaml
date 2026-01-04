@@ -3,10 +3,10 @@ databaseChangeLog:
       id: 015_create_stock_availability_table.yaml
       author: petya_licheva
       preConditions:
+        - onFail: MARK_RAN
         - not:
             tableExists:
               tableName: stock_availability
-            onFail: MARK_RAN
       changes:
         - createTable:
             tableName: stock_availability

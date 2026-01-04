@@ -28,6 +28,7 @@ public class Employee {
     private Instant createdAt;
     private Instant updatedAt;
     @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "credentials_id")
     private EmployeeCredentials credentials;
     @ManyToOne(fetch = FetchType.EAGER)
     private EmployeeRole role;

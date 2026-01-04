@@ -28,6 +28,11 @@ public class Location {
     private Instant updatedAt;
     @OneToOne(fetch = FetchType.LAZY)
     private Employee manager;
-    @OneToMany
+    @ManyToMany
+    @JoinTable(
+            name = "location_warehouse_zones",
+            joinColumns = @JoinColumn(name = "location_id"),
+            inverseJoinColumns = @JoinColumn(name = "warehouse_zones_id")
+    )
     private List<WarehouseZone> warehouseZones;
 }

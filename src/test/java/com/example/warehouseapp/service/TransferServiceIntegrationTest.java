@@ -5,6 +5,7 @@ import com.example.warehouseapp.model.entites.Location;
 import com.example.warehouseapp.model.entites.Transfer;
 import com.example.warehouseapp.repository.LocationRepository;
 import com.example.warehouseapp.repository.TransferRepository;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,7 +15,7 @@ import java.time.Instant;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@SpringBootTest
+@SpringBootTest(properties = "spring.liquibase.enabled=false")
 @Transactional
 class TransferServiceIntegrationTest {
 

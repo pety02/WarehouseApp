@@ -3,10 +3,10 @@ databaseChangeLog:
       id: 010_create_package_table.yaml
       author: petya_licheva
       preConditions:
+        - onFail: MARK_RAN
         - not:
             tableExists:
               tableName: package
-            onFail: MARK_RAN
       changes:
         - createTable:
             tableName: package

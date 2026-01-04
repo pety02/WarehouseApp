@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 005_create_location_warehouse_zones_table
+      id: 022_create_location_warehouse_zones_table.yaml
       author: petya_licheva
       preConditions:
         - not:
@@ -12,46 +12,24 @@ databaseChangeLog:
             tableName: location_warehouse_zones
             columns:
               - column:
-                  name: id
-                  type: UUID
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-
-              - column:
                   name: location_id
                   type: UUID
                   constraints:
-                    nullable: false
-
+                    primaryKey: true
               - column:
                   name: warehouse_zones_id
                   type: UUID
                   constraints:
-                    nullable: false
-
-              - column:
-                  name: created_at
-                  type: TIMESTAMP
-              - column:
-                  name: updated_at
-                  type: TIMESTAMP
-
+                    primaryKey: true
         - addForeignKeyConstraint:
             baseTableName: location_warehouse_zones
             baseColumnNames: location_id
             referencedTableName: location
             referencedColumnNames: id
-            constraintName: fk_lwz_location
-
+            constraintName: fk_location_warehouse
         - addForeignKeyConstraint:
             baseTableName: location_warehouse_zones
             baseColumnNames: warehouse_zones_id
             referencedTableName: warehouse_zone
             referencedColumnNames: id
-            constraintName: fk_lwz_warehouse_zone
-
-        - addUniqueConstraint:
-            tableName: location_warehouse_zones
-            columnNames: location_id, warehouse_zones_id
-            constraintName: uq_location_warehouse_zone
+            constraintName: fk_warehouse_location

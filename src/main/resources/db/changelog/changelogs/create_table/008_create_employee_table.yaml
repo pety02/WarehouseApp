@@ -3,10 +3,10 @@ databaseChangeLog:
       id: 008_create_employee_table.yaml
       author: petya_licheva
       preConditions:
+        - onFail: MARK_RAN
         - not:
             tableExists:
               tableName: employee
-            onFail: MARK_RAN
       changes:
         - createTable:
             tableName: employee

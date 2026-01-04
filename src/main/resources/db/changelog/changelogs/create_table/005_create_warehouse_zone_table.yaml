@@ -3,10 +3,10 @@ databaseChangeLog:
       id: 005_create_warehouse_zone_table.yaml
       author: petya_licheva
       preConditions:
+        - onFail: MARK_RAN
         - not:
             tableExists:
               tableName: warehouse_zone
-            onFail: MARK_RAN
       changes:
         - createTable:
             tableName: warehouse_zone

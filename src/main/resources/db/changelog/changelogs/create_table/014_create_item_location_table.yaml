@@ -3,10 +3,10 @@ databaseChangeLog:
       id: 014_create_item_location_table.yaml
       author: petya_licheva
       preConditions:
+        - onFail: MARK_RAN
         - not:
             tableExists:
               tableName: item_locations
-            onFail: MARK_RAN
       changes:
         - createTable:
             tableName: item_locations
