@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -54,7 +55,7 @@ public class StockAdviceController {
     @ApiResponse(responseCode = "201", description = "Stock advice created")
     @PostMapping
     public ResponseEntity<StockAdviceResponseDTO> createStockAdvice(
-            @RequestBody StockAdviceCreateRequestDTO dto
+            @RequestBody @Valid StockAdviceCreateRequestDTO dto
     ) {
         StockAdviceResponseDTO created = stockAdviceService.createStockAdvice(dto);
 
@@ -75,7 +76,7 @@ public class StockAdviceController {
     @PutMapping("/{id}")
     public ResponseEntity<StockAdviceResponseDTO> updateStockAdvice(
             @PathVariable UUID id,
-            @RequestBody StockAdviceUpdateRequestDTO dto
+            @RequestBody @Valid StockAdviceUpdateRequestDTO dto
     ) {
         try {
             return ResponseEntity.ok(stockAdviceService.updateStockAdvice(id, dto));
