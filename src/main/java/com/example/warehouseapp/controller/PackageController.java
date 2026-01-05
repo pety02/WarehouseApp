@@ -13,10 +13,13 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.security.Principal;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -80,9 +83,11 @@ public class PackageController {
     })
     @PostMapping
     public ResponseEntity<PackageResponseDTO> createPackage(
-            @RequestBody @Valid PackageCreateRequestDTO packageRequestDTO
+            @RequestBody @Valid PackageCreateRequestDTO packageRequestDTO,
+            @AuthenticationPrincipal Principal principal
     ) {
-        PackageResponseDTO createdPackage = packageService.createPackage(packageRequestDTO);
+        Instant createDate = Instant.now();
+        PackageResponseDTO createdPackage = packageService.createPackage(packageRequestDTO, createDate, principal.getName());
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -111,10 +116,11 @@ public class PackageController {
                     required = true
             )
             @PathVariable UUID id,
-            @RequestBody @Valid PackageUpdateRequestDTO packageUpdateRequestDTO
+            @RequestBody @Valid PackageUpdateRequestDTO packageUpdateRequestDTO,
+            @AuthenticationPrincipal Principal user
     ) {
         return ResponseEntity.ok(
-                packageService.updatePackage(id, packageUpdateRequestDTO)
+                packageService.updatePackage(id, packageUpdateRequestDTO, Instant.now(), user.getName())
         );
     }
 

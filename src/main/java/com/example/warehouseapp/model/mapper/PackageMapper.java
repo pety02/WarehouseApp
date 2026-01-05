@@ -5,6 +5,8 @@ import com.example.warehouseapp.model.dto.PackageUpdateRequestDTO;
 import com.example.warehouseapp.model.entites.Package;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+
 @Component
 public class PackageMapper {
 
@@ -17,22 +19,22 @@ public class PackageMapper {
                 .build();
     }
 
-    public void updatePackage(Package _package, PackageUpdateRequestDTO packageUpdateRequestDTO) {
+    public void updatePackage(Package _package, PackageUpdateRequestDTO packageUpdateRequestDTO, Instant updateDate, String user) {
         _package.setName(packageUpdateRequestDTO.getName());
         _package.setPiecesCount(packageUpdateRequestDTO.getPiecesCount());
-        _package.setUpdatedBy(packageUpdateRequestDTO.getUpdatedBy());
-        _package.setUpdatedAt(packageUpdateRequestDTO.getUpdatedAt());
+        _package.setUpdatedBy(user);
+        _package.setUpdatedAt(updateDate);
     }
 
-    public Package mapToEntity(com.example.warehouseapp.model.dto.PackageCreateRequestDTO packageRequestDTO) {
+    public Package mapToEntity(com.example.warehouseapp.model.dto.PackageCreateRequestDTO packageRequestDTO, Instant createDate, String user) {
         return Package
                 .builder()
                 .name(packageRequestDTO.getName())
                 .piecesCount(packageRequestDTO.getPiecesCount())
-                .createdBy(packageRequestDTO.getCreatedBy())
-                .updatedBy(packageRequestDTO.getUpdatedBy())
-                .createdAt(packageRequestDTO.getCreatedAt())
-                .updatedAt(packageRequestDTO.getUpdatedAt())
+                .createdBy(user)
+                .updatedBy(null)
+                .createdAt(createDate)
+                .updatedAt(null)
                 .build();
     }
 }

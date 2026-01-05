@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,7 +28,7 @@ class PackageTypeServiceIntegrationTest {
     void createAndFetch_realDb() {
         PackageTypeRequestDTO dto = new PackageTypeRequestDTO("Bottle");
 
-        PackageTypeResponseDTO created = service.createPackageType(dto);
+        PackageTypeResponseDTO created = service.createPackageType(dto, Instant.now(), "user");
 
         PackageTypeResponseDTO fetched =
                 service.getPackageTypeById(UUID.fromString(created.getId()));

@@ -5,6 +5,7 @@ import com.example.warehouseapp.model.dto.PackageTypeResponseDTO;
 import com.example.warehouseapp.model.entites.PackageType;
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,7 +21,7 @@ class PackageTypeMapperTest {
         type.setName("Bottle");
 
         PackageTypeMapper mapper = new PackageTypeMapper();
-        PackageTypeResponseDTO dto = mapper.mapToPackageType(type);
+        PackageTypeResponseDTO dto = mapper.mapToResponseDTO(type);
 
         assertEquals(id.toString(), dto.getId());
         assertEquals("Bottle", dto.getName());
@@ -32,7 +33,7 @@ class PackageTypeMapperTest {
         dto.setName("Crate");
 
         PackageTypeMapper mapper = new PackageTypeMapper();
-        PackageType entity = mapper.mapToEntity(dto);
+        PackageType entity = mapper.mapToEntity(dto, Instant.now(), "user");
 
         assertEquals("Crate", entity.getName());
     }

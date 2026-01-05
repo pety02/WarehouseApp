@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(properties = "spring.liquibase.enabled=false")
@@ -27,7 +29,7 @@ class PackageServiceIntegrationTest {
                 new PackageCreateRequestDTO();
         dto.setName("Box");
 
-        PackageResponseDTO response = service.createPackage(dto);
+        PackageResponseDTO response = service.createPackage(dto, Instant.now(), "user");
 
         assertNotNull(response.getId());
     }

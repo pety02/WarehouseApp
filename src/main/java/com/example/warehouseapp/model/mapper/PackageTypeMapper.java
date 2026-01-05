@@ -5,10 +5,12 @@ import com.example.warehouseapp.model.dto.PackageTypeResponseDTO;
 import com.example.warehouseapp.model.entites.PackageType;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+
 @Component
 public class PackageTypeMapper {
 
-    public PackageTypeResponseDTO mapToPackageType(PackageType packageType){
+    public PackageTypeResponseDTO mapToResponseDTO(PackageType packageType) {
         return PackageTypeResponseDTO
                 .builder()
                 .id(packageType.getId().toString())
@@ -16,10 +18,14 @@ public class PackageTypeMapper {
                 .build();
     }
 
-    public PackageType mapToEntity(PackageTypeRequestDTO packageTypeCreateRequestDTO){
+    public PackageType mapToEntity(PackageTypeRequestDTO packageTypeCreateRequestDTO, Instant createDate, String user){
         return PackageType
                 .builder()
                 .name(packageTypeCreateRequestDTO.getName())
+                .createdAt(createDate)
+                .createdBy(user)
+                .updatedAt(null)
+                .updatedBy(null)
                 .build();
     }
 }

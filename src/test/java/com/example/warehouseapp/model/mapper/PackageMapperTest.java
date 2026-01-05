@@ -44,10 +44,8 @@ class PackageMapperTest {
         PackageUpdateRequestDTO dto = new PackageUpdateRequestDTO();
         dto.setName("Crate");
         dto.setPiecesCount(20);
-        dto.setUpdatedBy("admin");
-        dto.setUpdatedAt(Instant.now());
 
-        mapper.updatePackage(pkg, dto);
+        mapper.updatePackage(pkg, dto, Instant.now(), "admin");
 
         assertEquals("Crate", pkg.getName());
         assertEquals(20, pkg.getPiecesCount());
@@ -60,12 +58,8 @@ class PackageMapperTest {
         PackageCreateRequestDTO dto = new PackageCreateRequestDTO();
         dto.setName("Bag");
         dto.setPiecesCount(5);
-        dto.setCreatedBy("user");
-        dto.setUpdatedBy("user");
-        dto.setCreatedAt(Instant.now());
-        dto.setUpdatedAt(Instant.now());
 
-        Package pkg = mapper.mapToEntity(dto);
+        Package pkg = mapper.mapToEntity(dto, Instant.now(), "user");
 
         assertEquals("Bag", pkg.getName());
         assertEquals(5, pkg.getPiecesCount());

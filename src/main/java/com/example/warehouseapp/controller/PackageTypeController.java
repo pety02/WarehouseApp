@@ -11,10 +11,13 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.security.Principal;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -72,9 +75,11 @@ public class PackageTypeController {
     })
     @PostMapping
     public ResponseEntity<PackageTypeResponseDTO> createPackageType(
-            @RequestBody @Valid PackageTypeRequestDTO requestDTO
+            @RequestBody @Valid PackageTypeRequestDTO requestDTO,
+            @AuthenticationPrincipal Principal principal
     ) {
-        PackageTypeResponseDTO created = packageTypeService.createPackageType(requestDTO);
+        Instant createDate = Instant.now();
+        PackageTypeResponseDTO created = packageTypeService.createPackageType(requestDTO, createDate, principal.getName());
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
