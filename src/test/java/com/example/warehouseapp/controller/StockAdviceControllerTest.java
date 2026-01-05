@@ -14,6 +14,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -69,11 +70,14 @@ class StockAdviceControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "admin", roles = "{ADMIN}")
+    @WithMockUser(username = "admin", roles = "ADMIN")
     void createStockAdvice_returns201() throws Exception {
         StockAdviceCreateRequestDTO request = StockAdviceCreateRequestDTO.builder()
-                .validUntil("2025-01-01T00:00:00Z")
+                .validUntil("2025-01-01")
+                .reasoning("Stock is running low")
                 .confidence(0.9)
+                .isActioned(false)
+                .actions(Map.of("order", "increase stock by 50 units"))
                 .build();
 
         StockAdviceResponseDTO response = StockAdviceResponseDTO.builder()
@@ -88,13 +92,22 @@ class StockAdviceControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
-                .andExpect(header().exists("Location"));
+                .andExpect(header().exists("Location"))
+                .andExpect(jsonPath("$.id").value(response.getId()));
     }
 
     @Test
-    @WithMockUser(username = "admin", roles = "{ADMIN}")
+    @WithMockUser(username = "admin", roles = "ADMIN")
     void updateStockAdvice_notFound() throws Exception {
         UUID id = UUID.randomUUID();
+
+        StockAdviceUpdateRequestDTO dto = StockAdviceUpdateRequestDTO.builder()
+                .validUntil("2026-01-31") // ISO date format yyyy-MM-dd
+                .reasoning("Stock levels are low and require immediate action")
+                .isActioned(false)
+                .confidence(0.75)
+                .actions(Map.of("order", "increase stock by 50 units"))
+                .build();
 
         Mockito.when(stockAdviceService.updateStockAdvice(Mockito.eq(id), Mockito.any()))
                 .thenThrow(EntityNotFoundException.class);
@@ -102,7 +115,7 @@ class StockAdviceControllerTest {
         mockMvc.perform(put("/api/stock_advices/{id}", id)
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{}"))
+                        .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isNotFound());
     }
 
