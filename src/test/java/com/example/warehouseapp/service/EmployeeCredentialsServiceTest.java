@@ -9,6 +9,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -51,7 +53,7 @@ class EmployeeCredentialsServiceTest {
         when(employeeCredentialsRepository.findByEmail(any()))
                 .thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class,
+        assertThrows(ResponseStatusException.class,
                 () -> service.findByEmail("missing@test.com"));
     }
 

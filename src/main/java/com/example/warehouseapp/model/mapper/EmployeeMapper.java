@@ -1,6 +1,7 @@
 package com.example.warehouseapp.model.mapper;
 
 import com.example.warehouseapp.model.dto.EmployeeCreateRequestDTO;
+import com.example.warehouseapp.model.dto.EmployeeLoginResponseDTO;
 import com.example.warehouseapp.model.dto.EmployeeResponseDTO;
 import com.example.warehouseapp.model.dto.EmployeeUpdateRequestDTO;
 import com.example.warehouseapp.model.entites.Employee;
@@ -31,6 +32,16 @@ public class EmployeeMapper {
                 .build();
     }
 
+    public EmployeeLoginResponseDTO toLoginResponseDTO(Employee employee) {
+        return EmployeeLoginResponseDTO
+                .builder()
+                .id(employee.getId() != null ? employee.getId().toString() : null)
+                .fullName(employee.getName() + " " + employee.getSurname())
+                .email(employee.getCredentials() != null ? employee.getCredentials().getEmail() : null)
+                .locationId(employee.getLocation() != null ? employee.getLocation().getId().toString() : null)
+                .build();
+    }
+
     public Employee mapToEmployee(EmployeeCreateRequestDTO employeeCreateRequestDTO,
                                   EmployeeRole role, Location location, String user, LocalDate today) {
         return Employee
@@ -41,9 +52,9 @@ public class EmployeeMapper {
                 .hireDate(today)
                 .fireDate(null)
                 .createdBy(user)
-                .updatedBy(user)
+                .updatedBy(null)
                 .createdAt(today.atStartOfDay(ZoneId.systemDefault()).toInstant())
-                .updatedAt(today.atStartOfDay(ZoneId.systemDefault()).toInstant())
+                .updatedAt(null)
                 .credentials(null)
                 .role(role)
                 .location(location)

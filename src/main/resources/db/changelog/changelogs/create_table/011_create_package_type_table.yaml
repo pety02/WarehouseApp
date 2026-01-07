@@ -2,7 +2,6 @@ databaseChangeLog:
   - changeSet:
       id: 011_create_package_type_table.yaml
       author: petya_licheva
-      runAlways: true
       preConditions:
         - onFail: MARK_RAN
         - not:
@@ -40,10 +39,10 @@ databaseChangeLog:
   - changeSet:
       id: 011_insert_package_types.yaml
       author: petya_licheva
-      runAlways: true
       preConditions:
         - onFail: MARK_RAN
-        - tableExists:
+        - not:
+          tableExists:
             tableName: package_type
       changes:
         # Insert package types

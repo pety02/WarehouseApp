@@ -1,9 +1,6 @@
 package com.example.warehouseapp.controller;
 
-import com.example.warehouseapp.model.dto.EmployeeCreateRequestDTO;
-import com.example.warehouseapp.model.dto.EmployeeLoginRequestDTO;
-import com.example.warehouseapp.model.dto.EmployeeResponseDTO;
-import com.example.warehouseapp.model.dto.EmployeeUpdateRequestDTO;
+import com.example.warehouseapp.model.dto.*;
 import com.example.warehouseapp.service.EmployeeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -87,11 +84,10 @@ public class EmployeeController {
                     description = "Employee creation request",
                     required = true
             )
-            @RequestBody @Valid EmployeeCreateRequestDTO employeeRequestDTO,
-            @AuthenticationPrincipal Principal principal
+            @RequestBody @Valid EmployeeCreateRequestDTO employeeRequestDTO
     ) {
         EmployeeResponseDTO createdEmployee =
-                employeeService.createEmployee(employeeRequestDTO, principal.getName());
+                employeeService.createEmployee(employeeRequestDTO, employeeRequestDTO.getEmail());
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -131,10 +127,10 @@ public class EmployeeController {
             @ApiResponse(responseCode = "401", description = "Invalid credentials")
     })
     @PostMapping("/login")
-    public ResponseEntity<EmployeeResponseDTO> login(
+    public EmployeeLoginResponseDTO login(
             @RequestBody @Valid EmployeeLoginRequestDTO employeeRequestDTO
     ) {
-        return ResponseEntity.ok(employeeService.login(employeeRequestDTO));
+        return employeeService.login(employeeRequestDTO);
     }
 
     @Operation(

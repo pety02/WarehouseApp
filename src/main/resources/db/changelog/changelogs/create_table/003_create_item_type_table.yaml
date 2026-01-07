@@ -2,7 +2,6 @@ databaseChangeLog:
   - changeSet:
       id: 003_create_item_type_table.yaml
       author: petya_licheva
-      runAlways: true
       preConditions:
         - onFail: MARK_RAN
         - not:
@@ -40,10 +39,10 @@ databaseChangeLog:
   - changeSet:
       id: 003_insert_item_types.yaml
       author: petya_licheva
-      runAlways: true
       preConditions:
         - onFail: MARK_RAN
-        - tableExists:
+        - not:
+          tableExists:
             tableName: item_type
       changes:
         # Insert rows

@@ -2,7 +2,6 @@ databaseChangeLog:
   - changeSet:
       id: 002_create_employee_role_table.yaml
       author: petya_licheva
-      runAlways: true
       preConditions:
         - onFail: MARK_RAN
         - not:
@@ -41,10 +40,10 @@ databaseChangeLog:
   - changeSet:
       id: 002_insert_employee_roles.yaml
       author: petya_licheva
-      runAlways: true
       preConditions:
         - onFail: MARK_RAN
-        - tableExists:
+        - not:
+          tableExists:
             tableName: employee_role
       changes:
         # Insert rows

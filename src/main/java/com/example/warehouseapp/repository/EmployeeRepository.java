@@ -13,7 +13,7 @@ import java.util.UUID;
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, UUID> {
     Optional<Employee> findEmployeeByCredentialsId(UUID credentialsId);
-    @Query("SELECT e FROM Employee e JOIN e.credentials c WHERE c.email = ?1")
+    @Query("SELECT e FROM Employee e JOIN FETCH e.credentials WHERE e.credentials.email = :email")
     Optional<Employee> findEmployeeByEmail(String email);
     List<Employee> findAllByLocationId(UUID locationId);
 }

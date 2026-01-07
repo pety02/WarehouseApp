@@ -89,7 +89,7 @@ class EmployeeMapperTest {
         assertEquals(role, employee.getRole());
         assertEquals(location, employee.getLocation());
         assertEquals("system", employee.getCreatedBy());
-        assertEquals("system", employee.getUpdatedBy());
+        assertEquals(null, employee.getUpdatedBy());
     }
 
     @Test

@@ -1,22 +1,22 @@
 package com.example.warehouseapp.service;
 
 import com.example.warehouseapp.model.entites.EmployeeCredentials;
-import com.example.warehouseapp.model.mapper.EmployeeCredentialsMapper;
 import com.example.warehouseapp.repository.EmployeeCredentialsRepository;
-import com.example.warehouseapp.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
 public class EmployeeCredentialsService {
     private final EmployeeCredentialsRepository employeeCredentialsRepository;
-    private final EmployeeRepository employeeRepository;
-    private final EmployeeCredentialsMapper employeeCredentialsMapper;
 
 
     EmployeeCredentials findByEmail(String email) {
-        return this.employeeCredentialsRepository.findByEmail(email).orElseThrow();
+        return this.employeeCredentialsRepository.findByEmail(email).orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.UNAUTHORIZED, "Invalid email or password"
+        ));
     }
 
     EmployeeCredentials saveCredentials(EmployeeCredentials employeeCredentials) {

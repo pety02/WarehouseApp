@@ -2,7 +2,6 @@ databaseChangeLog:
   - changeSet:
       id: 001_create_and_insert_currency_table.yaml
       author: petya_licheva
-      runAlways: true
       preConditions:
         - onFail: MARK_RAN
         - not:
@@ -33,10 +32,10 @@ databaseChangeLog:
   - changeSet:
       id: 001_insert_currencies.yaml
       author: petya_licheva
-      runAlways: true
       preConditions:
         - onFail: MARK_RAN
-        - tableExists:
+        - not:
+          tableExists:
             tableName: currency
       changes:
         # Insert rows

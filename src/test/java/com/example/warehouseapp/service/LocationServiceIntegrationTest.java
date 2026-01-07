@@ -108,7 +108,7 @@ class LocationServiceIntegrationTest {
 
         // --- 6. Assertions ---
         assertFalse(locations.isEmpty(), "Locations list should not be empty");
-        assertEquals(2, locations.size(), "Should have 2 locations");
+        assertEquals(3, locations.size(), "Should have 3 locations");
 
         // Optional: check manager info is correctly mapped
         LocationResponseDTO sofiaDto = locations.stream()

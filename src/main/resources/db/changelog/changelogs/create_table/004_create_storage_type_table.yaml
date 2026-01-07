@@ -2,7 +2,6 @@ databaseChangeLog:
   - changeSet:
       id: 004_create_storage_type_table.yaml
       author: petya_licheva
-      runAlways: true
       preConditions:
         - onFail: MARK_RAN
         - not:
@@ -39,10 +38,10 @@ databaseChangeLog:
   - changeSet:
       id: 004_insert_storage_types.yaml
       author: petya_licheva
-      runAlways: true
       preConditions:
         - onFail: MARK_RAN
-        - tableExists:
+        - not:
+          tableExists:
             tableName: storage_type
       changes:
         - insert:

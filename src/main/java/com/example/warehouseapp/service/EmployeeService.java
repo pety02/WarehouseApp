@@ -2,10 +2,7 @@ package com.example.warehouseapp.service;
 
 import com.example.warehouseapp.exception.InactiveEmployeeException;
 import com.example.warehouseapp.exception.NotFoundEntityException;
-import com.example.warehouseapp.model.dto.EmployeeCreateRequestDTO;
-import com.example.warehouseapp.model.dto.EmployeeLoginRequestDTO;
-import com.example.warehouseapp.model.dto.EmployeeResponseDTO;
-import com.example.warehouseapp.model.dto.EmployeeUpdateRequestDTO;
+import com.example.warehouseapp.model.dto.*;
 import com.example.warehouseapp.model.entites.Employee;
 import com.example.warehouseapp.model.entites.EmployeeCredentials;
 import com.example.warehouseapp.model.entites.EmployeeRole;
@@ -13,11 +10,14 @@ import com.example.warehouseapp.model.entites.Location;
 import com.example.warehouseapp.model.mapper.EmployeeMapper;
 import com.example.warehouseapp.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.UUID;
 import java.util.List;
 
@@ -69,6 +69,10 @@ public class EmployeeService {
                 .email(employeeRequestDTO.getEmail())
                 .phoneNumber(employeeRequestDTO.getPhoneNumber())
                 .password(this.passwordEncoder.encode(employeeRequestDTO.getPassword()))
+                .createdBy(user)
+                .updatedBy(null)
+                .createdAt(today.atStartOfDay(ZoneId.systemDefault()).toInstant())
+                .updatedAt(null)
                 .build();
         final EmployeeCredentials employeeCredentials = employeeCredentialsService.saveCredentials(credentials);
         final Employee toBeSaved = this.employeeMapper.mapToEmployee(
@@ -107,27 +111,28 @@ public class EmployeeService {
         return  this.employeeMapper.mapToResponseDTO(this.employeeRepository.save(toBeUpdated));
     }
 
-    public EmployeeResponseDTO login(EmployeeLoginRequestDTO employeeLoginRequestDTO) {
-        EmployeeCredentials credentials =
-                employeeCredentialsService.findByEmail(employeeLoginRequestDTO.getEmail());
+    public EmployeeLoginResponseDTO login(EmployeeLoginRequestDTO employeeLoginRequestDTO) {
+        EmployeeCredentials credentials = employeeCredentialsService
+                .findByEmail(employeeLoginRequestDTO.getEmail());  // query by email only
 
+        // Check password
         if (!passwordEncoder.matches(employeeLoginRequestDTO.getPassword(), credentials.getPassword())) {
             throw new BadCredentialsException("Invalid email or password");
         }
 
         Employee employee = employeeRepository
-                .findEmployeeByCredentialsId(credentials.getId())
-                .orElseThrow(() -> new NotFoundEntityException("Employee not found"));
+                .findEmployeeByEmail(employeeLoginRequestDTO.getEmail())
+                .orElseThrow(() -> new NotFoundEntityException("Employee with this email not found"));
 
         if(!employee.isActive()) {
             throw new InactiveEmployeeException(
                     String.format("Employee with email %s is inactive",
-                        employee.getCredentials().getEmail()
+                        employeeLoginRequestDTO.getEmail()
                     )
             );
         }
 
-        return this.employeeMapper.mapToResponseDTO(employee);
+        return this.employeeMapper.toLoginResponseDTO(employee);
     }
 
     public void deleteEmployeeById(UUID id){
