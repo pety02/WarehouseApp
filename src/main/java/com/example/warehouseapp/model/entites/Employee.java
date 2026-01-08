@@ -32,7 +32,8 @@ public class Employee {
     private EmployeeCredentials credentials;
     @ManyToOne(fetch = FetchType.EAGER)
     private EmployeeRole role;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "location_id")
     private Location location;
     private boolean isActive;
 }

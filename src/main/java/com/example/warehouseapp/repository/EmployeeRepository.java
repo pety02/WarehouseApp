@@ -1,7 +1,6 @@
 package com.example.warehouseapp.repository;
 
 import com.example.warehouseapp.model.entites.Employee;
-import com.example.warehouseapp.model.entites.WarehouseZone;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -15,5 +14,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, UUID> {
     Optional<Employee> findEmployeeByCredentialsId(UUID credentialsId);
     @Query("SELECT e FROM Employee e JOIN FETCH e.credentials WHERE e.credentials.email = :email")
     Optional<Employee> findEmployeeByEmail(String email);
+    @Query("SELECT e FROM Employee e JOIN FETCH e.location WHERE e.location.id = :locationId")
     List<Employee> findAllByLocationId(UUID locationId);
 }

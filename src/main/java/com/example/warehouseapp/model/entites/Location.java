@@ -27,6 +27,7 @@ public class Location {
     private Instant createdAt;
     private Instant updatedAt;
     @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "manager_id")
     private Employee manager;
     @ManyToMany
     @JoinTable(

@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
@@ -31,6 +32,7 @@ public class EmployeeService {
     private final LocationService locationService;
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional(readOnly = true)
     public List<EmployeeResponseDTO> getAllEmployees() {
         List<Employee> employees = employeeRepository.findAll();
 
@@ -43,6 +45,7 @@ public class EmployeeService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public EmployeeResponseDTO getEmployeeById(UUID id){
         Employee employee = employeeRepository.findById(id
         ).orElseThrow(() -> new NotFoundEntityException("Employee not found"));
@@ -50,6 +53,7 @@ public class EmployeeService {
         return this.employeeMapper.mapToResponseDTO(employee);
     }
 
+    @Transactional(readOnly = true)
     public List<EmployeeResponseDTO> getAllEmployeesByLocationId(UUID id) {
         return this.employeeRepository.findAllByLocationId(id).stream()
                 .map(employeeMapper::mapToResponseDTO)

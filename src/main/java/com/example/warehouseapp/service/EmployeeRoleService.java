@@ -30,6 +30,6 @@ public class EmployeeRoleService {
     }
 
     public EmployeeRole getEmployeeRoleByName(String roleName) {
-        return this.employeeRoleRepository.findByName(roleName);
+        return this.employeeRoleRepository.findEmployeeRoleByName(roleName);
     }
 }
