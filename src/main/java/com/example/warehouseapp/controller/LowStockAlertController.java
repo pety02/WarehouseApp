@@ -7,9 +7,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -33,8 +35,12 @@ public class LowStockAlertController {
             @ApiResponse(responseCode = "500", description = "Prediction or processing failed")
     })
     @PostMapping
-    public ResponseEntity<LowStockAlertResponseDTO> createLowStockAlert(@AuthenticationPrincipal Principal principal) {
-        LowStockAlertResponseDTO dto = lowStockAlertService.predictLowStocks(principal.getName());
+    public ResponseEntity<LowStockAlertResponseDTO> createLowStockAlert(@AuthenticationPrincipal String email, UUID locationId) {
+        if (email == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+
+        LowStockAlertResponseDTO dto = lowStockAlertService.predictLowStocks(email, locationId);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(dto.getAlertDate()) // or some generated ID

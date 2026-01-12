@@ -11,7 +11,12 @@ import java.util.UUID;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item, UUID> {
-    @Query("SELECT i FROM Item i JOIN i.locations l WHERE l.id = :locationId")
+    @Query("SELECT i FROM Item i JOIN FETCH i.locations l WHERE l.id = :locationId")
     List<Item> findAllByLocationId(UUID locationId);
+    @Query("""
+        SELECT i FROM Item i
+        LEFT JOIN FETCH i.packages
+        WHERE i.id = :id
+    """)
     Optional<Item> findItemById(UUID id);
 }

@@ -26,4 +26,19 @@ public interface StockAvailabilityRepository extends JpaRepository<StockAvailabi
     """)
     List<StockAvailability> findAllByLocationId(@Param("locationId") UUID locationId);
 
+    @Query("""
+    SELECT sa
+    FROM StockAvailability sa
+    JOIN FETCH sa.item i
+    LEFT JOIN FETCH i.currencies
+    JOIN FETCH sa.zone z
+    LEFT JOIN FETCH z.storageType
+    WHERE sa.zone IN (
+        SELECT wz
+        FROM Location l
+        JOIN l.warehouseZones wz
+        WHERE l.id = :locationId
+    )
+""")
+    List<StockAvailability> findAllByLocationIdWithItems(@Param("locationId") UUID locationId);
 }

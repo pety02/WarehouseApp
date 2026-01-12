@@ -26,7 +26,10 @@ public class LowStockAlertSchemaExporter {
                 - updatedAt (string): The timestamp when the stock availability record was last updated.
                 - item (string): The identifier or name of the item.
                 - warehouseZone (string): The zone in the warehouse where the item is stored.
-            - employees (array of strings): A list of employee names responsible for managing the low stock alert.""";
+            - employees (array of strings): A list of employee names responsible for managing the low stock alert.
+            
+            Use these data for analysis:
+            """;
 
     private LowStockAlertSchemaExporter() {}
 

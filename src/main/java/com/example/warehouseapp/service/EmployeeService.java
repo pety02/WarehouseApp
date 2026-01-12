@@ -9,10 +9,19 @@ import com.example.warehouseapp.model.entites.EmployeeRole;
 import com.example.warehouseapp.model.entites.Location;
 import com.example.warehouseapp.model.mapper.EmployeeMapper;
 import com.example.warehouseapp.repository.EmployeeRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -115,28 +124,45 @@ public class EmployeeService {
         return  this.employeeMapper.mapToResponseDTO(this.employeeRepository.save(toBeUpdated));
     }
 
-    public EmployeeLoginResponseDTO login(EmployeeLoginRequestDTO employeeLoginRequestDTO) {
-        EmployeeCredentials credentials = employeeCredentialsService
-                .findByEmail(employeeLoginRequestDTO.getEmail());  // query by email only
+    public EmployeeLoginResponseDTO loginAndAuthenticate(EmployeeLoginRequestDTO dto, HttpServletRequest request) {
 
-        // Check password
-        if (!passwordEncoder.matches(employeeLoginRequestDTO.getPassword(), credentials.getPassword())) {
+        EmployeeCredentials credentials = employeeCredentialsService.findByEmail(dto.getEmail());
+
+        if (!passwordEncoder.matches(dto.getPassword(), credentials.getPassword())) {
             throw new BadCredentialsException("Invalid email or password");
         }
 
-        Employee employee = employeeRepository
-                .findEmployeeByEmail(employeeLoginRequestDTO.getEmail())
-                .orElseThrow(() -> new NotFoundEntityException("Employee with this email not found"));
+        Employee employee = employeeRepository.findEmployeeByEmail(dto.getEmail())
+                .orElseThrow(() -> new NotFoundEntityException("Employee not found"));
 
-        if(!employee.isActive()) {
-            throw new InactiveEmployeeException(
-                    String.format("Employee with email %s is inactive",
-                        employeeLoginRequestDTO.getEmail()
-                    )
-            );
+        if (!employee.isActive()) {
+            throw new InactiveEmployeeException("Employee inactive");
         }
 
-        return this.employeeMapper.toLoginResponseDTO(employee);
+        // 🔑 MANUAL SPRING AUTHENTICATION
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                employee.getCredentials().getEmail(),
+                null,
+                List.of(new SimpleGrantedAuthority("ROLE_EMPLOYEE"))
+        );
+
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        context.setAuthentication(authentication);
+
+        HttpSession session = request.getSession(true);
+        session.setAttribute(
+                HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
+                context
+        );
+
+        SecurityContextHolder.setContext(context);
+
+        return EmployeeLoginResponseDTO.builder()
+                .id(employee.getId().toString())
+                .fullName(employee.getName() + " " + employee.getSurname())
+                .email(employee.getCredentials().getEmail())
+                .locationId(employee.getLocation().getId().toString())
+                .build();
     }
 
     public void deleteEmployeeById(UUID id){

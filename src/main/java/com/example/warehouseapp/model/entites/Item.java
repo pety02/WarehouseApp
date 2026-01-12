@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -27,9 +28,9 @@ public class Item {
     private Instant createdAt;
     private Instant updatedAt;
     @ManyToMany(fetch = FetchType.EAGER)
-    private List<Currency> currencies;
-    @ManyToMany(fetch = FetchType.LAZY)
-    private List<Package> packages;
+    private Set<Package> packages;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Currency> currencies;
     @ManyToOne(fetch = FetchType.EAGER)
     private ItemType type;
     @ManyToMany(fetch = FetchType.LAZY)

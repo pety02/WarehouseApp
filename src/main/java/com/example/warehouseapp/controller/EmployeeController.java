@@ -1,5 +1,7 @@
 package com.example.warehouseapp.controller;
 
+import com.example.warehouseapp.exception.InactiveEmployeeException;
+import com.example.warehouseapp.exception.NotFoundEntityException;
 import com.example.warehouseapp.model.dto.*;
 import com.example.warehouseapp.service.EmployeeService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -8,9 +10,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -27,6 +34,7 @@ import java.util.UUID;
         name = "Employees",
         description = "Employee management endpoints (CRUD, authentication)"
 )
+@Slf4j
 public class EmployeeController {
 
     private final EmployeeService employeeService;
@@ -127,10 +135,27 @@ public class EmployeeController {
             @ApiResponse(responseCode = "401", description = "Invalid credentials")
     })
     @PostMapping("/login")
-    public EmployeeLoginResponseDTO login(
-            @RequestBody @Valid EmployeeLoginRequestDTO employeeRequestDTO
+    public ResponseEntity<EmployeeLoginResponseDTO> login(
+            @RequestBody EmployeeLoginRequestDTO dto,
+            HttpServletRequest request
     ) {
-        return employeeService.login(employeeRequestDTO);
+        try {
+            EmployeeLoginResponseDTO response =
+                    employeeService.loginAndAuthenticate(dto, request);
+            return ResponseEntity.ok(response);
+        } catch (BadCredentialsException ex) {
+            log.error(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        } catch (InactiveEmployeeException ex) {
+            log.error(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        } catch (NotFoundEntityException ex) {
+            log.error(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
     @Operation(
@@ -141,7 +166,8 @@ public class EmployeeController {
             @ApiResponse(responseCode = "200", description = "Logout successful")
     })
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout() {
+    public ResponseEntity<Void> logout(HttpServletRequest request) {
+        request.getSession().invalidate();
         return ResponseEntity.ok().build();
     }
 

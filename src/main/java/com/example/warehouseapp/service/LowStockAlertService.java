@@ -3,26 +3,28 @@ package com.example.warehouseapp.service;
 import com.example.warehouseapp.config.schema_exporters.LowStockAlertSchemaExporter;
 import com.example.warehouseapp.exception.JsonParseException;
 import com.example.warehouseapp.exception.NotFoundEntityException;
+import com.example.warehouseapp.model.dto.ContextDataDTO;
 import com.example.warehouseapp.model.dto.LowStockAlertResponseDTO;
 import com.example.warehouseapp.model.entites.*;
+import com.example.warehouseapp.model.entites.Currency;
+import com.example.warehouseapp.model.entites.Package;
 import com.example.warehouseapp.model.mapper.LowStockAlertMapper;
 import com.example.warehouseapp.model.mapper.StockAvailabilityMapper;
-import com.example.warehouseapp.repository.EmployeeRepository;
-import com.example.warehouseapp.repository.LowStockAlertRepository;
-import com.example.warehouseapp.repository.StockAvailabilityRepository;
-import com.example.warehouseapp.repository.WarehouseZoneRepository;
+import com.example.warehouseapp.repository.*;
 import com.google.genai.Client;
 import com.google.genai.types.GenerateContentConfig;
 import com.google.genai.types.GenerateContentResponse;
+import com.google.genai.types.ThinkingConfig;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,21 +39,61 @@ public class LowStockAlertService {
     private final WarehouseZoneRepository warehouseZoneRepository;
     private final LowStockAlertMapper lowStockAlertMapper;
     private final StockAvailabilityMapper stockAvailabilityMapper;
+    private final ItemRepository itemRepository;
+    private final LocationRepository locationRepository;
+    private final TransferItemRepository transferItemRepository;
+    private final TransferRepository transferRepository;
 
-    public LowStockAlertResponseDTO predictLowStocks(String username) {
+    @Transactional(readOnly = true)
+    public List<ContextDataDTO> buildContextData(UUID locationId) {
+        // Fetch stock availabilities (Item and zone are fetch-joined)
+        List<StockAvailability> stockAvailabilities =
+                stockAvailabilityRepository.findAllByLocationIdWithItems(locationId);
+
+        // Map to DTO safely inside transaction
+        return stockAvailabilities.stream().map(sa -> {
+            Item item = sa.getItem();
+
+            WarehouseZone zone = sa.getZone();
+            Hibernate.initialize(zone.getStorageType());
+
+            return ContextDataDTO.builder()
+                    .itemId(item.getId())
+                    .itemName(item.getName())
+                    .packages(item.getPackages().stream()
+                            .map(Package::getName) // adjust field
+                            .toList())
+                    .currencies(item.getCurrencies().stream()
+                            .map(Currency::getAbbreviation)
+                            .toList())
+                    .zoneId(zone.getId())
+                    .zoneName(zone.getName())
+                    .storageType(zone.getStorageType().getName())
+                    .piecesCount(sa.getPiecesCount())
+                    .build();
+        }).toList();
+    }
+
+    public LowStockAlertResponseDTO predictLowStocks(String username, UUID locationId) {
         LocalDate today = LocalDate.now();
+
+        ThinkingConfig thinking = ThinkingConfig.builder()
+                .includeThoughts(true)
+                .thinkingBudget(500)
+                .build();
 
         GenerateContentConfig config = GenerateContentConfig.builder()
                 .responseMimeType("application/json")
                 .responseSchema(LowStockAlertSchemaExporter.exportSchema())
+                .thinkingConfig(thinking)
                 .build();
 
         GenerateContentResponse response = client.models.generateContent(
-                "gemma-3-1b-it", LowStockAlertSchemaExporter.PROMPT, config);
+                "gemini-2.5-flash", LowStockAlertSchemaExporter.PROMPT + " "
+                        + buildContextData(locationId), config);
 
         String jsonResponse = response.text();
         log.info("JSON Output: " + jsonResponse);
-
 
         try {
             LowStockAlertResponseDTO dto = new com.fasterxml.jackson.databind.ObjectMapper()

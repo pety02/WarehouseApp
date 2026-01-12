@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.time.Instant;
 import java.util.UUID;
+import java.util.List;
 
 @Data
 @Entity
@@ -24,4 +25,6 @@ public class WarehouseZone {
     private Instant updatedAt;
     @ManyToOne
     private StorageType storageType;
+    @ManyToMany(mappedBy = "warehouseZones")
+    private List<Location> locations;
 }
