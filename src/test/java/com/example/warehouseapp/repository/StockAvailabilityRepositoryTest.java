@@ -1,9 +1,6 @@
 package com.example.warehouseapp.repository;
 
-import com.example.warehouseapp.model.entites.Address;
-import com.example.warehouseapp.model.entites.Item;
-import com.example.warehouseapp.model.entites.Location;
-import com.example.warehouseapp.model.entites.StockAvailability;
+import com.example.warehouseapp.model.entites.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -33,6 +30,9 @@ class StockAvailabilityRepositoryTest {
     @Autowired
     private LocationRepository locationRepository;
 
+    @Autowired
+    private WarehouseZoneRepository  warehouseZoneRepository;
+
     @Test
     void getItemById_success() {
         Item item = Item.builder().name("Item").build();
@@ -59,16 +59,34 @@ class StockAvailabilityRepositoryTest {
                 .zip("1000")
                 .build();
 
-        Location location = Location.builder().name("Loc").address(address).build();
+        Location location = Location.builder()
+                .name("Loc")
+                .address(address)
+                .build();
 
+        // --- create warehouse zone ---
+        WarehouseZone zone = WarehouseZone.builder()
+                .name("ZONE-A")
+                .build();
+
+        zone = warehouseZoneRepository.save(zone);
+
+        // --- attach zone to location ---
+        location.setWarehouseZones(List.of(zone));
         locationRepository.save(location);
 
-        Item item = Item.builder().name("Item").locations(List.of(location)).build();
+        Item item = Item.builder()
+                .name("Item")
+                .build();
 
-        itemRepository.save(item);
+        item = itemRepository.save(item);
 
-        StockAvailability sa =
-                StockAvailability.builder().item(item).piecesCount(5).build();
+        // --- stock availability MUST reference the zone ---
+        StockAvailability sa = StockAvailability.builder()
+                .item(item)
+                .zone(zone)
+                .piecesCount(5)
+                .build();
 
         repository.save(sa);
 

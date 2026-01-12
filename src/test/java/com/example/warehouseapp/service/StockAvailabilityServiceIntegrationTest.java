@@ -47,19 +47,16 @@ class StockAvailabilityServiceIntegrationTest {
                 .zip("1000")
                 .build();
 
-        Location location = locationRepository.save(
-                Location.builder()
+        Location location = Location.builder()
                         .name("Main Warehouse")
                         .address(address)
-                        .build()
-        );
+                        .build();
 
         // Item
         Item item = itemRepository.save(
                 Item.builder()
                         .name("Test Item")
                         .barcodeValue("123456")
-                        .locations(List.of(location))
                         .build()
         );
 
@@ -70,16 +67,20 @@ class StockAvailabilityServiceIntegrationTest {
                         .build()
         );
 
-        // WarehouseZone
+        // WarehouseZone (IMPORTANT: link to location)
         WarehouseZone zone = warehouseZoneRepository.save(
                 WarehouseZone.builder()
                         .name("Zone A")
-                        .storageType(storageType) // mandatory
+                        .storageType(storageType)
                         .build()
         );
 
+        // IMPORTANT: attach zone to location
+        location.setWarehouseZones(List.of(zone));
+        locationRepository.save(location);
+
         // StockAvailability
-        StockAvailability stock = repository.save(
+        repository.save(
                 StockAvailability.builder()
                         .item(item)
                         .zone(zone)
@@ -93,10 +94,10 @@ class StockAvailabilityServiceIntegrationTest {
 
         // assertions
         assertFalse(dtos.isEmpty(), "Stock availability list should not be empty");
-        StockAvailabilityResponseDTO dto = dtos.get(0);
 
+        StockAvailabilityResponseDTO dto = dtos.get(0);
         assertEquals(10, dto.getPiecesCount());
-        assertEquals(item.getId().toString(), dto.getItem());
-        assertEquals(zone.getId().toString(), dto.getWarehouseZone());
+        assertEquals(item.getName(), dto.getItem());
+        assertEquals(zone.getName(), dto.getWarehouseZone());
     }
 }

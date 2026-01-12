@@ -36,6 +36,6 @@ class StockAvailabilityMapperTest {
         StockAvailabilityResponseDTO dto = mapper.mapToResponseDTO(entity);
 
         assertThat(dto.getPiecesCount()).isEqualTo(10);
-        assertThat(dto.getItem()).isEqualTo(item.getId().toString());
+        assertThat(dto.getItem()).isEqualTo(item.getName());
     }
 }
