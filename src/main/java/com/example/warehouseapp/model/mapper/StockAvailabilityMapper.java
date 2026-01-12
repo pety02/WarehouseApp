@@ -34,10 +34,8 @@ public class StockAvailabilityMapper {
                 .updatedBy(entity.getUpdatedBy())
                 .createdAt(entity.getCreatedAt() != null ? entity.getCreatedAt().toString() : null)
                 .updatedAt(entity.getUpdatedAt() != null ? entity.getUpdatedAt().toString() : null)
-                .item(entity.getItem() != null && entity.getItem().getId() != null
-                        ? entity.getItem().getId().toString() : null)
-                .warehouseZone(entity.getZone() != null && entity.getZone().getId() != null
-                        ? entity.getZone().getId().toString() : null)
+                .item(entity.getItem() != null ? entity.getItem().getName() : null)          // <-- use name
+                .warehouseZone(entity.getZone() != null ? entity.getZone().getName() : null) // <-- use name
                 .build();
     }
 }
