@@ -13,6 +13,7 @@ import java.util.UUID;
 @Repository
 public interface StockAvailabilityRepository extends JpaRepository<StockAvailability, UUID> {
     Optional<StockAvailability> getItemById(UUID itemId);
+
     @Query("""
     SELECT sa
     FROM StockAvailability sa
@@ -25,6 +26,19 @@ public interface StockAvailabilityRepository extends JpaRepository<StockAvailabi
     )
     """)
     List<StockAvailability> findAllByLocationId(@Param("locationId") UUID locationId);
+
+    @Query("""
+    SELECT sa
+    FROM StockAvailability sa
+    JOIN FETCH sa.item
+    WHERE sa.zone IN (
+        SELECT wz
+        FROM Location l
+        JOIN l.warehouseZones wz
+        WHERE l.id = :locationId
+    ) AND sa.item.name = :name
+    """)
+    Optional<StockAvailability> getItemByLocationIdAndItemName(@Param("locationId") UUID locationId, @Param("name") String name);
 
     @Query("""
     SELECT sa

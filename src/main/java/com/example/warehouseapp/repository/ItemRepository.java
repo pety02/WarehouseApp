@@ -19,4 +19,11 @@ public interface ItemRepository extends JpaRepository<Item, UUID> {
         WHERE i.id = :id
     """)
     Optional<Item> findItemById(UUID id);
+
+    @Query("""
+        SELECT i FROM Item i
+        LEFT JOIN FETCH i.packages
+        WHERE i.name = :name
+    """)
+    Optional<Item> getItemByName(String name);
 }

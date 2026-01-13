@@ -7,28 +7,35 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
-@Data
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Location {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @EqualsAndHashCode.Include
     private UUID id;
+
     @Column(nullable = false, length = 100)
     private String name;
+
     @Embedded
     private Address address;
+
     private String createdBy;
     private String updatedBy;
     private Instant createdAt;
     private Instant updatedAt;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "manager_id")
     private Employee manager;
+
     @ManyToMany
     @JoinTable(
             name = "location_warehouse_zones",

@@ -1,5 +1,6 @@
 package com.example.warehouseapp.service;
 
+import com.example.warehouseapp.model.entites.Location;
 import com.example.warehouseapp.model.mapper.WarehouseZoneMapper;
 import com.example.warehouseapp.repository.WarehouseZoneRepository;
 import org.junit.jupiter.api.Test;
@@ -33,7 +34,8 @@ class WarehouseZoneServiceTest {
         var entity = mock(com.example.warehouseapp.model.entites.WarehouseZone.class);
         var dto = mock(com.example.warehouseapp.model.dto.WarehouseZoneResponseDTO.class);
 
-        when(repository.findAllByLocationId(locId)).thenReturn(List.of(entity));
+        Location location = mock(Location.class);
+        when(repository.findZonesByLocation(location.getId())).thenReturn(List.of(entity));
         when(mapper.mapToResponseDTO(entity)).thenReturn(dto);
 
         List<com.example.warehouseapp.model.dto.WarehouseZoneResponseDTO> result =

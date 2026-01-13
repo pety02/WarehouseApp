@@ -11,6 +11,7 @@ import com.example.warehouseapp.model.entites.Package;
 import com.example.warehouseapp.model.mapper.LowStockAlertMapper;
 import com.example.warehouseapp.model.mapper.StockAvailabilityMapper;
 import com.example.warehouseapp.repository.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.genai.Client;
 import com.google.genai.types.GenerateContentConfig;
 import com.google.genai.types.GenerateContentResponse;
@@ -22,7 +23,7 @@ import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.ParseException;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -34,23 +35,16 @@ public class LowStockAlertService {
 
     private final Client client;
     private final LowStockAlertRepository lowStockAlertRepository;
-    private final EmployeeRepository employeeRepository;
     private final StockAvailabilityRepository stockAvailabilityRepository;
-    private final WarehouseZoneRepository warehouseZoneRepository;
     private final LowStockAlertMapper lowStockAlertMapper;
     private final StockAvailabilityMapper stockAvailabilityMapper;
-    private final ItemRepository itemRepository;
     private final LocationRepository locationRepository;
-    private final TransferItemRepository transferItemRepository;
-    private final TransferRepository transferRepository;
 
     @Transactional(readOnly = true)
     public List<ContextDataDTO> buildContextData(UUID locationId) {
-        // Fetch stock availabilities (Item and zone are fetch-joined)
         List<StockAvailability> stockAvailabilities =
                 stockAvailabilityRepository.findAllByLocationIdWithItems(locationId);
 
-        // Map to DTO safely inside transaction
         return stockAvailabilities.stream().map(sa -> {
             Item item = sa.getItem();
 
@@ -74,53 +68,84 @@ public class LowStockAlertService {
         }).toList();
     }
 
-    public LowStockAlertResponseDTO predictLowStocks(String username, UUID locationId) {
-        LocalDate today = LocalDate.now();
-
+    private GenerateContentConfig getContentConfig() {
         ThinkingConfig thinking = ThinkingConfig.builder()
                 .includeThoughts(true)
                 .thinkingBudget(500)
                 .build();
 
-        GenerateContentConfig config = GenerateContentConfig.builder()
+        return GenerateContentConfig.builder()
                 .responseMimeType("application/json")
                 .responseSchema(LowStockAlertSchemaExporter.exportSchema())
                 .thinkingConfig(thinking)
                 .build();
+    }
 
+    @Transactional(readOnly = true)
+    public String generateData(UUID locationId, String extraData) {
+        String contextData = LowStockAlertSchemaExporter.PROMPT + " "
+                + buildContextData(locationId);
+        if (extraData != null && !extraData.isBlank()) {
+            contextData += extraData;
+        }
         GenerateContentResponse response = client.models.generateContent(
-                "gemini-2.5-flash", LowStockAlertSchemaExporter.PROMPT + " "
-                        + buildContextData(locationId), config);
+                "gemini-2.5-flash", contextData, getContentConfig());
 
         String jsonResponse = response.text();
         log.info("JSON Output: " + jsonResponse);
 
+        return jsonResponse;
+    }
+
+    @Transactional
+    public LowStockAlertResponseDTO saveAlert(UUID locationId, String jsonResponse) throws JsonProcessingException {
+        LowStockAlertResponseDTO dto = new com.fasterxml.jackson.databind.ObjectMapper()
+                .readValue(jsonResponse, LowStockAlertResponseDTO.class);
+
+        Location currentLocation = this.locationRepository.findById(locationId).orElseThrow(() ->
+                new EntityNotFoundException("Location cannot be found"));
+        Employee locationManager = currentLocation.getManager();
+        if(locationManager == null) {
+            throw new EntityNotFoundException("Location Manager cannot be found");
+        }
+        dto.setAlertDate(Instant.now().toString());
+        dto.setEmployees(List.of(locationManager.getName() + " " + locationManager.getSurname()));
+        dto.setCreatedBy("system");
+        dto.setUpdatedBy("system");
+        dto.setCreatedAt(Instant.now().toString());
+        dto.setUpdatedAt(Instant.now().toString());
+
+        StockAvailability stockAvailability = stockAvailabilityRepository
+                .getItemByLocationIdAndItemName(locationId, dto.getStockAvailability().getItem())
+                .orElseThrow(() -> new NotFoundEntityException("Item not found"));
+
+        lowStockAlertRepository.save(
+                lowStockAlertMapper.mapToEntity(dto, stockAvailability, List.of(locationManager), LocalDate.now())
+        );
+        lowStockAlertRepository.flush();
+
+        return dto;
+    }
+
+    @Transactional
+    public LowStockAlertResponseDTO constructAndSaveAlert(UUID locationId) throws JsonProcessingException {
+        String jsonResponse = generateData(locationId, null);
+        return saveAlert(locationId, jsonResponse);
+    }
+
+    @Transactional
+    public LowStockAlertResponseDTO predictLowStocks(String username, UUID locationId) {
         try {
-            LowStockAlertResponseDTO dto = new com.fasterxml.jackson.databind.ObjectMapper()
-                    .readValue(jsonResponse, LowStockAlertResponseDTO.class);
-
-            /*List<Employee> employees = dto.getEmployees().stream()
-                    .map(email -> employeeRepository.findEmployeeByEmail(email)
-                            .orElseThrow(() -> new NotFoundEntityException(
-                                    "Employee not found with email: " + email)))
-                    .collect(Collectors.toList());
-
-            StockAvailability stockAvailability = stockAvailabilityRepository
-                    .getItemById(UUID.fromString(dto.getStockAvailability().getItem()))
-                    .orElseThrow(() -> new NotFoundEntityException("Item not found"));
-
-            WarehouseZone zone = warehouseZoneRepository.findById(
-                            UUID.fromString(dto.getStockAvailability().getWarehouseZone()))
-                    .orElseThrow(() -> new NotFoundEntityException("WarehouseZone not found"));
-
-            lowStockAlertRepository.save(
-                    lowStockAlertMapper.mapToEntity(dto, stockAvailability, employees, today)
-            );*/
-
-            return dto;
-
-        } catch (Exception e) {
-            throw new JsonParseException("Failed to parse JSON response from Gemini");
+            return constructAndSaveAlert(locationId);
+        } catch (Exception outerException) {
+            try {
+                String lowStockAlertWithAdditionalInstructions = generateData(locationId,
+                        " For recommendations use only data provided here from the " +
+                                "database of this application.");
+                return saveAlert(locationId, lowStockAlertWithAdditionalInstructions);
+            } catch (JsonProcessingException innerException) {
+                throw new JsonParseException("Failed to parse JSON response from Gemini for two times");
+            }
         }
     }
 
@@ -135,7 +160,7 @@ public class LowStockAlertService {
         return lowStockAlertRepository.findAll()
                 .stream()
                 .map((LowStockAlert lowStockAlert) -> lowStockAlertMapper.mapToResponseDTO(lowStockAlert,
-                                stockAvailabilityMapper.mapToResponseDTO(lowStockAlert.getStockAvailability())))
+                        stockAvailabilityMapper.mapToResponseDTO(lowStockAlert.getStockAvailability())))
                 .collect(Collectors.toList());
     }
 }

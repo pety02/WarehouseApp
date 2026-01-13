@@ -59,7 +59,7 @@ class WarehouseZoneRepositoryTest {
         locationRepository.save(location);
 
         List<WarehouseZone> zones =
-                repository.findAllByLocationId(location.getId());
+                repository.findZonesByLocation(location.getId());
 
         assertEquals(1, zones.size());
     }

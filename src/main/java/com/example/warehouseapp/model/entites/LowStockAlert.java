@@ -30,6 +30,6 @@ public class LowStockAlert {
     private Instant updatedAt;
     @ManyToOne(fetch = FetchType.LAZY)
     private StockAvailability stockAvailability;
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private List<Employee> employees;
 }

@@ -23,8 +23,8 @@ public class WarehouseZone {
     private String updatedBy;
     private Instant createdAt;
     private Instant updatedAt;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private StorageType storageType;
-    @ManyToMany(mappedBy = "warehouseZones")
+    @ManyToMany(mappedBy = "warehouseZones", fetch = FetchType.LAZY)
     private List<Location> locations;
 }
