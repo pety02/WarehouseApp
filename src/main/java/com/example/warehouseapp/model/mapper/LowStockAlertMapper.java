@@ -19,7 +19,6 @@ public class LowStockAlertMapper {
                                                      StockAvailabilityResponseDTO stockAvailabilityResponseDTO) {
         return LowStockAlertResponseDTO
                 .builder()
-                .id(lowStockAlert.getId().toString())
                 .alertDate(lowStockAlert.getAlertDate().toString())
                 .message(lowStockAlert.getMessage())
                 .actualCount(lowStockAlert.getActualCount())

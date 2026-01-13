@@ -1,5 +1,6 @@
 package com.example.warehouseapp.controller;
 
+import com.example.warehouseapp.model.dto.LowStockAlertRequestDTO;
 import com.example.warehouseapp.model.dto.LowStockAlertResponseDTO;
 import com.example.warehouseapp.service.LowStockAlertService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,12 +36,16 @@ public class LowStockAlertController {
             @ApiResponse(responseCode = "500", description = "Prediction or processing failed")
     })
     @PostMapping
-    public ResponseEntity<LowStockAlertResponseDTO> createLowStockAlert(@AuthenticationPrincipal String email, UUID locationId) {
+    public ResponseEntity<LowStockAlertResponseDTO> createLowStockAlert(@AuthenticationPrincipal String email,
+                                                                        @RequestBody LowStockAlertRequestDTO request) {
         if (email == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email is required for authentication");
+        }
+        if(request == null || request.getId() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "locationId is required");
         }
 
-        LowStockAlertResponseDTO dto = lowStockAlertService.predictLowStocks(email, locationId);
+        LowStockAlertResponseDTO dto = lowStockAlertService.predictLowStocks(email, request.getId());
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(dto.getAlertDate()) // or some generated ID

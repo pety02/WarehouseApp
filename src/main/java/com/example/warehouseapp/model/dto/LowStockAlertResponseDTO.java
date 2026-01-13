@@ -11,7 +11,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class LowStockAlertResponseDTO {
-    private String id;
     private String alertDate;
     private String message;
     private Integer actualCount;

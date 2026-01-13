@@ -99,7 +99,7 @@ public class LowStockAlertService {
             LowStockAlertResponseDTO dto = new com.fasterxml.jackson.databind.ObjectMapper()
                     .readValue(jsonResponse, LowStockAlertResponseDTO.class);
 
-            List<Employee> employees = dto.getEmployees().stream()
+            /*List<Employee> employees = dto.getEmployees().stream()
                     .map(email -> employeeRepository.findEmployeeByEmail(email)
                             .orElseThrow(() -> new NotFoundEntityException(
                                     "Employee not found with email: " + email)))
@@ -115,7 +115,7 @@ public class LowStockAlertService {
 
             lowStockAlertRepository.save(
                     lowStockAlertMapper.mapToEntity(dto, stockAvailability, employees, today)
-            );
+            );*/
 
             return dto;
 
