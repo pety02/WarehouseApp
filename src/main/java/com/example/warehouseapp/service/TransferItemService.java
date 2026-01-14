@@ -13,12 +13,14 @@ import com.example.warehouseapp.repository.TransferItemRepository;
 import com.example.warehouseapp.repository.TransferRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class TransferItemService {
 
     private final TransferItemRepository transferItemRepository;
@@ -26,6 +28,9 @@ public class TransferItemService {
     private final TransferItemMapper transferItemMapper;
     private final ItemRepository itemRepository;
 
+    /* ========================= READ ========================= */
+
+    @Transactional(readOnly = true)
     public List<TransferItemResponseDTO> getAllTransferItems() {
         List<TransferItem> items = transferItemRepository.findAll();
 
@@ -34,16 +39,18 @@ public class TransferItemService {
         }
 
         return items.stream()
-                .map(transferItemMapper::mapToResponseDTO)
+                .map(item -> transferItemMapper.mapToResponseDTO(item))
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public List<TransferItemResponseDTO> getTransferItemsByTransferId(UUID transferId) {
-        transferRepository.findById(transferId)
-                .orElseThrow(() -> new NotFoundEntityException("Transfer not found"));
+        if (!transferRepository.existsById(transferId)) {
+            throw new NotFoundEntityException("Transfer not found");
+        }
 
         List<TransferItem> items =
-                transferItemRepository.findAllByTransferId(transferId);
+                transferItemRepository.findAllByTransfer_Id(transferId);
 
         if (items.isEmpty()) {
             throw new NotFoundEntityException("No transfer items found for this transfer");
@@ -54,6 +61,8 @@ public class TransferItemService {
                 .toList();
     }
 
+    /* ========================= CREATE ========================= */
+
     public TransferItemResponseDTO createTransferItem(
             UUID transferId,
             String user,
@@ -62,17 +71,18 @@ public class TransferItemService {
         Transfer transfer = transferRepository.findById(transferId)
                 .orElseThrow(() -> new NotFoundEntityException("Transfer not found"));
 
-        Item item = itemRepository.findById(UUID.fromString(dto.getItemId()))
+        Item item = itemRepository.findById(dto.getItemId())
                 .orElseThrow(() -> new NotFoundEntityException("Item not found"));
 
         TransferItem transferItem =
-                transferItemMapper.mapToEntity(dto, transfer, item, user);
+                transferItemMapper.toEntity(transfer, item, dto.getQuantity(), user);
 
-        TransferItem savedItem =
-                transferItemRepository.save(transferItem);
+        TransferItem savedItem = transferItemRepository.save(transferItem);
 
         return transferItemMapper.mapToResponseDTO(savedItem);
     }
+
+    /* ========================= UPDATE ========================= */
 
     public TransferItemResponseDTO updateTransferItem(
             UUID transferItemId,
@@ -82,21 +92,22 @@ public class TransferItemService {
         TransferItem existingItem = transferItemRepository.findById(transferItemId)
                 .orElseThrow(() -> new NotFoundEntityException("Transfer item not found"));
 
-        Item item = existingItem.getItem();
+        Item item = itemRepository.findById(UUID.fromString(dto.getItemId()))
+                .orElseThrow(() -> new NotFoundEntityException("Item not found"));
 
         transferItemMapper.updateTransferItem(existingItem, item, dto, user);
 
-        TransferItem updatedItem =
-                transferItemRepository.save(existingItem);
+        TransferItem updatedItem = transferItemRepository.save(existingItem);
 
         return transferItemMapper.mapToResponseDTO(updatedItem);
     }
 
-    public void deleteTransferItemById(UUID transferItemId) {
-        if (!transferItemRepository.existsById(transferItemId)) {
-            throw new NotFoundEntityException("Transfer item not found");
-        }
+    /* ========================= DELETE ========================= */
 
-        transferItemRepository.deleteById(transferItemId);
+    public void deleteTransferItemById(UUID transferItemId) {
+        TransferItem item = transferItemRepository.findById(transferItemId)
+                .orElseThrow(() -> new NotFoundEntityException("Transfer item not found"));
+
+        transferItemRepository.delete(item);
     }
 }

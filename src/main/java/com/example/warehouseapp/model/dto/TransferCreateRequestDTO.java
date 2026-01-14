@@ -5,32 +5,22 @@ import lombok.*;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class TransferCreateRequestDTO {
 
-    @NotNull(message = "Delivery date and time is required")
-    @FutureOrPresent(message = "Delivery date and time cannot be in the past")
+    @NotNull
     private Instant deliveryDateTime;
 
-    @Size(max = 500, message = "Remarks must not exceed 500 characters")
     private String remarks;
 
-    @NotNull(message = "Transfer items are required")
-    @Size(min = 1, message = "At least one transfer item is required")
-    private List<
-            @NotBlank(message = "Transfer item must not be blank")
-                    String
-            > transferItems;
+    @NotNull
+    private UUID sourceLocationId;
 
-    @NotBlank(message = "Source location is required")
-    @Size(max = 100, message = "Source location must not exceed 100 characters")
-    private String sourceLocation;
+    @NotNull
+    private UUID destinationLocationId;
 
-    @NotBlank(message = "Destination location is required")
-    @Size(max = 100, message = "Destination location must not exceed 100 characters")
-    private String destinationLocation;
+    @NotEmpty
+    private List<TransferItemCreateRequestDTO> items;
 }

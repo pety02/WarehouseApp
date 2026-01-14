@@ -4,7 +4,6 @@ import com.example.warehouseapp.model.dto.ItemCreateRequestDTO;
 import com.example.warehouseapp.model.dto.ItemResponseDTO;
 import com.example.warehouseapp.model.entites.*;
 import com.example.warehouseapp.model.entites.Package;
-import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -24,8 +23,7 @@ public class ItemMapper {
                 .currencies(item.getCurrencies() != null ? item.getCurrencies().stream().map(Currency::getName).toList() : null)
                 .packages(
                         item.getPackages() != null ? item.getPackages().stream()
-                                .map(p -> Pair.of(p.getName(), p.getPiecesCount().toString()))
-                                .toList() :  List.of()
+                                .map(Package::getName).toList() :  List.of()
                 )
                 .itemType(item.getType() != null ? item.getType().getName() : null)
                 .build();
