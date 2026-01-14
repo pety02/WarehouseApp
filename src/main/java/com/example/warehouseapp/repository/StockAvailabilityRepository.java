@@ -13,6 +13,7 @@ import java.util.UUID;
 @Repository
 public interface StockAvailabilityRepository extends JpaRepository<StockAvailability, UUID> {
     Optional<StockAvailability> getItemById(UUID itemId);
+    boolean existsByItemId(UUID itemId);
 
     @Query("""
     SELECT sa

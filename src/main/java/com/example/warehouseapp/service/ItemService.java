@@ -27,12 +27,20 @@ public class ItemService {
     private final CurrencyRepository currencyRepository;
     private final ItemTypeRepository itemTypeRepository;
     private final LocationRepository locationRepository;
+    private final StockAvailabilityRepository stockAvailabilityRepository;
 
     @Transactional(readOnly = true)
     public ItemResponseDTO getItemById(UUID id) {
         Item item = itemRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Item not found"));
         return itemMapper.mapToResponseDTO(item);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ItemResponseDTO> getAllItemsByLocationId(UUID locationId) {
+        List<Item> itemsList = this.itemRepository.findAllByLocationId(locationId);
+        log.info("======================== ITEMS: " + itemsList.toString());
+        return itemsList.stream().map(this.itemMapper::mapToResponseDTO).toList();
     }
 
     @Transactional
@@ -104,6 +112,13 @@ public class ItemService {
         if (!itemRepository.existsById(id)) {
             throw new EntityNotFoundException("Item not found");
         }
+
+        if (stockAvailabilityRepository.existsByItemId(id)) {
+            throw new IllegalStateException(
+                    "Cannot delete item: stock availability exists"
+            );
+        }
+
         itemRepository.deleteById(id);
     }
 }
