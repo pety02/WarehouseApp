@@ -28,7 +28,7 @@ class LocationServiceTest {
 
     @Test
     void getLocationById_notFound() {
-        when(locationRepository.findById(any()))
+        when(locationRepository.findByIdWithManager(any()))
                 .thenReturn(Optional.empty());
 
         assertThrows(NotFoundEntityException.class,

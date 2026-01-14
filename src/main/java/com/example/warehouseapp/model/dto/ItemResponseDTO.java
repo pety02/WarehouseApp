@@ -19,4 +19,5 @@ public class ItemResponseDTO {
     private List<String> currencies;
     private List<Pair<String, String>> packages;
     private String itemType;
+    private WarehouseZoneResponseDTO warehouseZone;
 }

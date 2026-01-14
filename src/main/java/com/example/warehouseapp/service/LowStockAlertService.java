@@ -102,7 +102,7 @@ public class LowStockAlertService {
         LowStockAlertResponseDTO dto = new com.fasterxml.jackson.databind.ObjectMapper()
                 .readValue(jsonResponse, LowStockAlertResponseDTO.class);
 
-        Location currentLocation = this.locationRepository.findById(locationId).orElseThrow(() ->
+        Location currentLocation = this.locationRepository.findByIdWithManager(locationId).orElseThrow(() ->
                 new EntityNotFoundException("Location cannot be found"));
         Employee locationManager = currentLocation.getManager();
         if(locationManager == null) {

@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class Address {
+
     @NotBlank(message = "Country is required")
     @Size(max = 50, message = "Country must not exceed 50 characters")
     private String country;

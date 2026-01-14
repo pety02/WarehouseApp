@@ -7,6 +7,7 @@ import com.example.warehouseapp.repository.LocationRepository;
 import com.example.warehouseapp.repository.WarehouseZoneRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,8 +19,9 @@ public class WarehouseZoneService {
     private final LocationRepository locationRepository;
     private final WarehouseZoneMapper warehouseZoneMapper;
 
+    @Transactional(readOnly = true)
     public List<WarehouseZoneResponseDTO> getAllWarehouseZonesByLocationId(UUID locationId) {
-        Location location = this.locationRepository.findById(locationId).orElse(null);
+        Location location = this.locationRepository.findByIdWithManager(locationId).orElse(null);
         if(location == null) {
             return List.of();
         }

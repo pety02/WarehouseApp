@@ -1,13 +1,10 @@
 package com.example.warehouseapp.model.dto;
 
 import com.example.warehouseapp.model.entites.Address;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
-import lombok.*;
 import jakarta.validation.constraints.*;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -18,8 +15,10 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EmployeeUpdateRequestDTO {
+
     @NotNull(message = "Fire date is required")
     @PastOrPresent(message = "Fire date cannot be in the future")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate fireDate;
 
     @NotBlank(message = "Email is required")

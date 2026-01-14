@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +19,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
@@ -119,11 +119,13 @@ public class EmployeeController {
             @Parameter(description = "Employee UUID", required = true)
             @PathVariable UUID id,
             @RequestBody @Valid EmployeeUpdateRequestDTO employeeRequestDTO,
-            @AuthenticationPrincipal Principal principal
+            @AuthenticationPrincipal String email
     ) {
+        if(email == null || email.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized Exception");
+        }
         return ResponseEntity.ok(
-                employeeService.updateEmployee(id, employeeRequestDTO, principal.getName())
-        );
+                employeeService.updateEmployee(id, employeeRequestDTO, email));
     }
 
     @Operation(

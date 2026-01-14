@@ -76,10 +76,10 @@ public class TransferService {
 
         List<TransferItem> items = transferItemRepository.findAllByIds(transferRequestDTO.getTransferItems().stream().map(UUID::fromString).toList());
 
-        Location sourceLocation = locationRepository.findById(UUID.fromString(transferRequestDTO.getSourceLocation()))
+        Location sourceLocation = locationRepository.findByIdWithManager(UUID.fromString(transferRequestDTO.getSourceLocation()))
                 .orElseThrow(() -> new NotFoundEntityException("Source location not found"));
 
-        Location destinationLocation = locationRepository.findById(UUID.fromString(transferRequestDTO.getDestinationLocation()))
+        Location destinationLocation = locationRepository.findByIdWithManager(UUID.fromString(transferRequestDTO.getDestinationLocation()))
                 .orElseThrow(() -> new NotFoundEntityException("Destination location not found"));
 
         Transfer transfer = transferMapper.mapToEntity(transferRequestDTO, user,
@@ -102,10 +102,10 @@ public class TransferService {
 
         List<TransferItem> items = transferItemRepository.findAllByIds(transferRequestDTO.getTransferItems().stream().map(UUID::fromString).toList());
 
-        Location sourceLocation = locationRepository.findById(UUID.fromString(transferRequestDTO.getSourceLocation()))
+        Location sourceLocation = locationRepository.findByIdWithManager(UUID.fromString(transferRequestDTO.getSourceLocation()))
                 .orElseThrow(() -> new NotFoundEntityException("Source location not found"));
 
-        Location destinationLocation = locationRepository.findById(UUID.fromString(transferRequestDTO.getDestinationLocation()))
+        Location destinationLocation = locationRepository.findByIdWithManager(UUID.fromString(transferRequestDTO.getDestinationLocation()))
                 .orElseThrow(() -> new NotFoundEntityException("Destination location not found"));
 
         // Fetch existing transfer

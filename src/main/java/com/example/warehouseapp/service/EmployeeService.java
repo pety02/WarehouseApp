@@ -98,6 +98,7 @@ public class EmployeeService {
         return this.employeeMapper.mapToResponseDTO(this.employeeRepository.save(toBeSaved));
     }
 
+    @Transactional
     public EmployeeResponseDTO updateEmployee(UUID id, EmployeeUpdateRequestDTO employeeRequestDTO, String user) {
         Employee toBeUpdated = this.employeeRepository.findById(id).orElseThrow(() ->
                 new NotFoundEntityException("Employee not found"));
@@ -109,16 +110,14 @@ public class EmployeeService {
         credentials.setPhoneNumber(employeeRequestDTO.getPhoneNumber());
         this.employeeCredentialsService.saveCredentials(credentials);
 
-        EmployeeRole role = employeeRoleService.getEmployeeRoleByName(employeeRequestDTO.getRole());
-        Location location = locationService.getLocationByAddressAndName(
-                employeeRequestDTO.getLocationAddress(),
-                employeeRequestDTO.getLocationName()
-        );
+        toBeUpdated.setFireDate(null);
+        toBeUpdated.setRole(null);
+        toBeUpdated.setLocation(null);
 
         this.employeeMapper.updateEmployee(
                 toBeUpdated, employeeRequestDTO,
-                role != null ? role : toBeUpdated.getRole(),
-                location != null ? location : toBeUpdated.getLocation(),
+                toBeUpdated.getRole(),
+                toBeUpdated.getLocation(),
                 user, today
         );
         return  this.employeeMapper.mapToResponseDTO(this.employeeRepository.save(toBeUpdated));
@@ -165,7 +164,10 @@ public class EmployeeService {
                 .build();
     }
 
+    @Transactional
     public void deleteEmployeeById(UUID id){
-        this.employeeRepository.findById(id).ifPresent(employee -> employee.setActive(false));
+        this.employeeRepository.findById(id).ifPresent(employee -> {
+            employee.setActive(false);
+        });
     }
 }
