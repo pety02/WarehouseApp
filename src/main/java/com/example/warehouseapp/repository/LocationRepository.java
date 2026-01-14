@@ -9,10 +9,16 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 import java.util.UUID;
+import java.util.List;
 
 @Repository
 public interface LocationRepository extends JpaRepository<Location, UUID> {
     @Query("SELECT l FROM Location l JOIN FETCH l.manager WHERE l.id = :locationId")
     Optional<Location> findByIdWithManager(@Param("locationId") UUID id);
     Location findByAddressAndName(Address address, String name);
+
+    @Query("""
+        SELECT l FROM Location l WHERE l.id IN :ids
+    """)
+    List<Location> getAllByIds(@Param("ids") List<UUID> ids);
 }

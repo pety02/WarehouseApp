@@ -110,12 +110,8 @@ public class EmployeeService {
         credentials.setPhoneNumber(employeeRequestDTO.getPhoneNumber());
         this.employeeCredentialsService.saveCredentials(credentials);
 
-        toBeUpdated.setFireDate(null);
-        toBeUpdated.setRole(null);
-        toBeUpdated.setLocation(null);
-
         this.employeeMapper.updateEmployee(
-                toBeUpdated, employeeRequestDTO,
+                toBeUpdated,
                 toBeUpdated.getRole(),
                 toBeUpdated.getLocation(),
                 user, today
