@@ -62,9 +62,8 @@ public class EmployeeMapper {
                 .build();
     }
 
-    public Employee updateEmployee(Employee employee, EmployeeUpdateRequestDTO employeeRequestDTO,
+    public Employee updateEmployee(Employee employee,
                                    EmployeeRole role, Location location, String user, LocalDate today) {
-        employee.setFireDate(employeeRequestDTO.getFireDate());
         employee.setRole(role);
         employee.setLocation(location);
         employee.setUpdatedBy(user);
