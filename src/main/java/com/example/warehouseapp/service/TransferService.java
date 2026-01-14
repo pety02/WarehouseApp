@@ -69,7 +69,7 @@ public class TransferService {
     }
 
     public Transfer getTransferById(UUID id) {
-        return transferRepository.findById(id)
+        return transferRepository.findByIdWithLocations(id)
                 .orElseThrow(() -> new NotFoundEntityException("Transfer not found"));
     }
 
