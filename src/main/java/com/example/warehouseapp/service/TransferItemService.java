@@ -12,13 +12,16 @@ import com.example.warehouseapp.repository.ItemRepository;
 import com.example.warehouseapp.repository.TransferItemRepository;
 import com.example.warehouseapp.repository.TransferRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class TransferItemService {
 
     private final TransferItemRepository transferItemRepository;
@@ -26,6 +29,7 @@ public class TransferItemService {
     private final TransferItemMapper transferItemMapper;
     private final ItemRepository itemRepository;
 
+    @Transactional(readOnly = true)
     public List<TransferItemResponseDTO> getAllTransferItems() {
         List<TransferItem> items = transferItemRepository.findAll();
 
@@ -34,16 +38,18 @@ public class TransferItemService {
         }
 
         return items.stream()
-                .map(transferItemMapper::mapToResponseDTO)
+                .map(item -> transferItemMapper.mapToResponseDTO(item))
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public List<TransferItemResponseDTO> getTransferItemsByTransferId(UUID transferId) {
-        transferRepository.findById(transferId)
-                .orElseThrow(() -> new NotFoundEntityException("Transfer not found"));
+        if (!transferRepository.existsById(transferId)) {
+            throw new NotFoundEntityException("Transfer not found");
+        }
 
         List<TransferItem> items =
-                transferItemRepository.findAllByTransferId(transferId);
+                transferItemRepository.findAllByTransfer_Id(transferId);
 
         if (items.isEmpty()) {
             throw new NotFoundEntityException("No transfer items found for this transfer");
@@ -62,14 +68,13 @@ public class TransferItemService {
         Transfer transfer = transferRepository.findById(transferId)
                 .orElseThrow(() -> new NotFoundEntityException("Transfer not found"));
 
-        Item item = itemRepository.findById(UUID.fromString(dto.getItemId()))
+        Item item = itemRepository.findById(dto.getItemId())
                 .orElseThrow(() -> new NotFoundEntityException("Item not found"));
 
         TransferItem transferItem =
-                transferItemMapper.mapToEntity(dto, transfer, item, user);
+                transferItemMapper.toEntity(transfer, item, dto.getQuantity(), user);
 
-        TransferItem savedItem =
-                transferItemRepository.save(transferItem);
+        TransferItem savedItem = transferItemRepository.save(transferItem);
 
         return transferItemMapper.mapToResponseDTO(savedItem);
     }
@@ -82,21 +87,27 @@ public class TransferItemService {
         TransferItem existingItem = transferItemRepository.findById(transferItemId)
                 .orElseThrow(() -> new NotFoundEntityException("Transfer item not found"));
 
-        Item item = existingItem.getItem();
+        Item item = itemRepository.findById(UUID.fromString(dto.getItemId()))
+                .orElseThrow(() -> new NotFoundEntityException("Item not found"));
 
         transferItemMapper.updateTransferItem(existingItem, item, dto, user);
 
-        TransferItem updatedItem =
-                transferItemRepository.save(existingItem);
+        TransferItem updatedItem = transferItemRepository.save(existingItem);
 
         return transferItemMapper.mapToResponseDTO(updatedItem);
     }
 
     public void deleteTransferItemById(UUID transferItemId) {
-        if (!transferItemRepository.existsById(transferItemId)) {
-            throw new NotFoundEntityException("Transfer item not found");
+        TransferItem transferItem = transferItemRepository.findById(transferItemId)
+                .orElseThrow(() -> new NotFoundEntityException("Transfer item not found"));
+
+        if(transferItem.getTransfer() != null) {
+            throw new IllegalStateException("Transfer item is connected with a transfer. So, it cannot be deleted");
+        }
+        if(transferItem.getItem() != null) {
+            throw  new IllegalStateException("Item is connected with an item. So, it cannot be deleted");
         }
 
-        transferItemRepository.deleteById(transferItemId);
+        transferItemRepository.delete(transferItem);
     }
 }

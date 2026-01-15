@@ -24,8 +24,7 @@ public class ItemMapper {
                 .currencies(item.getCurrencies() != null ? item.getCurrencies().stream().map(Currency::getName).toList() : null)
                 .packages(
                         item.getPackages() != null ? item.getPackages().stream()
-                                .map(p -> Pair.of(p.getName(), p.getPiecesCount().toString()))
-                                .toList() :  List.of()
+                                .map(Package::getName).toList() :  List.of()
                 )
                 .itemType(item.getType() != null ? item.getType().getName() : null)
                 .build();

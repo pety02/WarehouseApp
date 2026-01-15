@@ -7,27 +7,39 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
-@Data
 @Entity
+@Table(name = "transfer")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Transfer {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
     private Instant deliveryDateTime;
+
     private String remarks;
+
     private String createdBy;
     private String updatedBy;
+
     private Instant createdAt;
     private Instant updatedAt;
-    @ManyToMany(fetch = FetchType.EAGER)
-    private List<TransferItem> transferItems;
-    @ManyToOne(fetch = FetchType.EAGER)
+
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Location sourceLocation;
-    @ManyToOne(fetch = FetchType.EAGER)
+
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Location destinationLocation;
+
+    @OneToMany(
+            mappedBy = "transfer",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<TransferItem> items;
 }

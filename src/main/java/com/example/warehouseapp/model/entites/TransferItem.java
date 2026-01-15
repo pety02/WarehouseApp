@@ -6,25 +6,31 @@ import lombok.*;
 import java.time.Instant;
 import java.util.UUID;
 
-@Data
 @Entity
+@Table(name = "transfer_item")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class TransferItem {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private Transfer transfer;
+
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private Item item;
+
+    @Column(nullable = false)
     private Integer quantity;
+
     private String createdBy;
     private String updatedBy;
+
     private Instant createdAt;
     private Instant updatedAt;
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Item item;
-    @ManyToOne
-    @JoinColumn(name = "transfer_id")
-    private Transfer transfer;
 }

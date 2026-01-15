@@ -17,7 +17,6 @@ public class ItemResponseDTO {
     private String expirationDateTime;
     private Double sellingPrice;
     private List<String> currencies;
-    private List<Pair<String, String>> packages;
+    private List<String> packages;
     private String itemType;
-    private WarehouseZoneResponseDTO warehouseZone;
 }

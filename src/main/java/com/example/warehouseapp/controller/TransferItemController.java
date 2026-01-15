@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@Slf4j
 @RequestMapping("/api/transfer-items")
 @RequiredArgsConstructor
 @Tag(
@@ -40,7 +42,12 @@ public class TransferItemController {
     })
     @GetMapping
     public ResponseEntity<List<TransferItemResponseDTO>> getAllTransferItems() {
-        return ResponseEntity.ok(transferItemService.getAllTransferItems());
+        try {
+            return ResponseEntity.ok(transferItemService.getAllTransferItems());
+        } catch (Exception ex) {
+            log.error("Exception occurred: %s", ex.getCause());
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @Operation(
@@ -54,9 +61,14 @@ public class TransferItemController {
     public ResponseEntity<List<TransferItemResponseDTO>> getTransferItemsByTransferId(
             @PathVariable UUID transferId
     ) {
-        return ResponseEntity.ok(
+        try {
+            return ResponseEntity.ok(
                 transferItemService.getTransferItemsByTransferId(transferId)
-        );
+            );
+        } catch (Exception ex) {
+            log.error("Exception occurred: %s", ex.getCause());
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @Operation(
@@ -73,20 +85,25 @@ public class TransferItemController {
             @RequestBody @Valid TransferItemCreateRequestDTO requestDTO,
             @AuthenticationPrincipal Principal principal
     ) {
-        TransferItemResponseDTO created =
+        try {
+            TransferItemResponseDTO created =
                 transferItemService.createTransferItem(
                         transferId,
                         principal.getName(),
                         requestDTO
                 );
 
-        URI location = ServletUriComponentsBuilder
+            URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(created.getId())
                 .toUri();
 
-        return ResponseEntity.created(location).body(created);
+            return ResponseEntity.created(location).body(created);
+        } catch (Exception ex) {
+            log.error("Exception occurred: %s", ex.getCause());
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @Operation(
@@ -103,13 +120,18 @@ public class TransferItemController {
             @RequestBody @Valid TransferItemUpdateRequestDTO requestDTO,
             @AuthenticationPrincipal Principal principal
     ) {
-        return ResponseEntity.ok(
-                transferItemService.updateTransferItem(
-                        transferItemId,
-                        requestDTO,
-                        principal.getName()
-                )
-        );
+        try {
+            return ResponseEntity.ok(
+                    transferItemService.updateTransferItem(
+                            transferItemId,
+                            requestDTO,
+                            principal.getName()
+                    )
+            );
+        } catch (Exception ex) {
+            log.error("Exception occurred: %s", ex.getCause());
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @Operation(
@@ -122,7 +144,12 @@ public class TransferItemController {
     })
     @DeleteMapping("/{transferItemId}")
     public ResponseEntity<Void> deleteTransferItemById(@PathVariable UUID transferItemId) {
-        transferItemService.deleteTransferItemById(transferItemId);
-        return ResponseEntity.noContent().build();
+        try {
+            transferItemService.deleteTransferItemById(transferItemId);
+            return ResponseEntity.noContent().build();
+        } catch (Exception ex) {
+            log.error("Exception occurred: %s", ex.getCause());
+            return ResponseEntity.notFound().build();
+        }
     }
 }
