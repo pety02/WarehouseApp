@@ -12,6 +12,7 @@ import com.example.warehouseapp.repository.ItemRepository;
 import com.example.warehouseapp.repository.TransferItemRepository;
 import com.example.warehouseapp.repository.TransferRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,8 +28,6 @@ public class TransferItemService {
     private final TransferRepository transferRepository;
     private final TransferItemMapper transferItemMapper;
     private final ItemRepository itemRepository;
-
-    /* ========================= READ ========================= */
 
     @Transactional(readOnly = true)
     public List<TransferItemResponseDTO> getAllTransferItems() {
@@ -61,8 +60,6 @@ public class TransferItemService {
                 .toList();
     }
 
-    /* ========================= CREATE ========================= */
-
     public TransferItemResponseDTO createTransferItem(
             UUID transferId,
             String user,
@@ -82,8 +79,6 @@ public class TransferItemService {
         return transferItemMapper.mapToResponseDTO(savedItem);
     }
 
-    /* ========================= UPDATE ========================= */
-
     public TransferItemResponseDTO updateTransferItem(
             UUID transferItemId,
             TransferItemUpdateRequestDTO dto,
@@ -102,12 +97,17 @@ public class TransferItemService {
         return transferItemMapper.mapToResponseDTO(updatedItem);
     }
 
-    /* ========================= DELETE ========================= */
-
     public void deleteTransferItemById(UUID transferItemId) {
-        TransferItem item = transferItemRepository.findById(transferItemId)
+        TransferItem transferItem = transferItemRepository.findById(transferItemId)
                 .orElseThrow(() -> new NotFoundEntityException("Transfer item not found"));
 
-        transferItemRepository.delete(item);
+        if(transferItem.getTransfer() != null) {
+            throw new IllegalStateException("Transfer item is connected with a transfer. So, it cannot be deleted");
+        }
+        if(transferItem.getItem() != null) {
+            throw  new IllegalStateException("Item is connected with an item. So, it cannot be deleted");
+        }
+
+        transferItemRepository.delete(transferItem);
     }
 }

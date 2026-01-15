@@ -2,9 +2,7 @@ package com.example.warehouseapp.service;
 
 import com.example.warehouseapp.exception.NotFoundEntityException;
 import com.example.warehouseapp.model.dto.TransferCreateRequestDTO;
-import com.example.warehouseapp.model.dto.TransferItemResponseDTO;
 import com.example.warehouseapp.model.dto.TransferResponseDTO;
-import com.example.warehouseapp.model.dto.TransferUpdateRequestDTO;
 import com.example.warehouseapp.model.entites.Item;
 import com.example.warehouseapp.model.entites.Location;
 import com.example.warehouseapp.model.entites.Transfer;
@@ -13,13 +11,11 @@ import com.example.warehouseapp.model.mapper.TransferItemMapper;
 import com.example.warehouseapp.model.mapper.TransferMapper;
 import com.example.warehouseapp.repository.ItemRepository;
 import com.example.warehouseapp.repository.LocationRepository;
-import com.example.warehouseapp.repository.TransferItemRepository;
 import com.example.warehouseapp.repository.TransferRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,7 +30,7 @@ public class TransferService {
     private final TransferMapper transferMapper;
     private final TransferItemMapper transferItemMapper;
 
-    public Transfer createTransfer(
+    public TransferResponseDTO createTransfer(
             TransferCreateRequestDTO dto,
             String user
     ) {
@@ -61,19 +57,29 @@ public class TransferService {
 
         transfer.setItems(items);
 
-        return transferRepository.save(transfer);
+        return this.transferMapper.toDTO(transferRepository.save(transfer));
     }
 
-    public List<Transfer> getAllTransfers() {
-        return transferRepository.findAll();
+    public List<TransferResponseDTO> getAllTransfers() {
+        return transferRepository.findAll().stream().map(this.transferMapper::toDTO).toList();
     }
 
-    public Transfer getTransferById(UUID id) {
-        return transferRepository.findByIdWithLocations(id)
-                .orElseThrow(() -> new NotFoundEntityException("Transfer not found"));
+    public TransferResponseDTO getTransferById(UUID id) {
+        return this.transferMapper.toDTO(transferRepository.findByIdWithLocations(id)
+                .orElseThrow(() -> new NotFoundEntityException("Transfer not found")));
     }
 
     public void deleteTransfer(UUID id) {
+        Transfer transfer = transferRepository
+                .findById(id).orElseThrow(() -> new NotFoundEntityException("Transfer not found"));
+        if(!transfer.getItems().isEmpty()) {
+            throw new IllegalStateException("Transfer's items not empty list. So, the transfer cannot be deleted");
+        }
+        if(transfer.getSourceLocation() != null || transfer.getDestinationLocation() != null) {
+            throw new IllegalStateException("Transfer has a source or destination location attached to it. " +
+                    "So, the transfer cannot be deleted");
+        }
+
         transferRepository.deleteById(id);
     }
 }
